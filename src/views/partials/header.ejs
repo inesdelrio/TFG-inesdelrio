@@ -3,6 +3,16 @@
     <a class="brand" href="/">TFG Voluntariado</a>
     <nav class="site-nav">
       <a href="/">Inicio</a>
+      <% if (currentUser) { %>
+        <a href="/login">Sesion</a>
+        <a href="<%= currentUser.role === 'ADMIN' ? '/admin/area' : currentUser.role === 'ENTIDAD' ? '/entidad/area' : '/voluntariado/area' %>">Mi area</a>
+        <form class="inline-form" action="/logout" method="post">
+          <button class="nav-button" type="submit">Cerrar sesion</button>
+        </form>
+      <% } else { %>
+        <a href="/registro">Registro</a>
+        <a href="/login">Login</a>
+      <% } %>
       <a href="/health">Health</a>
       <a href="/health/db">DB Check</a>
     </nav>

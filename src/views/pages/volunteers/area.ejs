@@ -1,0 +1,33 @@
+<%- include("../../partials/head") %>
+<%- include("../../partials/header") %>
+
+<main class="container dashboard-page">
+  <section class="dashboard-hero">
+    <span class="eyebrow">Sesion activa</span>
+    <h1>Bienvenida, <%= currentUser.firstName %></h1>
+    <p>
+      Has iniciado sesion correctamente como <strong><%= currentUser.role %></strong>.
+      Esta es el area privada inicial del voluntario y queda preparada para los
+      siguientes requisitos funcionales.
+    </p>
+  </section>
+
+  <section class="status-grid">
+    <article class="status-card">
+      <h2>Cuenta</h2>
+      <p><strong>Email:</strong> <%= currentUser.email %></p>
+    </article>
+
+    <article class="status-card">
+      <h2>Sesion</h2>
+      <p>La sesion del usuario queda almacenada en servidor con `express-session`.</p>
+    </article>
+
+    <article class="status-card">
+      <h2>Destino</h2>
+      <p>La redireccion por rol ya esta operativa para voluntario, entidad y admin.</p>
+    </article>
+  </section>
+</main>
+
+<%- include("../../partials/footer") %>

@@ -121,7 +121,8 @@ No se debe dar por hecho ningún paso técnico importante. Si algo requiere inst
   - Añadir un script útil de Prisma en package.json para el desarrollo — **0,3**
   - Documentar la configuración realizada para que pueda reproducirse desde cero — **0,5**
 
-### RI03 — Configuración de PostgreSQL
+### PRE03 — Configuración de PostgreSQL
+- **Estado:** Cerrado
 - **Descripción:** Preparar la base de datos relacional del proyecto.
 - **Criterio de validación:** Existe una base de datos accesible desde la aplicación y preparada para trabajar con Prisma.
 - **Estimación:** 5 h
@@ -136,7 +137,8 @@ No se debe dar por hecho ningún paso técnico importante. Si algo requiere inst
   - RI03-06: Crear script o instrucción de reseteo de base de datos para desarrollo
   - RI03-07: Documentar configuración mínima de PostgreSQL para el proyecto
 
-### RI04 — Configuración inicial de Prisma
+### PRE04 — Configuración inicial de Prisma
+- **Estado:** Cerrado
 - **Descripción:** Preparar Prisma como herramienta de modelado y acceso a datos.
 - **Criterio de validación:** Prisma está inicializado, conectado a PostgreSQL y permite ejecutar migraciones.
 - **Estimación:** 5 h
@@ -156,44 +158,46 @@ No se debe dar por hecho ningún paso técnico importante. Si algo requiere inst
 ## 6. Requisitos funcionales
 
 ### RF01 — Registro de voluntario
+- **Estado:** Cerrado
 - **Descripción:** Permitir que una persona cree una cuenta como voluntario.
 - **Criterio de validación:** Un usuario no autenticado puede registrarse, guardarse en base de datos y acceder posteriormente con sus credenciales.
 - **Estimación:** 8 h
 - **Prioridad:** Must
 - **Riesgo:** Medio
 - **Tareas:**
-  - RF01-01: Definir los campos del formulario de registro del voluntario
+  - RF01-01: Definir los campos del formulario de registro del voluntario 
   - RF01-02: Crear la vista EJS de registro de voluntario
   - RF01-03: Añadir estilos CSS y validaciones básicas en cliente para el formulario
-  - RF01-04: Definir el modelo de voluntario en Prisma
-  - RF01-05: Crear y ejecutar la migración de base de datos del voluntario
-  - RF01-06: Crear la ruta GET/POST del registro
+  - RF01-04: Crear las rutas GET y POST del registro de voluntario
+  - RF01-05: Definir el modelo de usuario con rol VOLUNTARIO en Prisma
+  - RF01-06: Crear y ejecutar la migración de usuario voluntario
   - RF01-07: Implementar el controlador de alta con validación de datos en servidor
   - RF01-08: Hashear la contraseña con bcrypt antes de guardar
   - RF01-09: Persistir el nuevo usuario en la base de datos
   - RF01-10: Mostrar mensajes de error y confirmación en la interfaz
   - RF01-11: Añadir test unitario del registro correcto y del registro con datos inválidos
-  - RF01-12: Documentar el requisito y cómo comprobarlo manualmente
+  - RF01-12: Documentar el requisito técnico y cómo comprobarlo manualmente
 
 ### RF02 — Inicio y cierre de sesión
+- **Estado:** Cerrado
 - **Descripción:** Permitir autenticación y cierre de sesión para los distintos tipos de cuenta.
 - **Criterio de validación:** El usuario puede iniciar sesión, quedar autenticado en sesión y salir correctamente de la aplicación.
 - **Estimación:** 8 h
 - **Prioridad:** Must
 - **Riesgo:** Medio
 - **Tareas:**
-  - RF02-01: Crear la vista EJS de inicio de sesión
-  - RF02-02: Añadir estilos CSS y validaciones básicas del formulario de login
-  - RF02-03: Configurar `express-session` y variables de sesión
-  - RF02-04: Crear las rutas de login y logout
+  - RF02-01: Crear la vista EJS de inicio de sesión 
+  - RF02-02: Añadir estilos CSS y validaciones básicas del formulario de login 
+  - RF02-03: Instalar y configurar express-session en el proyecto 
+  - RF02-04: Crear las rutas de login y logout 
   - RF02-05: Implementar el controlador de autenticación
-  - RF02-06: Comprobar email y contraseña contra la base de datos
-  - RF02-07: Comparar la contraseña con bcrypt
+  - RF02-06: Consultar el usuario por email en la base de datos 
+  - RF02-07: Comparar la contraseña introducida con bcrypt
   - RF02-08: Guardar el usuario autenticado en sesión
-  - RF02-09: Redirigir al área correspondiente según el rol
-  - RF02-10: Añadir botón o acción de cierre de sesión en el layout
-  - RF02-11: Añadir test unitario de login válido, login inválido y logout
-  - RF02-12: Documentar el requisito y cómo validarlo
+  - RF02-09: Redirigir al área correspondiente según el rol 
+  - RF02-10: Añadir la acción de cierre de sesión en el layout o menú principal 
+  - RF02-11: Añadir test unitario de login válido, login inválido y logout 
+  - RF02-12: Documentar el requisito técnico y cómo comprobarlo manualmente
 
 ### RF03 — Solicitud de alta de entidad
 - **Descripción:** Permitir que una entidad solicite el alta en la plataforma.
@@ -222,16 +226,16 @@ No se debe dar por hecho ningún paso técnico importante. Si algo requiere inst
 - **Prioridad:** Must
 - **Riesgo:** Medio
 - **Tareas:**
-  - RF04-01: Crear la vista del listado de entidades pendientes para el administrador
-  - RF04-02: Crear la vista de detalle de solicitud de entidad
-  - RF04-03: Definir las rutas de administración para aprobar, rechazar y suspender
-  - RF04-04: Implementar el controlador de cambio de estado de entidad
-  - RF04-05: Actualizar el estado de la entidad en la base de datos
-  - RF04-06: Bloquear la publicación de eventos si la entidad no está verificada
-  - RF04-07: Mostrar el estado actual de la entidad en la interfaz de administración
-  - RF04-08: Registrar la acción administrativa realizada
-  - RF04-09: Añadir test unitario del cambio de estado y de la restricción de publicación
-  - RF04-10: Documentar el requisito y sus casos de validación
+  - RF04-01: Crear la vista del listado de entidades pendientes para el administrador 
+  - RF04-02: Crear la vista de detalle de solicitud de entidad 
+  - RF04-03: Definir las rutas de administración para aprobar, rechazar y suspender 
+  - RF04-04: Implementar el controlador de cambio de estado de entidad 
+  - RF04-05: Actualizar el estado de validación de la entidad en la base de datos 
+  - RF04-06: Mostrar el estado actual de la entidad en la interfaz de administración 
+  - RF04-07: Bloquear la publicación de eventos si la entidad no está verificada 
+  - RF04-08: Registrar la acción administrativa realizada 
+  - RF04-09: Añadir test unitario del cambio de estado y de la restricción de publicación 
+  - RF04-10: Documentar el requisito técnico y cómo comprobarlo manualmente 
 
 ### RF05 — Perfil de voluntario
 - **Descripción:** Permitir al voluntario consultar y editar sus datos autorizados.
@@ -240,15 +244,17 @@ No se debe dar por hecho ningún paso técnico importante. Si algo requiere inst
 - **Prioridad:** Should
 - **Riesgo:** Bajo
 - **Tareas:**
-  - RF05-01: Crear la vista EJS del perfil del voluntario
-  - RF05-02: Mostrar los datos actuales del voluntario en el formulario
-  - RF05-03: Añadir estilos CSS de la pantalla de perfil
-  - RF05-04: Crear la ruta GET/POST para editar el perfil
-  - RF05-05: Implementar el controlador de actualización del perfil
-  - RF05-06: Actualizar los datos permitidos del voluntario en la base de datos
-  - RF05-07: Validar campos editables y mensajes de error
-  - RF05-08: Añadir test unitario de edición correcta y edición inválida
-  - RF05-09: Documentar el requisito
+  - RF05-01: Crear la vista EJS del perfil del voluntario 
+  - RF05-02: Crear la ruta GET para mostrar el perfil
+  - RF05-03: Cargar los datos actuales del voluntario en el formulario 
+  - RF05-04: Añadir estilos CSS de la pantalla de perfil
+  - RF05-05: Crear la ruta POST para guardar cambios del perfil
+  - RF05-06: Implementar el controlador de actualización del perfil 
+  - RF05-07: Validar los campos personales que sí se pueden editar 
+  - RF05-08: Actualizar los datos del voluntario en la base de datos
+  - RF05-09: Mostrar mensajes de éxito y error tras guardar 
+  - RF05-10: Añadir test unitario de edición correcta y edición inválida
+  - RF05-11: Documentar el requisito técnico y cómo comprobarlo manualmente 
 
 ### RF06 — Perfil de entidad
 - **Descripción:** Permitir a la entidad consultar y modificar su información visible.

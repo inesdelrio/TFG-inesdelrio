@@ -8,8 +8,9 @@
     "start": "node app.js",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
+    "prisma:reset": "prisma migrate reset --force",
     "prisma:validate": "prisma validate",
-    "test": "echo \"Tests pendientes de implementar\""
+    "test": "node tests/unit/auth.run.js"
   },
   "keywords": [
     "node",

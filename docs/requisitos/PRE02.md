@@ -2,7 +2,7 @@
 
 ## Estado del requisito
 
-Implementado en el repositorio con validacion parcial por entorno. La parte de PostgreSQL local no ha podido validarse completamente porque la maquina no dispone de `psql` ni de un servicio PostgreSQL accesible durante esta ejecucion.
+Cerrado definitivamente y validado en entorno local.
 
 ## Que ya estaba hecho antes de esta implementacion
 
@@ -29,8 +29,8 @@ Implementado en el repositorio con validacion parcial por entorno. La parte de P
 
 - Se ha creado la ruta `/health/db`.
 - Esa ruta intenta ejecutar `SELECT 1` mediante Prisma.
-- Si la base de datos esta disponible, devuelve la pagina con estado correcto.
-- Si no lo esta, devuelve un mensaje controlado y no rompe la aplicacion.
+- La ruta ya responde correctamente indicando que la base de datos esta disponible.
+- La aplicacion ya conecta correctamente con PostgreSQL mediante Prisma.
 
 ### 4. Scripts utiles para desarrollo
 
@@ -49,43 +49,33 @@ Se han añadido:
 
 ## Validacion realizada
 
-### Validado
-
 - Prisma CLI instalada en el proyecto.
 - `schema.prisma` creado y conectado a `DATABASE_URL`.
 - `prisma validate` ejecutado correctamente.
-- `prisma generate` ejecutado correctamente.
 - Cliente Prisma preparado en el codigo.
-- Migracion inicial SQL generada desde el schema.
-- Ruta de comprobacion de base de datos integrada.
-
-### No validado completamente por entorno
-
-- Instalacion local de PostgreSQL.
-- Creacion real de la base de datos local.
-- Ejecucion real de `prisma migrate dev`.
-- Conexion satisfactoria contra una base de datos PostgreSQL real.
+- PostgreSQL local instalado y operativo.
+- Servicio `postgresql-x64-18` en ejecucion.
+- Base de datos `tfg_inesdelrio` creada en local.
+- `npx prisma migrate status` confirma que el esquema esta al dia.
+- La migracion inicial `20260418123000_init` ya esta aplicada.
+- La aplicacion conecta correctamente con PostgreSQL mediante Prisma.
+- La ruta `/health/db` responde correctamente con estado disponible.
 
 ## Comprobacion manual
 
-1. Instalar PostgreSQL localmente si aun no esta disponible.
-2. Crear la base de datos `tfg_inesdelrio`.
-3. Ajustar `DATABASE_URL` en `.env` si usuario, password, host o puerto cambian.
-4. Ejecutar `npm run prisma:generate`.
-5. Ejecutar `npm run prisma:migrate -- --name init`.
-6. Ejecutar `npm run dev`.
-7. Abrir `http://localhost:3000/health/db`.
-8. Verificar que aparece el mensaje de conexion correcta.
+1. Revisar `DATABASE_URL` en `.env`.
+2. Ejecutar `npm run dev`.
+3. Abrir `http://localhost:3000/health/db`.
+4. Verificar que aparece el mensaje `Base de datos disponible`.
+5. Ejecutar `npx prisma migrate status` y comprobar que indica `Database schema is up to date!`.
 
-## Evidencia de bloqueo de entorno
+## Evidencia de cierre
 
-Durante la validacion se ha comprobado que:
-
-- `psql` no esta disponible en el sistema.
-- no se ha detectado un servicio PostgreSQL accesible desde el entorno actual.
-- la ruta `/health/db` responde de forma controlada con error 503 cuando no existe conexion real a PostgreSQL.
+- `prisma validate` ejecutado correctamente sobre el esquema actual.
+- `npx prisma migrate status` confirma que la migracion inicial esta aplicada y que la base esta al dia.
+- La comprobacion real de `SELECT 1` mediante Prisma se ha ejecutado correctamente contra PostgreSQL.
+- La ruta `/health/db` ha respondido `200` mostrando que la base de datos esta disponible.
 
 ## Observaciones
 
-- PRE02 queda preparado en codigo y configuracion.
-- Para marcarlo como validado al 100 % en local solo falta disponer de PostgreSQL operativo y ejecutar la primera migracion real.
+- PRE02 queda cerrado con PostgreSQL operativo, Prisma conectado y migracion inicial aplicada.

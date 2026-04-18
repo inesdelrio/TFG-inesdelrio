@@ -1,0 +1,123 @@
+<%- include("../../partials/head") %>
+<%- include("../../partials/header") %>
+
+<main class="container auth-page">
+  <section class="auth-shell">
+    <div class="auth-intro">
+      <span class="eyebrow">RF01</span>
+      <h1>Registro de voluntario</h1>
+      <p>
+        Crea tu cuenta para participar en actividades y seguir la evolucion del
+        proyecto desde una base de usuarios real.
+      </p>
+    </div>
+
+    <div class="auth-card">
+      <% if (successMessage) { %>
+        <div class="feedback-banner success">
+          <strong>Cuenta creada.</strong>
+          <p><%= successMessage %></p>
+        </div>
+      <% } %>
+
+      <% if (Object.keys(errors).length > 0) { %>
+        <div class="feedback-banner error">
+          <strong>Revisa el formulario.</strong>
+          <p>Hay campos con errores que impiden completar el registro.</p>
+        </div>
+      <% } %>
+
+      <form class="auth-form" action="/registro" method="post" novalidate>
+        <div class="form-row">
+          <label for="firstName">Nombre</label>
+          <input
+            id="firstName"
+            name="firstName"
+            type="text"
+            required
+            minlength="2"
+            value="<%= formData.firstName %>"
+          />
+          <% if (errors.firstName) { %>
+            <p class="field-error"><%= errors.firstName %></p>
+          <% } %>
+        </div>
+
+        <div class="form-row">
+          <label for="lastName">Apellidos</label>
+          <input
+            id="lastName"
+            name="lastName"
+            type="text"
+            required
+            minlength="2"
+            value="<%= formData.lastName %>"
+          />
+          <% if (errors.lastName) { %>
+            <p class="field-error"><%= errors.lastName %></p>
+          <% } %>
+        </div>
+
+        <div class="form-row">
+          <label for="email">Email</label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            required
+            value="<%= formData.email %>"
+          />
+          <% if (errors.email) { %>
+            <p class="field-error"><%= errors.email %></p>
+          <% } %>
+        </div>
+
+        <div class="form-row">
+          <label for="phone">Telefono</label>
+          <input
+            id="phone"
+            name="phone"
+            type="tel"
+            inputmode="tel"
+            value="<%= formData.phone %>"
+          />
+          <% if (errors.phone) { %>
+            <p class="field-error"><%= errors.phone %></p>
+          <% } %>
+        </div>
+
+        <div class="form-row">
+          <label for="password">Contraseña</label>
+          <input
+            id="password"
+            name="password"
+            type="password"
+            required
+            minlength="8"
+          />
+          <% if (errors.password) { %>
+            <p class="field-error"><%= errors.password %></p>
+          <% } %>
+        </div>
+
+        <div class="form-row">
+          <label for="passwordConfirm">Confirmar contraseña</label>
+          <input
+            id="passwordConfirm"
+            name="passwordConfirm"
+            type="password"
+            required
+            minlength="8"
+          />
+          <% if (errors.passwordConfirm) { %>
+            <p class="field-error"><%= errors.passwordConfirm %></p>
+          <% } %>
+        </div>
+
+        <button class="primary-button" type="submit">Crear cuenta</button>
+      </form>
+    </div>
+  </section>
+</main>
+
+<%- include("../../partials/footer") %>

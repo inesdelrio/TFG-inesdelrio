@@ -1,0 +1,64 @@
+<%- include("../../partials/head") %>
+<%- include("../../partials/header") %>
+
+<main class="container auth-page">
+  <section class="auth-shell">
+    <div class="auth-intro">
+      <span class="eyebrow">RF02</span>
+      <h1>Inicio de sesion</h1>
+      <p>
+        Accede con tu cuenta para mantener una sesion activa y entrar en tu area
+        privada segun el rol asignado.
+      </p>
+    </div>
+
+    <div class="auth-card">
+      <% if (infoMessage) { %>
+        <div class="feedback-banner success">
+          <strong>Todo listo.</strong>
+          <p><%= infoMessage %></p>
+        </div>
+      <% } %>
+
+      <% if (errors.credentials) { %>
+        <div class="feedback-banner error">
+          <strong>No se ha podido iniciar sesion.</strong>
+          <p><%= errors.credentials %></p>
+        </div>
+      <% } %>
+
+      <form class="auth-form" action="/login" method="post" novalidate>
+        <div class="form-row">
+          <label for="email">Email</label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            required
+            value="<%= formData.email %>"
+          />
+          <% if (errors.email) { %>
+            <p class="field-error"><%= errors.email %></p>
+          <% } %>
+        </div>
+
+        <div class="form-row">
+          <label for="password">Contraseña</label>
+          <input
+            id="password"
+            name="password"
+            type="password"
+            required
+          />
+          <% if (errors.password) { %>
+            <p class="field-error"><%= errors.password %></p>
+          <% } %>
+        </div>
+
+        <button class="primary-button" type="submit">Entrar</button>
+      </form>
+    </div>
+  </section>
+</main>
+
+<%- include("../../partials/footer") %>

@@ -2,7 +2,7 @@
 
 ## Estado del requisito
 
-Completado en el repositorio. La unica parte que no puede certificarse solo desde el codigo es la instalacion global de herramientas de sistema fuera del repo.
+Cerrado definitivamente.
 
 ## Que ya estaba hecho antes de esta implementacion
 
@@ -97,6 +97,7 @@ Se han creado:
 - La app puede arrancar con `npm run start`.
 - La ruta `/` renderiza una vista EJS.
 - Los estaticos se sirven desde `public/`.
+- La base tecnica inicial queda integrada con la configuracion validada en PRE02.
 
 ## Comprobacion manual
 
@@ -111,3 +112,4 @@ Se han creado:
 
 - La instalacion de Node.js y npm ya estaba resuelta antes de esta intervencion.
 - La estructura inicial de carpetas ya estaba creada antes de empezar PRE01.
+- PRE01 queda cerrado y consolidado como base tecnica definitiva del proyecto.
