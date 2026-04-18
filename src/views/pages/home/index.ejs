@@ -1,0 +1,39 @@
+<%- include("../../partials/head") %>
+<%- include("../../partials/header") %>
+
+<main class="container hero">
+  <section class="hero-copy">
+    <span class="eyebrow">PRE01 + PRE02</span>
+    <h1>Base tecnica inicial operativa</h1>
+    <p>
+      La aplicacion ya arranca con Node.js, Express y EJS, sirve estaticos desde
+      <code>public/</code> y deja preparada la integracion con PostgreSQL mediante Prisma.
+    </p>
+
+    <div class="status-grid">
+      <article class="status-card">
+        <h2>Servidor</h2>
+        <p>Ruta principal renderizada con EJS.</p>
+      </article>
+
+      <article class="status-card">
+        <h2>Static assets</h2>
+        <p>CSS y JavaScript servidos desde la carpeta <code>public/</code>.</p>
+      </article>
+
+      <article class="status-card">
+        <h2>Prisma</h2>
+        <p>Cliente configurado y schema inicial preparado para PostgreSQL.</p>
+      </article>
+    </div>
+
+    <% if (dbStatus) { %>
+      <div class="db-status <%= dbStatus.ok ? "success" : "error" %>">
+        <strong><%= dbStatus.ok ? "Base de datos disponible." : "Base de datos no disponible." %></strong>
+        <p><%= dbStatus.message %></p>
+      </div>
+    <% } %>
+  </section>
+</main>
+
+<%- include("../../partials/footer") %>
