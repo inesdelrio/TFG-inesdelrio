@@ -5,6 +5,9 @@
       <a href="/">Inicio</a>
       <% if (currentUser) { %>
         <a href="/login">Sesion</a>
+        <% if (currentUser.role === "VOLUNTARIO") { %>
+          <a href="/entidades/solicitud">Alta entidad</a>
+        <% } %>
         <a href="<%= currentUser.role === 'ADMIN' ? '/admin/area' : currentUser.role === 'ENTIDAD' ? '/entidad/area' : '/voluntariado/area' %>">Mi area</a>
         <form class="inline-form" action="/logout" method="post">
           <button class="nav-button" type="submit">Cerrar sesion</button>

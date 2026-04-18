@@ -1,0 +1,67 @@
+<%- include("../../partials/head") %>
+<%- include("../../partials/header") %>
+
+<main class="container dashboard-page">
+  <section class="dashboard-hero">
+    <span class="eyebrow">Entidad</span>
+    <h1>Area de entidad</h1>
+    <p>
+      Tu solicitud ya queda vinculada a tu usuario. Desde aqui puedes revisar el
+      estado actual de validacion mientras se implementa el panel administrativo.
+    </p>
+  </section>
+
+  <% if (requestCreated) { %>
+    <div class="feedback-banner success">
+      <strong>Solicitud enviada.</strong>
+      <p>La entidad se ha registrado correctamente con estado inicial <strong>PENDIENTE</strong>.</p>
+    </div>
+  <% } %>
+
+  <% if (entity) { %>
+    <section class="status-grid">
+      <article class="status-card">
+        <h2>Estado</h2>
+        <p><strong><%= entity.validationStatus %></strong></p>
+      </article>
+
+      <article class="status-card">
+        <h2>Entidad</h2>
+        <p><strong><%= entity.organizationName %></strong></p>
+        <p><%= entity.legalName %></p>
+      </article>
+
+      <article class="status-card">
+        <h2>Contacto</h2>
+        <p><%= entity.contactEmail %></p>
+        <p><%= entity.contactPhone %></p>
+      </article>
+    </section>
+
+    <section class="entity-details">
+      <div class="status-card">
+        <h2>Direccion</h2>
+        <p><%= entity.address %>, <%= entity.city %></p>
+      </div>
+
+      <div class="status-card">
+        <h2>Descripcion</h2>
+        <p><%= entity.description %></p>
+      </div>
+
+      <% if (entity.supportingInfo) { %>
+        <div class="status-card">
+          <h2>Informacion justificativa</h2>
+          <p><%= entity.supportingInfo %></p>
+        </div>
+      <% } %>
+    </section>
+  <% } else { %>
+    <div class="feedback-banner error">
+      <strong>No hay solicitud asociada.</strong>
+      <p>Tu cuenta tiene rol de entidad pero no se ha encontrado la solicitud vinculada.</p>
+    </div>
+  <% } %>
+</main>
+
+<%- include("../../partials/footer") %>

@@ -12,6 +12,7 @@ Actualmente estan cerrados los requisitos:
 - PRE04 - Configuracion inicial de Prisma
 - RF01 - Registro de voluntario
 - RF02 - Inicio y cierre de sesion
+- RF03 - Solicitud de alta de entidad
 
 Estado tecnico validado:
 
@@ -66,4 +67,5 @@ npm run prisma:validate
 - [PRE04](docs/requisitos/PRE04.md)
 - [RF01](docs/requisitos/RF01.md)
 - [RF02](docs/requisitos/RF02.md)
+- [RF03](docs/requisitos/RF03.md)
 - [Estructura inicial](docs/arquitectura/estructura-inicial.md)

@@ -1,0 +1,85 @@
+<%- include("../../partials/head") %>
+<%- include("../../partials/header") %>
+
+<main class="container auth-page">
+  <section class="auth-shell entity-shell">
+    <div class="auth-intro">
+      <span class="eyebrow">RF03</span>
+      <h1>Solicitud de alta de entidad</h1>
+      <p>
+        Registra tu organizacion para entrar en el circuito de validacion de la
+        plataforma. La solicitud quedara asociada a tu usuario y nacera con estado
+        <strong>PENDIENTE</strong>.
+      </p>
+    </div>
+
+    <div class="auth-card">
+      <% if (errors.general) { %>
+        <div class="feedback-banner error">
+          <strong>No se ha podido registrar la entidad.</strong>
+          <p><%= errors.general %></p>
+        </div>
+      <% } %>
+
+      <form class="auth-form" action="/entidades/solicitud" method="post" novalidate>
+        <div class="form-row">
+          <label for="organizationName">Nombre visible de la entidad</label>
+          <input id="organizationName" name="organizationName" type="text" required value="<%= formData.organizationName %>" />
+          <% if (errors.organizationName) { %><p class="field-error"><%= errors.organizationName %></p><% } %>
+        </div>
+
+        <div class="form-row">
+          <label for="legalName">Razon social o nombre legal</label>
+          <input id="legalName" name="legalName" type="text" required value="<%= formData.legalName %>" />
+          <% if (errors.legalName) { %><p class="field-error"><%= errors.legalName %></p><% } %>
+        </div>
+
+        <div class="form-row">
+          <label for="taxId">CIF/NIF</label>
+          <input id="taxId" name="taxId" type="text" required value="<%= formData.taxId %>" />
+          <% if (errors.taxId) { %><p class="field-error"><%= errors.taxId %></p><% } %>
+        </div>
+
+        <div class="form-row">
+          <label for="contactEmail">Email de contacto</label>
+          <input id="contactEmail" name="contactEmail" type="email" required value="<%= formData.contactEmail %>" />
+          <% if (errors.contactEmail) { %><p class="field-error"><%= errors.contactEmail %></p><% } %>
+        </div>
+
+        <div class="form-row">
+          <label for="contactPhone">Telefono de contacto</label>
+          <input id="contactPhone" name="contactPhone" type="tel" required value="<%= formData.contactPhone %>" />
+          <% if (errors.contactPhone) { %><p class="field-error"><%= errors.contactPhone %></p><% } %>
+        </div>
+
+        <div class="form-row">
+          <label for="city">Ciudad</label>
+          <input id="city" name="city" type="text" required value="<%= formData.city %>" />
+          <% if (errors.city) { %><p class="field-error"><%= errors.city %></p><% } %>
+        </div>
+
+        <div class="form-row">
+          <label for="address">Direccion</label>
+          <input id="address" name="address" type="text" required value="<%= formData.address %>" />
+          <% if (errors.address) { %><p class="field-error"><%= errors.address %></p><% } %>
+        </div>
+
+        <div class="form-row">
+          <label for="description">Descripcion de la entidad</label>
+          <textarea id="description" name="description" rows="5" required><%= formData.description %></textarea>
+          <% if (errors.description) { %><p class="field-error"><%= errors.description %></p><% } %>
+        </div>
+
+        <div class="form-row">
+          <label for="supportingInfo">Documento o informacion justificativa</label>
+          <textarea id="supportingInfo" name="supportingInfo" rows="4"><%= formData.supportingInfo %></textarea>
+          <p class="field-help">Campo preparado para adjuntar o describir documentacion justificativa en esta fase inicial.</p>
+        </div>
+
+        <button class="primary-button" type="submit">Enviar solicitud</button>
+      </form>
+    </div>
+  </section>
+</main>
+
+<%- include("../../partials/footer") %>

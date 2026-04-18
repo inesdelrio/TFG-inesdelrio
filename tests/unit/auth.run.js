@@ -3,6 +3,9 @@ const {
   testAuthenticateUserReturnsUserWithValidCredentials,
 } = require("./services/auth/authenticate-user.service.test");
 const {
+  testCreateEntityRequestCreatesPendingEntityAndPromotesUserRole,
+} = require("./services/entities/create-entity-request.service.test");
+const {
   testRegisterVolunteerCreatesVolunteerUser,
 } = require("./services/auth/register-volunteer.service.test");
 const {
@@ -11,6 +14,9 @@ const {
 const {
   testValidateLoginInputRejectsInvalidData,
 } = require("./validators/auth/login.validator.test");
+const {
+  testValidateEntityRegistrationInputRejectsInvalidData,
+} = require("./validators/entities/entity-registration.validator.test");
 const {
   testValidateVolunteerRegistrationInputRejectsInvalidData,
 } = require("./validators/auth/register-volunteer.validator.test");
@@ -44,12 +50,20 @@ async function main() {
     testDestroyUserSessionDestroysSessionWithoutError,
   );
   await runTest(
+    "createEntityRequest crea una entidad pendiente y promociona el rol del usuario",
+    testCreateEntityRequestCreatesPendingEntityAndPromotesUserRole,
+  );
+  await runTest(
     "validateVolunteerRegistrationInput detecta datos invalidos en el registro",
     testValidateVolunteerRegistrationInputRejectsInvalidData,
   );
   await runTest(
     "validateLoginInput detecta datos invalidos en el login",
     testValidateLoginInputRejectsInvalidData,
+  );
+  await runTest(
+    "validateEntityRegistrationInput detecta datos invalidos en el alta de entidad",
+    testValidateEntityRegistrationInputRejectsInvalidData,
   );
 }
 
