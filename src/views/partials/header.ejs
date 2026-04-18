@@ -6,6 +6,7 @@
       <% if (currentUser) { %>
         <a href="/login">Sesion</a>
         <% if (currentUser.role === "VOLUNTARIO") { %>
+          <a href="/voluntariado/perfil">Mi perfil</a>
           <a href="/entidades/solicitud">Alta entidad</a>
         <% } %>
         <a href="<%= currentUser.role === 'ADMIN' ? '/admin/area' : currentUser.role === 'ENTIDAD' ? '/entidad/area' : '/voluntariado/area' %>">Mi area</a>

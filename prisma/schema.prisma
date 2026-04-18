@@ -37,6 +37,7 @@ model User {
   passwordHash String
   role         UserRole @default(VOLUNTARIO)
   entity       Entity?
+  adminActionLogs AdminActionLog[]
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 }
@@ -55,6 +56,20 @@ model Entity {
   validationStatus   EntityValidationStatus @default(PENDIENTE)
   requestedByUser    User                   @relation(fields: [requestedByUserId], references: [id])
   requestedByUserId  Int                    @unique
+  adminActionLogs    AdminActionLog[]
   createdAt          DateTime               @default(now())
   updatedAt          DateTime               @updatedAt
+}
+
+model AdminActionLog {
+  id            Int                    @id @default(autoincrement())
+  action        String
+  fromStatus    EntityValidationStatus
+  toStatus      EntityValidationStatus
+  notes         String?
+  adminUser     User                   @relation(fields: [adminUserId], references: [id])
+  adminUserId   Int
+  entity        Entity                 @relation(fields: [entityId], references: [id])
+  entityId      Int
+  createdAt     DateTime               @default(now())
 }

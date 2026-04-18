@@ -1,0 +1,42 @@
+<%- include("../../partials/head") %>
+<%- include("../../partials/header") %>
+
+<main class="container dashboard-page">
+  <section class="dashboard-hero">
+    <span class="eyebrow">RF04</span>
+    <h1>Entidades pendientes de revision</h1>
+    <p>
+      Panel base de administracion para revisar solicitudes y cambiar el estado de
+      validacion de cada entidad.
+    </p>
+  </section>
+
+  <% if (infoMessage) { %>
+    <div class="feedback-banner success">
+      <strong>Actualizacion completada.</strong>
+      <p><%= infoMessage %></p>
+    </div>
+  <% } %>
+
+  <% if (entities.length === 0) { %>
+    <div class="feedback-banner success">
+      <strong>Sin pendientes.</strong>
+      <p>No hay entidades en estado <strong>PENDIENTE</strong> en este momento.</p>
+    </div>
+  <% } else { %>
+    <section class="status-grid admin-grid">
+      <% entities.forEach((entity) => { %>
+        <article class="status-card">
+          <h2><%= entity.organizationName %></h2>
+          <p><strong>Solicitante:</strong> <%= entity.requestedByUser.firstName %> <%= entity.requestedByUser.lastName %></p>
+          <p><strong>Email:</strong> <%= entity.requestedByUser.email %></p>
+          <p><strong>Estado:</strong> <%= entity.validationStatus %></p>
+          <p><strong>Ciudad:</strong> <%= entity.city %></p>
+          <a class="secondary-link" href="/admin/entidades/<%= entity.id %>">Revisar solicitud</a>
+        </article>
+      <% }) %>
+    </section>
+  <% } %>
+</main>
+
+<%- include("../../partials/footer") %>

@@ -13,6 +13,8 @@ Actualmente estan cerrados los requisitos:
 - RF01 - Registro de voluntario
 - RF02 - Inicio y cierre de sesion
 - RF03 - Solicitud de alta de entidad
+- RF04 - Verificacion de entidades
+- RF05 - Perfil de voluntario
 
 Estado tecnico validado:
 
@@ -68,4 +70,6 @@ npm run prisma:validate
 - [RF01](docs/requisitos/RF01.md)
 - [RF02](docs/requisitos/RF02.md)
 - [RF03](docs/requisitos/RF03.md)
+- [RF04](docs/requisitos/RF04.md)
+- [RF05](docs/requisitos/RF05.md)
 - [Estructura inicial](docs/arquitectura/estructura-inicial.md)

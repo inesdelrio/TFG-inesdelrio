@@ -25,11 +25,7 @@ async function renderEntityArea(req, res, next) {
 }
 
 function renderAdminArea(req, res) {
-  return res.render("pages/auth/role-area", {
-    pageTitle: "Area de administracion",
-    areaTitle: "Area de administracion",
-    areaDescription: "Zona reservada para cuentas con rol ADMIN.",
-  });
+  return res.redirect("/admin/area");
 }
 
 module.exports = {

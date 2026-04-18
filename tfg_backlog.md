@@ -239,6 +239,7 @@ No se debe dar por hecho ningún paso técnico importante. Si algo requiere inst
   - RF04-10: Documentar el requisito técnico y cómo comprobarlo manualmente
 
 ### RF05 — Perfil de voluntario
+- **Estado:** Cerrado
 - **Descripción:** Permitir al voluntario consultar y editar sus datos autorizados.
 - **Criterio de validación:** El voluntario puede ver y modificar sus datos personales permitidos.
 - **Estimación:** 6 h

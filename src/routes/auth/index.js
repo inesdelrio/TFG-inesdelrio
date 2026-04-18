@@ -14,6 +14,5 @@ router.post("/login", authSessionController.loginUser);
 router.post("/logout", authSessionController.logoutUser);
 router.get("/voluntariado/area", requireAuth, requireRole("VOLUNTARIO"), userAreaController.renderVolunteerArea);
 router.get("/entidad/area", requireAuth, requireRole("ENTIDAD"), userAreaController.renderEntityArea);
-router.get("/admin/area", requireAuth, requireRole("ADMIN"), userAreaController.renderAdminArea);
 
 module.exports = router;

@@ -1,0 +1,94 @@
+<%- include("../../partials/head") %>
+<%- include("../../partials/header") %>
+
+<main class="container dashboard-page">
+  <section class="dashboard-hero">
+    <span class="eyebrow">Revision</span>
+    <h1><%= entity.organizationName %></h1>
+    <p>
+      Revision detallada de la solicitud de entidad y registro de acciones
+      administrativas asociadas.
+    </p>
+  </section>
+
+  <section class="status-grid admin-grid">
+    <article class="status-card">
+      <h2>Estado actual</h2>
+      <p><strong><%= entity.validationStatus %></strong></p>
+      <p><strong>CIF/NIF:</strong> <%= entity.taxId %></p>
+    </article>
+
+    <article class="status-card">
+      <h2>Solicitante</h2>
+      <p><%= entity.requestedByUser.firstName %> <%= entity.requestedByUser.lastName %></p>
+      <p><%= entity.requestedByUser.email %></p>
+      <p><strong>Rol actual:</strong> <%= entity.requestedByUser.role %></p>
+    </article>
+
+    <article class="status-card">
+      <h2>Contacto entidad</h2>
+      <p><%= entity.contactEmail %></p>
+      <p><%= entity.contactPhone %></p>
+      <p><%= entity.address %>, <%= entity.city %></p>
+    </article>
+  </section>
+
+  <section class="entity-details">
+    <div class="status-card">
+      <h2>Descripcion</h2>
+      <p><%= entity.description %></p>
+    </div>
+
+    <% if (entity.supportingInfo) { %>
+      <div class="status-card">
+        <h2>Informacion justificativa</h2>
+        <p><%= entity.supportingInfo %></p>
+      </div>
+    <% } %>
+
+    <div class="status-card">
+      <h2>Accion administrativa</h2>
+      <% if (errors.nextStatus) { %>
+        <p class="field-error"><%= errors.nextStatus %></p>
+      <% } %>
+      <form class="auth-form" action="/admin/entidades/<%= entity.id %>/estado" method="post">
+        <div class="form-row">
+          <label for="nextStatus">Nuevo estado</label>
+          <select id="nextStatus" name="nextStatus" required>
+            <option value="">Selecciona una accion</option>
+            <option value="VERIFICADA">Verificar</option>
+            <option value="RECHAZADA">Rechazar</option>
+            <option value="SUSPENDIDA">Suspender</option>
+          </select>
+        </div>
+
+        <div class="form-row">
+          <label for="notes">Notas administrativas</label>
+          <textarea id="notes" name="notes" rows="4"></textarea>
+        </div>
+
+        <button class="primary-button" type="submit">Guardar cambio de estado</button>
+      </form>
+    </div>
+
+    <div class="status-card">
+      <h2>Historial de acciones</h2>
+      <% if (entity.adminActionLogs.length === 0) { %>
+        <p>No hay acciones registradas todavia.</p>
+      <% } else { %>
+        <div class="log-list">
+          <% entity.adminActionLogs.forEach((log) => { %>
+            <article class="log-item">
+              <p><strong><%= log.action %></strong></p>
+              <p><%= log.fromStatus %> -> <%= log.toStatus %></p>
+              <p>Por <%= log.adminUser.firstName %> <%= log.adminUser.lastName %> (<%= log.adminUser.email %>)</p>
+              <% if (log.notes) { %><p><%= log.notes %></p><% } %>
+            </article>
+          <% }) %>
+        </div>
+      <% } %>
+    </div>
+  </section>
+</main>
+
+<%- include("../../partials/footer") %>

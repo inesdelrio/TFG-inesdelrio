@@ -1,0 +1,106 @@
+<%- include("../../partials/head") %>
+<%- include("../../partials/header") %>
+
+<main class="container dashboard-page">
+  <section class="dashboard-hero">
+    <span class="eyebrow">RF05</span>
+    <h1>Perfil de voluntario</h1>
+    <p>
+      Desde esta pantalla puedes consultar y editar los datos personales que la
+      plataforma permite modificar sin afectar a tus credenciales de acceso.
+    </p>
+  </section>
+
+  <section class="profile-shell">
+    <div class="status-card">
+      <h2>Resumen</h2>
+      <p><strong>Rol:</strong> VOLUNTARIO</p>
+      <p><strong>Email de acceso:</strong> <%= formData.email %></p>
+      <p class="field-help">
+        El email se muestra como referencia de login y no se edita desde este
+        formulario.
+      </p>
+    </div>
+
+    <div class="auth-card">
+      <% if (successMessage) { %>
+        <div class="feedback-banner success">
+          <strong>Perfil actualizado.</strong>
+          <p><%= successMessage %></p>
+        </div>
+      <% } %>
+
+      <% if (Object.keys(errors).length > 0) { %>
+        <div class="feedback-banner error">
+          <strong>No se han guardado los cambios.</strong>
+          <p>Revisa los campos marcados antes de volver a enviar el formulario.</p>
+        </div>
+      <% } %>
+
+      <form class="auth-form" action="/voluntariado/perfil" method="post" novalidate>
+        <div class="form-row">
+          <label for="firstName">Nombre</label>
+          <input
+            id="firstName"
+            name="firstName"
+            type="text"
+            required
+            minlength="2"
+            value="<%= formData.firstName %>"
+          />
+          <% if (errors.firstName) { %>
+            <p class="field-error"><%= errors.firstName %></p>
+          <% } %>
+        </div>
+
+        <div class="form-row">
+          <label for="lastName">Apellidos</label>
+          <input
+            id="lastName"
+            name="lastName"
+            type="text"
+            required
+            minlength="2"
+            value="<%= formData.lastName %>"
+          />
+          <% if (errors.lastName) { %>
+            <p class="field-error"><%= errors.lastName %></p>
+          <% } %>
+        </div>
+
+        <div class="form-row">
+          <label for="email">Email</label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            value="<%= formData.email %>"
+            disabled
+          />
+          <p class="field-help">El email se mantiene bloqueado en esta primera version del perfil.</p>
+        </div>
+
+        <div class="form-row">
+          <label for="phone">Telefono</label>
+          <input
+            id="phone"
+            name="phone"
+            type="tel"
+            inputmode="tel"
+            value="<%= formData.phone %>"
+          />
+          <% if (errors.phone) { %>
+            <p class="field-error"><%= errors.phone %></p>
+          <% } %>
+        </div>
+
+        <div class="profile-actions">
+          <button class="primary-button" type="submit">Guardar cambios</button>
+          <a class="secondary-link" href="/voluntariado/area">Volver al area</a>
+        </div>
+      </form>
+    </div>
+  </section>
+</main>
+
+<%- include("../../partials/footer") %>

@@ -10,6 +10,7 @@
     "prisma:migrate": "prisma migrate dev",
     "prisma:reset": "prisma migrate reset --force",
     "prisma:validate": "prisma validate",
+    "seed:admin": "node scripts/seed-admin.js",
     "test": "node tests/unit/auth.run.js"
   },
   "keywords": [
