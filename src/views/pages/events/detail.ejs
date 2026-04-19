@@ -1,0 +1,39 @@
+<%- include("../../partials/head") %>
+<%- include("../../partials/header") %>
+
+<main class="container dashboard-page">
+  <section class="dashboard-hero">
+    <span class="eyebrow">RF09</span>
+    <h1><%= event.title %></h1>
+    <p>
+      Consulta el detalle completo de la actividad y la informacion de la entidad organizadora.
+    </p>
+  </section>
+
+  <section class="event-detail-grid">
+    <article class="status-card">
+      <h2>Datos del evento</h2>
+      <p><strong>Fecha y hora:</strong> <%= new Date(event.startsAt).toLocaleString("es-ES") %></p>
+      <p><strong>Ciudad:</strong> <%= event.city %></p>
+      <p><strong>Direccion:</strong> <%= event.address %></p>
+      <p><strong>Plazas:</strong> <%= event.totalSlots %></p>
+      <p><%= event.description %></p>
+    </article>
+
+    <article class="status-card">
+      <h2>Entidad organizadora</h2>
+      <p><strong><%= event.entity.organizationName %></strong></p>
+      <p><strong>Email:</strong> <%= event.entity.contactEmail %></p>
+      <p><strong>Telefono:</strong> <%= event.entity.contactPhone %></p>
+      <p><strong>Ciudad:</strong> <%= event.entity.city %></p>
+      <p><strong>Direccion:</strong> <%= event.entity.address %></p>
+      <p><%= event.entity.description %></p>
+    </article>
+  </section>
+
+  <div class="profile-actions">
+    <a class="secondary-link" href="/eventos">Volver al listado</a>
+  </div>
+</main>
+
+<%- include("../../partials/footer") %>

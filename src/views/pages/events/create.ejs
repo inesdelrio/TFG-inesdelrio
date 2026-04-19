@@ -1,0 +1,97 @@
+<%- include("../../partials/head") %>
+<%- include("../../partials/header") %>
+
+<main class="container dashboard-page">
+  <section class="dashboard-hero">
+    <span class="eyebrow">RF07</span>
+    <h1>Publicar evento</h1>
+    <p>
+      Crea una actividad desde tu cuenta de entidad para que aparezca en el
+      listado publico de voluntariado.
+    </p>
+  </section>
+
+  <section class="profile-shell">
+    <div class="status-card">
+      <h2>Estado de publicacion</h2>
+      <% if (entity) { %>
+        <p><strong>Entidad:</strong> <%= entity.organizationName %></p>
+        <p><strong>Validacion:</strong> <%= entity.validationStatus %></p>
+      <% } else { %>
+        <p>No se ha encontrado una entidad vinculada a la sesion actual.</p>
+      <% } %>
+      <p class="field-help">
+        Solo las entidades en estado <strong>VERIFICADA</strong> pueden publicar eventos.
+      </p>
+    </div>
+
+    <div class="auth-card">
+      <% if (blockedReason) { %>
+        <div class="feedback-banner error">
+          <strong>Publicacion bloqueada.</strong>
+          <p><%= blockedReason %></p>
+        </div>
+      <% } %>
+
+      <% if (Object.keys(errors).length > 0) { %>
+        <div class="feedback-banner error">
+          <strong>No se ha podido publicar el evento.</strong>
+          <p>Revisa los campos marcados antes de volver a intentarlo.</p>
+        </div>
+      <% } %>
+
+      <form class="auth-form" action="/eventos" method="post" novalidate>
+        <div class="form-row">
+          <label for="title">Titulo</label>
+          <input id="title" name="title" type="text" required minlength="5" value="<%= formData.title %>" />
+          <% if (errors.title) { %><p class="field-error"><%= errors.title %></p><% } %>
+        </div>
+
+        <div class="form-row">
+          <label for="description">Descripcion</label>
+          <textarea id="description" name="description" rows="6" required><%= formData.description %></textarea>
+          <% if (errors.description) { %><p class="field-error"><%= errors.description %></p><% } %>
+        </div>
+
+        <div class="form-row">
+          <label for="city">Ciudad</label>
+          <input id="city" name="city" type="text" required value="<%= formData.city %>" />
+          <% if (errors.city) { %><p class="field-error"><%= errors.city %></p><% } %>
+        </div>
+
+        <div class="form-row">
+          <label for="address">Direccion</label>
+          <input id="address" name="address" type="text" required value="<%= formData.address %>" />
+          <% if (errors.address) { %><p class="field-error"><%= errors.address %></p><% } %>
+        </div>
+
+        <div class="form-row-group">
+          <div class="form-row">
+            <label for="eventDate">Fecha</label>
+            <input id="eventDate" name="eventDate" type="date" required value="<%= formData.eventDate %>" />
+            <% if (errors.eventDate) { %><p class="field-error"><%= errors.eventDate %></p><% } %>
+          </div>
+
+          <div class="form-row">
+            <label for="eventTime">Hora</label>
+            <input id="eventTime" name="eventTime" type="time" required value="<%= formData.eventTime %>" />
+            <% if (errors.eventTime) { %><p class="field-error"><%= errors.eventTime %></p><% } %>
+          </div>
+
+          <div class="form-row">
+            <label for="totalSlots">Plazas</label>
+            <input id="totalSlots" name="totalSlots" type="number" min="1" required value="<%= formData.totalSlots %>" />
+            <% if (errors.totalSlots) { %><p class="field-error"><%= errors.totalSlots %></p><% } %>
+          </div>
+        </div>
+
+        <div class="profile-actions">
+          <button class="primary-button" type="submit" <%= blockedReason ? "disabled" : "" %>>Publicar evento</button>
+          <a class="secondary-link" href="/eventos">Ver listado publico</a>
+        </div>
+      </form>
+    </div>
+  </section>
+</main>
+
+<%- include("../../partials/footer") %>

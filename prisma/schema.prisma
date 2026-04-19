@@ -57,8 +57,23 @@ model Entity {
   requestedByUser    User                   @relation(fields: [requestedByUserId], references: [id])
   requestedByUserId  Int                    @unique
   adminActionLogs    AdminActionLog[]
+  events             Event[]
   createdAt          DateTime               @default(now())
   updatedAt          DateTime               @updatedAt
+}
+
+model Event {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  city        String
+  address     String
+  startsAt    DateTime
+  totalSlots  Int
+  entity      Entity   @relation(fields: [entityId], references: [id])
+  entityId    Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model AdminActionLog {

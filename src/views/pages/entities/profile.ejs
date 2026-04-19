@@ -1,0 +1,167 @@
+<%- include("../../partials/head") %>
+<%- include("../../partials/header") %>
+
+<main class="container dashboard-page">
+  <section class="dashboard-hero">
+    <span class="eyebrow">RF06</span>
+    <h1>Perfil de entidad</h1>
+    <p>
+      Desde aqui puedes mantener actualizada la informacion publica y de contacto
+      de tu entidad sin alterar los datos institucionales de identificacion.
+    </p>
+  </section>
+
+  <section class="profile-shell">
+    <div class="status-card">
+      <h2>Identificacion</h2>
+      <p><strong>Estado:</strong> <%= formData.validationStatus %></p>
+      <p><strong>Razon social:</strong> <%= formData.legalName %></p>
+      <p><strong>CIF/NIF:</strong> <%= formData.taxId %></p>
+      <p class="field-help">
+        La razon social y el CIF/NIF se muestran como referencia y no se editan desde este perfil.
+      </p>
+    </div>
+
+    <div class="auth-card">
+      <% if (successMessage) { %>
+        <div class="feedback-banner success">
+          <strong>Perfil actualizado.</strong>
+          <p><%= successMessage %></p>
+        </div>
+      <% } %>
+
+      <% if (Object.keys(errors).length > 0) { %>
+        <div class="feedback-banner error">
+          <strong>No se han guardado los cambios.</strong>
+          <p>Revisa los campos con error antes de volver a enviar el formulario.</p>
+        </div>
+      <% } %>
+
+      <form class="auth-form" action="/entidad/perfil" method="post" novalidate>
+        <div class="form-row">
+          <label for="organizationName">Nombre visible</label>
+          <input
+            id="organizationName"
+            name="organizationName"
+            type="text"
+            required
+            minlength="3"
+            value="<%= formData.organizationName %>"
+          />
+          <% if (errors.organizationName) { %>
+            <p class="field-error"><%= errors.organizationName %></p>
+          <% } %>
+        </div>
+
+        <div class="form-row">
+          <label for="legalName">Razon social</label>
+          <input
+            id="legalName"
+            name="legalName"
+            type="text"
+            value="<%= formData.legalName %>"
+            disabled
+          />
+        </div>
+
+        <div class="form-row">
+          <label for="taxId">CIF/NIF</label>
+          <input
+            id="taxId"
+            name="taxId"
+            type="text"
+            value="<%= formData.taxId %>"
+            disabled
+          />
+        </div>
+
+        <div class="form-row">
+          <label for="contactEmail">Email de contacto</label>
+          <input
+            id="contactEmail"
+            name="contactEmail"
+            type="email"
+            required
+            value="<%= formData.contactEmail %>"
+          />
+          <% if (errors.contactEmail) { %>
+            <p class="field-error"><%= errors.contactEmail %></p>
+          <% } %>
+        </div>
+
+        <div class="form-row">
+          <label for="contactPhone">Telefono de contacto</label>
+          <input
+            id="contactPhone"
+            name="contactPhone"
+            type="tel"
+            inputmode="tel"
+            required
+            value="<%= formData.contactPhone %>"
+          />
+          <% if (errors.contactPhone) { %>
+            <p class="field-error"><%= errors.contactPhone %></p>
+          <% } %>
+        </div>
+
+        <div class="form-row">
+          <label for="city">Ciudad</label>
+          <input
+            id="city"
+            name="city"
+            type="text"
+            required
+            value="<%= formData.city %>"
+          />
+          <% if (errors.city) { %>
+            <p class="field-error"><%= errors.city %></p>
+          <% } %>
+        </div>
+
+        <div class="form-row">
+          <label for="address">Direccion</label>
+          <input
+            id="address"
+            name="address"
+            type="text"
+            required
+            value="<%= formData.address %>"
+          />
+          <% if (errors.address) { %>
+            <p class="field-error"><%= errors.address %></p>
+          <% } %>
+        </div>
+
+        <div class="form-row">
+          <label for="description">Descripcion</label>
+          <textarea
+            id="description"
+            name="description"
+            rows="6"
+            required
+          ><%= formData.description %></textarea>
+          <% if (errors.description) { %>
+            <p class="field-error"><%= errors.description %></p>
+          <% } %>
+        </div>
+
+        <div class="form-row">
+          <label for="supportingInfo">Informacion justificativa</label>
+          <textarea
+            id="supportingInfo"
+            name="supportingInfo"
+            rows="4"
+          ><%= formData.supportingInfo %></textarea>
+          <p class="field-help">Campo opcional para ampliar o actualizar informacion institucional.</p>
+        </div>
+
+        <div class="profile-actions">
+          <button class="primary-button" type="submit">Guardar cambios</button>
+          <a class="secondary-link" href="/entidad/area">Volver al area</a>
+        </div>
+      </form>
+    </div>
+  </section>
+</main>
+
+<%- include("../../partials/footer") %>

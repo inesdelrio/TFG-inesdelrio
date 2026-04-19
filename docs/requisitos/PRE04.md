@@ -65,12 +65,12 @@ Preparar Prisma como capa de acceso a datos del proyecto, dejandolo inicializado
 
 ## Trazabilidad con tareas
 
-- `RI04-01` completada: Prisma inicializado en el proyecto.
-- `RI04-02` completada: `schema.prisma` creado.
-- `RI04-03` completada: `datasource` y `generator` configurados.
-- `RI04-04` completada: modelo temporal `SystemCheck` creado.
-- `RI04-05` completada: primera migracion creada y aplicada.
-- `RI04-06` completada: cliente Prisma disponible en el proyecto.
-- `RI04-07` completada: utilidad reutilizable creada en `src/config/prisma.js`.
-- `RI04-08` completada: lectura minima validada contra la base de datos real.
-- `RI04-09` completada: flujo basico de migraciones documentado en este fichero.
+- `PRE04-01` completada: Prisma inicializado en el proyecto.
+- `PRE04-02` completada: `schema.prisma` creado.
+- `PRE04-03` completada: `datasource` y `generator` configurados.
+- `PRE04-04` completada: modelo temporal `SystemCheck` creado.
+- `PRE04-05` completada: primera migracion creada y aplicada.
+- `PRE04-06` completada: cliente Prisma disponible en el proyecto.
+- `PRE04-07` completada: utilidad reutilizable creada en `src/config/prisma.js`.
+- `PRE04-08` completada: lectura minima validada contra la base de datos real.
+- `PRE04-09` completada: flujo basico de migraciones documentado en este fichero.

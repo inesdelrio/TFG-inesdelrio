@@ -1,0 +1,99 @@
+<%- include("../../partials/head") %>
+<%- include("../../partials/header") %>
+
+<main class="container dashboard-page">
+  <section class="dashboard-hero">
+    <span class="eyebrow">RF10</span>
+    <h1>Eventos publicados</h1>
+    <p>
+      Listado general de actividades visibles en la plataforma para consulta publica.
+    </p>
+  </section>
+
+  <section class="filter-shell">
+    <form class="auth-card filter-form" action="/eventos" method="get">
+      <div class="form-row-group">
+        <div class="form-row">
+          <label for="eventDate">Fecha</label>
+          <input id="eventDate" name="eventDate" type="date" value="<%= filters.eventDate %>" />
+        </div>
+
+        <div class="form-row">
+          <label for="entity">Entidad</label>
+          <input id="entity" name="entity" type="text" value="<%= filters.entity %>" placeholder="Nombre de entidad" />
+        </div>
+
+        <div class="form-row">
+          <label for="city">Ciudad</label>
+          <input id="city" name="city" type="text" value="<%= filters.city %>" placeholder="Ubicacion" />
+        </div>
+      </div>
+
+      <div class="profile-actions">
+        <button class="primary-button" type="submit">Aplicar filtros</button>
+        <% if (hasActiveFilters) { %>
+          <a class="secondary-link" href="/eventos">Limpiar filtros</a>
+        <% } %>
+      </div>
+    </form>
+  </section>
+
+  <% if (infoMessage) { %>
+    <div class="feedback-banner success">
+      <strong>Evento publicado.</strong>
+      <p><%= infoMessage %></p>
+    </div>
+  <% } %>
+
+  <% if (events.length === 0) { %>
+    <div class="status-card">
+      <h2>Sin eventos</h2>
+      <p>
+        <%= hasActiveFilters
+          ? "No hay eventos activos que coincidan con los filtros seleccionados."
+          : "Todavia no hay actividades publicadas." %>
+      </p>
+    </div>
+  <% } else { %>
+    <section class="event-list">
+      <% events.forEach((event) => { %>
+        <article class="status-card event-card">
+          <span class="eyebrow">Evento</span>
+          <h2><%= event.title %></h2>
+          <p><strong>Entidad:</strong> <%= event.entity.organizationName %></p>
+          <p><strong>Fecha:</strong> <%= new Date(event.startsAt).toLocaleString("es-ES") %></p>
+          <p><strong>Ciudad:</strong> <%= event.city %></p>
+          <p><strong>Direccion:</strong> <%= event.address %></p>
+          <p><strong>Plazas:</strong> <%= event.totalSlots %></p>
+          <p><%= event.description %></p>
+          <a class="secondary-link" href="/eventos/<%= event.id %>">Ver detalle</a>
+
+          <% if (currentEntityId && currentEntityId === event.entityId) { %>
+            <div class="event-actions">
+              <a class="secondary-link" href="/eventos/<%= event.id %>/editar">Editar</a>
+              <form class="inline-form" action="/eventos/<%= event.id %>/eliminar" method="post">
+                <button class="danger-button" type="submit">Eliminar</button>
+              </form>
+            </div>
+          <% } %>
+        </article>
+      <% }) %>
+    </section>
+
+    <% if (pagination.totalPages > 1) { %>
+      <nav class="pagination-nav" aria-label="Paginacion de eventos">
+        <% if (pagination.hasPreviousPage) { %>
+          <a class="secondary-link" href="/eventos?<%= new URLSearchParams({ page: String(pagination.previousPage), ...(filters.eventDate ? { eventDate: filters.eventDate } : {}), ...(filters.entity ? { entity: filters.entity } : {}), ...(filters.city ? { city: filters.city } : {}) }).toString() %>">Pagina anterior</a>
+        <% } %>
+
+        <span class="field-help">Pagina <%= pagination.currentPage %> de <%= pagination.totalPages %></span>
+
+        <% if (pagination.hasNextPage) { %>
+          <a class="secondary-link" href="/eventos?<%= new URLSearchParams({ page: String(pagination.nextPage), ...(filters.eventDate ? { eventDate: filters.eventDate } : {}), ...(filters.entity ? { entity: filters.entity } : {}), ...(filters.city ? { city: filters.city } : {}) }).toString() %>">Pagina siguiente</a>
+        <% } %>
+      </nav>
+    <% } %>
+  <% } %>
+</main>
+
+<%- include("../../partials/footer") %>

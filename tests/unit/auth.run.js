@@ -13,6 +13,27 @@ const {
   testAssertEntityCanPublishEventsRejectsPendingEntity,
 } = require("./services/entities/entity-publication-access.service.test");
 const {
+  testCreateEventCreatesEventForVerifiedEntity,
+  testCreateEventRejectsUnverifiedEntity,
+} = require("./services/events/create-event.service.test");
+const {
+  testDeleteOwnedEventDeletesEventForOwnerEntity,
+  testDeleteOwnedEventRejectsEventFromAnotherEntity,
+} = require("./services/events/delete-owned-event.service.test");
+const {
+  testGetEventDetailReturnsEventWithOrganizerData,
+} = require("./services/events/get-event-detail.service.test");
+const {
+  testListPublishedEventsAppliesCombinedFilters,
+  testListPublishedEventsReturnsOrderedPaginatedActiveEvents,
+} = require("./services/events/list-published-events.service.test");
+const {
+  testUpdateEntityProfileUpdatesAllowedFields,
+} = require("./services/entities/update-entity-profile.service.test");
+const {
+  testUpdateOwnedEventUpdatesEventForOwnerEntity,
+} = require("./services/events/update-owned-event.service.test");
+const {
   testRegisterVolunteerCreatesVolunteerUser,
 } = require("./services/auth/register-volunteer.service.test");
 const {
@@ -27,6 +48,15 @@ const {
 const {
   testValidateEntityRegistrationInputRejectsInvalidData,
 } = require("./validators/entities/entity-registration.validator.test");
+const {
+  testValidateEntityProfileInputRejectsInvalidData,
+} = require("./validators/entities/entity-profile.validator.test");
+const {
+  testValidateEventFiltersSanitizesInvalidDateAndText,
+} = require("./validators/events/event-filters.validator.test");
+const {
+  testValidateEventInputRejectsInvalidData,
+} = require("./validators/events/event.validator.test");
 const {
   testValidateVolunteerProfileInputRejectsInvalidData,
 } = require("./validators/volunteers/volunteer-profile.validator.test");
@@ -79,6 +109,42 @@ async function main() {
     testAssertEntityCanPublishEventsRejectsPendingEntity,
   );
   await runTest(
+    "createEvent crea un evento para una entidad verificada",
+    testCreateEventCreatesEventForVerifiedEntity,
+  );
+  await runTest(
+    "createEvent bloquea una entidad no verificada",
+    testCreateEventRejectsUnverifiedEntity,
+  );
+  await runTest(
+    "updateOwnedEvent actualiza un evento propio",
+    testUpdateOwnedEventUpdatesEventForOwnerEntity,
+  );
+  await runTest(
+    "deleteOwnedEvent elimina un evento propio",
+    testDeleteOwnedEventDeletesEventForOwnerEntity,
+  );
+  await runTest(
+    "deleteOwnedEvent bloquea la eliminacion de un evento ajeno",
+    testDeleteOwnedEventRejectsEventFromAnotherEntity,
+  );
+  await runTest(
+    "listPublishedEvents devuelve eventos activos con orden y paginacion",
+    testListPublishedEventsReturnsOrderedPaginatedActiveEvents,
+  );
+  await runTest(
+    "listPublishedEvents aplica filtros combinados de fecha, entidad y ciudad",
+    testListPublishedEventsAppliesCombinedFilters,
+  );
+  await runTest(
+    "getEventDetail devuelve el evento con datos de la entidad organizadora",
+    testGetEventDetailReturnsEventWithOrganizerData,
+  );
+  await runTest(
+    "updateEntityProfile actualiza los datos institucionales permitidos",
+    testUpdateEntityProfileUpdatesAllowedFields,
+  );
+  await runTest(
     "updateVolunteerProfile actualiza los datos personales permitidos",
     testUpdateVolunteerProfileUpdatesAllowedFields,
   );
@@ -93,6 +159,18 @@ async function main() {
   await runTest(
     "validateEntityRegistrationInput detecta datos invalidos en el alta de entidad",
     testValidateEntityRegistrationInputRejectsInvalidData,
+  );
+  await runTest(
+    "validateEntityProfileInput detecta datos invalidos en el perfil de entidad",
+    testValidateEntityProfileInputRejectsInvalidData,
+  );
+  await runTest(
+    "validateEventInput detecta datos invalidos en la publicacion de eventos",
+    testValidateEventInputRejectsInvalidData,
+  );
+  await runTest(
+    "validateEventFilters normaliza filtros de busqueda invalidos",
+    testValidateEventFiltersSanitizesInvalidDateAndText,
   );
   await runTest(
     "validateVolunteerProfileInput detecta datos invalidos en el perfil",

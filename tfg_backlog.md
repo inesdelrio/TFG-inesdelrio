@@ -83,6 +83,7 @@ No se debe dar por hecho ningún paso técnico importante. Si algo requiere inst
 ## 5. Requisitos iniciales de trabajo
 
 ### PRE01 — Preparación del entorno de desarrollo
+- **Estado:** Cerrado
 - **Descripción:** Preparar el entorno base de trabajo en local para poder desarrollar la aplicación.
 - **Criterio de validación:** El proyecto puede abrirse, instalar dependencias y arrancar sin errores en un entorno local limpio.
 - **Estimación:** 6 h
@@ -102,6 +103,7 @@ No se debe dar por hecho ningún paso técnico importante. Si algo requiere inst
   - PRE01-11: Documentar la configuración realizada para que pueda reproducirse desde cero
 
 ### PRE02 — Configuración inicial de PostgreSQL y Prisma
+- **Estado:** Cerrado
 - **Descripción:** Configurar la base técnica de la aplicación web.
 - **Criterio de validación:** La aplicación arranca con Express, renderiza una vista EJS y sirve recursos estáticos correctamente.
 - **Estimación:** 6 h
@@ -259,6 +261,7 @@ No se debe dar por hecho ningún paso técnico importante. Si algo requiere inst
   - RF05-11: Documentar el requisito técnico y cómo comprobarlo manualmente
 
 ### RF06 — Perfil de entidad
+- **Estado:** Cerrado
 - **Descripción:** Permitir a la entidad consultar y modificar su información visible.
 - **Criterio de validación:** La entidad puede editar los campos permitidos y visualizar los cambios actualizados.
 - **Estimación:** 6 h
@@ -278,6 +281,7 @@ No se debe dar por hecho ningún paso técnico importante. Si algo requiere inst
   - RF06-11: Documentar el requisito técnico y cómo comprobarlo manualmente
 
 ### RF07 — Publicación de eventos
+- **Estado:** Cerrado
 - **Descripción:** Permitir a entidades verificadas crear actividades o eventos.
 - **Criterio de validación:** Una entidad verificada puede publicar un evento con sus datos básicos y verlo en el listado público.
 - **Estimación:** 9 h
@@ -298,6 +302,7 @@ No se debe dar por hecho ningún paso técnico importante. Si algo requiere inst
   - RF07-12: Documentar el requisito técnico y cómo comprobarlo manualmente
 
 ### RF08 — Edición y eliminación de eventos
+- **Estado:** Cerrado
 - **Descripción:** Permitir a la entidad autora editar o eliminar sus publicaciones.
 - **Criterio de validación:** Solo la entidad propietaria puede modificar o retirar sus eventos.
 - **Estimación:** 7 h
@@ -318,6 +323,7 @@ No se debe dar por hecho ningún paso técnico importante. Si algo requiere inst
   - RF08-12: Documentar el requisito técnico y cómo comprobarlo manualmente
 
 ### RF09 — Listado y detalle de eventos
+- **Estado:** Cerrado
 - **Descripción:** Mostrar actividades disponibles y su información detallada.
 - **Criterio de validación:** El usuario puede consultar el listado de eventos activos y acceder al detalle de cada uno.
 - **Estimación:** 7 h
@@ -336,6 +342,7 @@ No se debe dar por hecho ningún paso técnico importante. Si algo requiere inst
   - RF09-10: Documentar el requisito técnico y cómo comprobarlo manualmente
 
 ### RF10 — Búsqueda y filtros de eventos
+- **Estado:** Cerrado
 - **Descripción:** Permitir filtrar actividades por criterios básicos.
 - **Criterio de validación:** El listado se ajusta a filtros como fecha, entidad, categoría o ubicación.
 - **Estimación:** 6 h

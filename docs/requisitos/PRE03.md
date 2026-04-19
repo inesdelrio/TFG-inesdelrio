@@ -62,10 +62,10 @@ Preparar la base de datos relacional del proyecto para que la aplicacion pueda t
 
 ## Trazabilidad con tareas
 
-- `RI03-01` completada: base de datos creada.
-- `RI03-02` completada: credenciales locales definidas en `DATABASE_URL`.
-- `RI03-03` completada: cadena de conexion configurada en `.env`.
-- `RI03-04` completada: conexion verificada desde local.
-- `RI03-05` completada: convencion inicial de nombres documentada.
-- `RI03-06` completada: instruccion de reseteo disponible con `npm run prisma:reset`.
-- `RI03-07` completada: configuracion minima documentada en este fichero.
+- `PRE03-01` completada: base de datos creada.
+- `PRE03-02` completada: credenciales locales definidas en `DATABASE_URL`.
+- `PRE03-03` completada: cadena de conexion configurada en `.env`.
+- `PRE03-04` completada: conexion verificada desde local.
+- `PRE03-05` completada: convencion inicial de nombres documentada.
+- `PRE03-06` completada: instruccion de reseteo disponible con `npm run prisma:reset`.
+- `PRE03-07` completada: configuracion minima documentada en este fichero.

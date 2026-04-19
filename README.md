@@ -7,7 +7,7 @@ Base tecnica inicial de una aplicacion web de voluntariado con Node.js, Express,
 Actualmente estan cerrados los requisitos:
 
 - PRE01 - Preparacion del entorno de desarrollo
-- PRE02 - Inicializacion base de Node + Express + EJS y preparacion de Prisma/PostgreSQL
+- PRE02 - Configuracion inicial de PostgreSQL y Prisma
 - PRE03 - Configuracion de PostgreSQL
 - PRE04 - Configuracion inicial de Prisma
 - RF01 - Registro de voluntario
@@ -15,11 +15,16 @@ Actualmente estan cerrados los requisitos:
 - RF03 - Solicitud de alta de entidad
 - RF04 - Verificacion de entidades
 - RF05 - Perfil de voluntario
+- RF06 - Perfil de entidad
+- RF07 - Publicacion de eventos
+- RF08 - Edicion y eliminacion de eventos
+- RF09 - Listado y detalle de eventos
+- RF10 - Busqueda y filtros de eventos
 
 Estado tecnico validado:
 
 - PostgreSQL local operativo con la base de datos `tfg_inesdelrio`
-- Prisma conectado correctamente y con la migracion inicial aplicada
+- Prisma conectado correctamente y con las migraciones actuales aplicadas
 - Ruta `http://localhost:3000/health/db` respondiendo correctamente
 
 ## Stack
@@ -72,4 +77,9 @@ npm run prisma:validate
 - [RF03](docs/requisitos/RF03.md)
 - [RF04](docs/requisitos/RF04.md)
 - [RF05](docs/requisitos/RF05.md)
+- [RF06](docs/requisitos/RF06.md)
+- [RF07](docs/requisitos/RF07.md)
+- [RF08](docs/requisitos/RF08.md)
+- [RF09](docs/requisitos/RF09.md)
+- [RF10](docs/requisitos/RF10.md)
 - [Estructura inicial](docs/arquitectura/estructura-inicial.md)

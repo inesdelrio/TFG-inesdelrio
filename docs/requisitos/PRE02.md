@@ -1,8 +1,12 @@
-# PRE02 - Inicializacion de la aplicacion Node + Express + EJS y base Prisma/PostgreSQL
+# PRE02 - Configuracion inicial de PostgreSQL y Prisma
 
 ## Estado del requisito
 
 Cerrado definitivamente y validado en entorno local.
+
+## Objetivo
+
+Configurar la base tecnica de la aplicacion para dejar Express, EJS, PostgreSQL y Prisma funcionando de forma integrada en entorno local.
 
 ## Que ya estaba hecho antes de esta implementacion
 
@@ -78,4 +82,4 @@ Se han añadido:
 
 ## Observaciones
 
-- PRE02 queda cerrado con PostgreSQL operativo, Prisma conectado y migracion inicial aplicada.
+- PRE02 queda cerrado con PostgreSQL operativo, Prisma conectado y base de datos actualizada con las migraciones aplicadas.

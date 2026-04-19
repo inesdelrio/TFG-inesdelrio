@@ -1,0 +1,89 @@
+<%- include("../../partials/head") %>
+<%- include("../../partials/header") %>
+
+<main class="container dashboard-page">
+  <section class="dashboard-hero">
+    <span class="eyebrow">RF08</span>
+    <h1>Editar evento</h1>
+    <p>
+      Actualiza los datos de una actividad publicada o retirala del listado si ya
+      no debe seguir visible.
+    </p>
+  </section>
+
+  <section class="profile-shell">
+    <div class="status-card">
+      <h2>Entidad autora</h2>
+      <% if (entity) { %>
+        <p><strong><%= entity.organizationName %></strong></p>
+        <p>Solo la entidad propietaria puede editar o eliminar este evento.</p>
+      <% } %>
+    </div>
+
+    <div class="auth-card">
+      <% if (Object.keys(errors).length > 0) { %>
+        <div class="feedback-banner error">
+          <strong>No se han guardado los cambios.</strong>
+          <p>Revisa los campos marcados antes de volver a enviar el formulario.</p>
+        </div>
+      <% } %>
+
+      <form class="auth-form" action="/eventos/<%= formData.id %>" method="post" novalidate>
+        <div class="form-row">
+          <label for="title">Titulo</label>
+          <input id="title" name="title" type="text" required minlength="5" value="<%= formData.title %>" />
+          <% if (errors.title) { %><p class="field-error"><%= errors.title %></p><% } %>
+        </div>
+
+        <div class="form-row">
+          <label for="description">Descripcion</label>
+          <textarea id="description" name="description" rows="6" required><%= formData.description %></textarea>
+          <% if (errors.description) { %><p class="field-error"><%= errors.description %></p><% } %>
+        </div>
+
+        <div class="form-row">
+          <label for="city">Ciudad</label>
+          <input id="city" name="city" type="text" required value="<%= formData.city %>" />
+          <% if (errors.city) { %><p class="field-error"><%= errors.city %></p><% } %>
+        </div>
+
+        <div class="form-row">
+          <label for="address">Direccion</label>
+          <input id="address" name="address" type="text" required value="<%= formData.address %>" />
+          <% if (errors.address) { %><p class="field-error"><%= errors.address %></p><% } %>
+        </div>
+
+        <div class="form-row-group">
+          <div class="form-row">
+            <label for="eventDate">Fecha</label>
+            <input id="eventDate" name="eventDate" type="date" required value="<%= formData.eventDate %>" />
+            <% if (errors.eventDate) { %><p class="field-error"><%= errors.eventDate %></p><% } %>
+          </div>
+
+          <div class="form-row">
+            <label for="eventTime">Hora</label>
+            <input id="eventTime" name="eventTime" type="time" required value="<%= formData.eventTime %>" />
+            <% if (errors.eventTime) { %><p class="field-error"><%= errors.eventTime %></p><% } %>
+          </div>
+
+          <div class="form-row">
+            <label for="totalSlots">Plazas</label>
+            <input id="totalSlots" name="totalSlots" type="number" min="1" required value="<%= formData.totalSlots %>" />
+            <% if (errors.totalSlots) { %><p class="field-error"><%= errors.totalSlots %></p><% } %>
+          </div>
+        </div>
+
+        <div class="profile-actions">
+          <button class="primary-button" type="submit">Guardar cambios</button>
+          <a class="secondary-link" href="/eventos">Volver al listado</a>
+        </div>
+      </form>
+
+      <form class="danger-form" action="/eventos/<%= formData.id %>/eliminar" method="post">
+        <button class="danger-button" type="submit">Eliminar evento</button>
+      </form>
+    </div>
+  </section>
+</main>
+
+<%- include("../../partials/footer") %>

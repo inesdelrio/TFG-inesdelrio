@@ -3,11 +3,16 @@
     <a class="brand" href="/">TFG Voluntariado</a>
     <nav class="site-nav">
       <a href="/">Inicio</a>
+      <a href="/eventos">Eventos</a>
       <% if (currentUser) { %>
         <a href="/login">Sesion</a>
         <% if (currentUser.role === "VOLUNTARIO") { %>
           <a href="/voluntariado/perfil">Mi perfil</a>
           <a href="/entidades/solicitud">Alta entidad</a>
+        <% } %>
+        <% if (currentUser.role === "ENTIDAD") { %>
+          <a href="/entidad/perfil">Perfil entidad</a>
+          <a href="/eventos/nuevo">Publicar evento</a>
         <% } %>
         <a href="<%= currentUser.role === 'ADMIN' ? '/admin/area' : currentUser.role === 'ENTIDAD' ? '/entidad/area' : '/voluntariado/area' %>">Mi area</a>
         <form class="inline-form" action="/logout" method="post">

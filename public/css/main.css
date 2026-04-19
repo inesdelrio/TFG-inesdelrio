@@ -135,6 +135,21 @@ code {
   flex-wrap: wrap;
 }
 
+.form-row-group {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.filter-shell {
+  margin-bottom: 1.5rem;
+}
+
+.filter-form {
+  display: grid;
+  gap: 1rem;
+}
+
 .auth-page {
   padding: 3rem 0 5rem;
 }
@@ -296,6 +311,58 @@ code {
   margin: 0.2rem 0;
 }
 
+.event-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.event-card h2 {
+  margin-bottom: 0.7rem;
+}
+
+.event-actions {
+  display: flex;
+  gap: 0.8rem;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+.event-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.pagination-nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
+}
+
+.danger-form {
+  margin-top: 1rem;
+}
+
+.danger-button {
+  appearance: none;
+  border: 0;
+  border-radius: 999px;
+  padding: 0.85rem 1.2rem;
+  background: #aa3c2b;
+  color: #fff;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.danger-button:hover {
+  background: #8f3224;
+}
+
 .primary-button {
   appearance: none;
   border: 0;
@@ -381,6 +448,14 @@ code {
   }
 
   .profile-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .form-row-group {
+    grid-template-columns: 1fr;
+  }
+
+  .event-detail-grid {
     grid-template-columns: 1fr;
   }
 }
