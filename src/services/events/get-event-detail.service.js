@@ -8,6 +8,11 @@ async function getEventDetail(eventId, dependencies = {}) {
       id: eventId,
     },
     include: {
+      _count: {
+        select: {
+          registrations: true,
+        },
+      },
       entity: {
         select: {
           id: true,

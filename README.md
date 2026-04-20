@@ -20,6 +20,8 @@ Actualmente estan cerrados los requisitos:
 - RF08 - Edicion y eliminacion de eventos
 - RF09 - Listado y detalle de eventos
 - RF10 - Busqueda y filtros de eventos
+- RF11 - Suscripcion a entidades
+- RF12 - Inscripcion en actividades
 
 Estado tecnico validado:
 
@@ -82,4 +84,6 @@ npm run prisma:validate
 - [RF08](docs/requisitos/RF08.md)
 - [RF09](docs/requisitos/RF09.md)
 - [RF10](docs/requisitos/RF10.md)
+- [RF11](docs/requisitos/RF11.md)
+- [RF12](docs/requisitos/RF12.md)
 - [Estructura inicial](docs/arquitectura/estructura-inicial.md)

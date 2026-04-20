@@ -13,13 +13,28 @@ const {
   testAssertEntityCanPublishEventsRejectsPendingEntity,
 } = require("./services/entities/entity-publication-access.service.test");
 const {
+  testCreateEntitySubscriptionCreatesSubscriptionWithoutDuplicates,
+  testCreateEntitySubscriptionRejectsDuplicateSubscription,
+} = require("./services/entities/create-entity-subscription.service.test");
+const {
+  testGetEntitySubscriptionStatusReturnsTrueWhenSubscriptionExists,
+} = require("./services/entities/get-entity-subscription-status.service.test");
+const {
   testCreateEventCreatesEventForVerifiedEntity,
   testCreateEventRejectsUnverifiedEntity,
 } = require("./services/events/create-event.service.test");
 const {
+  testCreateEventRegistrationCreatesRegistrationWhenSlotsAvailable,
+  testCreateEventRegistrationRejectsDuplicateRegistration,
+  testCreateEventRegistrationRejectsWhenEventIsFull,
+} = require("./services/events/create-event-registration.service.test");
+const {
   testDeleteOwnedEventDeletesEventForOwnerEntity,
   testDeleteOwnedEventRejectsEventFromAnotherEntity,
 } = require("./services/events/delete-owned-event.service.test");
+const {
+  testGetEventRegistrationStatusReturnsTrueWhenRegistrationExists,
+} = require("./services/events/get-event-registration-status.service.test");
 const {
   testGetEventDetailReturnsEventWithOrganizerData,
 } = require("./services/events/get-event-detail.service.test");
@@ -97,6 +112,18 @@ async function main() {
     testCreateEntityRequestCreatesPendingEntityAndPromotesUserRole,
   );
   await runTest(
+    "createEntitySubscription crea una suscripcion sin duplicados",
+    testCreateEntitySubscriptionCreatesSubscriptionWithoutDuplicates,
+  );
+  await runTest(
+    "createEntitySubscription bloquea una suscripcion duplicada",
+    testCreateEntitySubscriptionRejectsDuplicateSubscription,
+  );
+  await runTest(
+    "getEntitySubscriptionStatus detecta suscripcion existente",
+    testGetEntitySubscriptionStatusReturnsTrueWhenSubscriptionExists,
+  );
+  await runTest(
     "updateEntityValidationStatus cambia el estado y registra la accion administrativa",
     testUpdateEntityValidationStatusChangesStatusAndCreatesAdminLog,
   );
@@ -115,6 +142,18 @@ async function main() {
   await runTest(
     "createEvent bloquea una entidad no verificada",
     testCreateEventRejectsUnverifiedEntity,
+  );
+  await runTest(
+    "createEventRegistration crea una inscripcion con plazas disponibles",
+    testCreateEventRegistrationCreatesRegistrationWhenSlotsAvailable,
+  );
+  await runTest(
+    "createEventRegistration bloquea una inscripcion duplicada",
+    testCreateEventRegistrationRejectsDuplicateRegistration,
+  );
+  await runTest(
+    "createEventRegistration bloquea la inscripcion cuando no hay plazas",
+    testCreateEventRegistrationRejectsWhenEventIsFull,
   );
   await runTest(
     "updateOwnedEvent actualiza un evento propio",
@@ -139,6 +178,10 @@ async function main() {
   await runTest(
     "getEventDetail devuelve el evento con datos de la entidad organizadora",
     testGetEventDetailReturnsEventWithOrganizerData,
+  );
+  await runTest(
+    "getEventRegistrationStatus detecta inscripcion existente",
+    testGetEventRegistrationStatusReturnsTrueWhenRegistrationExists,
   );
   await runTest(
     "updateEntityProfile actualiza los datos institucionales permitidos",

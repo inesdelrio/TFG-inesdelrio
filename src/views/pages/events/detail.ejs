@@ -3,12 +3,19 @@
 
 <main class="container dashboard-page">
   <section class="dashboard-hero">
-    <span class="eyebrow">RF09</span>
+    <span class="eyebrow">RF12</span>
     <h1><%= event.title %></h1>
     <p>
       Consulta el detalle completo de la actividad y la informacion de la entidad organizadora.
     </p>
   </section>
+
+  <% if (infoMessage) { %>
+    <div class="feedback-banner success">
+      <strong>Estado actualizado.</strong>
+      <p><%= infoMessage %></p>
+    </div>
+  <% } %>
 
   <section class="event-detail-grid">
     <article class="status-card">
@@ -16,8 +23,22 @@
       <p><strong>Fecha y hora:</strong> <%= new Date(event.startsAt).toLocaleString("es-ES") %></p>
       <p><strong>Ciudad:</strong> <%= event.city %></p>
       <p><strong>Direccion:</strong> <%= event.address %></p>
-      <p><strong>Plazas:</strong> <%= event.totalSlots %></p>
+      <p><strong>Plazas totales:</strong> <%= event.totalSlots %></p>
+      <p><strong>Plazas disponibles:</strong> <%= availableSlots %></p>
       <p><%= event.description %></p>
+
+      <% if (canRegister) { %>
+        <% if (isRegistered) { %>
+          <p class="registration-state">Ya estas inscrito en esta actividad.</p>
+        <% } else if (availableSlots > 0) { %>
+          <form class="subscription-form" action="/eventos/<%= event.id %>/inscribirse" method="post">
+            <input type="hidden" name="redirectTo" value="/eventos/<%= event.id %>" />
+            <button class="primary-button" type="submit">Apuntarse</button>
+          </form>
+        <% } else { %>
+          <p class="registration-state registration-state-full">Actividad completa sin plazas disponibles.</p>
+        <% } %>
+      <% } %>
     </article>
 
     <article class="status-card">
@@ -28,6 +49,17 @@
       <p><strong>Ciudad:</strong> <%= event.entity.city %></p>
       <p><strong>Direccion:</strong> <%= event.entity.address %></p>
       <p><%= event.entity.description %></p>
+
+      <% if (canSubscribe) { %>
+        <% if (isSubscribed) { %>
+          <p class="subscription-state">Ya sigues a esta entidad.</p>
+        <% } else { %>
+          <form class="subscription-form" action="/entidades/<%= event.entity.id %>/suscribirse" method="post">
+            <input type="hidden" name="redirectTo" value="/eventos/<%= event.id %>" />
+            <button class="primary-button" type="submit">Seguir entidad</button>
+          </form>
+        <% } %>
+      <% } %>
     </article>
   </section>
 

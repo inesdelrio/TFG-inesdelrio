@@ -360,6 +360,7 @@ No se debe dar por hecho ningún paso técnico importante. Si algo requiere inst
   - RF10-09: Documentar el requisito técnico y cómo comprobarlo manualmente
 
 ### RF11 — Suscripción a entidades
+- **Estado:** Cerrado
 - **Descripción:** Permitir a voluntarios seguir entidades para recibir avisos.
 - **Criterio de validación:** El voluntario puede suscribirse a una entidad sin duplicar registros.
 - **Estimación:** 6 h
@@ -379,6 +380,7 @@ No se debe dar por hecho ningún paso técnico importante. Si algo requiere inst
   - RF11-11: Documentar el requisito técnico y cómo comprobarlo manualmente
 
 ### RF12 — Inscripción en actividades
+- **Estado:** Cerrado
 - **Descripción:** Permitir que un voluntario se apunte a un evento con plazas disponibles.
 - **Criterio de validación:** La inscripción queda registrada, no duplica al usuario y actualiza plazas.
 - **Estimación:** 8 h

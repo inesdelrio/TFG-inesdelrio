@@ -1,6 +1,7 @@
 const express = require("express");
 
 const entityProfileController = require("../../controllers/entities/entity-profile.controller");
+const entitySubscriptionController = require("../../controllers/entities/entity-subscription.controller");
 const entityRegistrationController = require("../../controllers/entities/entity-registration.controller");
 const { requireAuth, requireRole } = require("../../middlewares/auth.middleware");
 
@@ -29,6 +30,12 @@ router.post(
   requireAuth,
   requireRole("ENTIDAD"),
   entityProfileController.updateEntityProfileAction,
+);
+router.post(
+  "/entidades/:entityId/suscribirse",
+  requireAuth,
+  requireRole("VOLUNTARIO"),
+  entitySubscriptionController.subscribeToEntity,
 );
 
 module.exports = router;

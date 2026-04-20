@@ -150,6 +150,26 @@ code {
   gap: 1rem;
 }
 
+.subscription-form {
+  margin-top: 1rem;
+}
+
+.subscription-state {
+  margin-top: 1rem;
+  color: #1f7a5a;
+  font-weight: 700;
+}
+
+.registration-state {
+  margin-top: 1rem;
+  color: #1f7a5a;
+  font-weight: 700;
+}
+
+.registration-state-full {
+  color: #aa3c2b;
+}
+
 .auth-page {
   padding: 3rem 0 5rem;
 }

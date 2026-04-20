@@ -1,5 +1,6 @@
 const express = require("express");
 
+const eventRegistrationController = require("../../controllers/events/event-registration.controller");
 const eventManagementController = require("../../controllers/events/event-management.controller");
 const eventPublicationController = require("../../controllers/events/event-publication.controller");
 const { requireAuth, requireRole } = require("../../middlewares/auth.middleware");
@@ -36,6 +37,12 @@ router.post(
   requireAuth,
   requireRole("ENTIDAD"),
   eventManagementController.deleteEvent,
+);
+router.post(
+  "/eventos/:eventId/inscribirse",
+  requireAuth,
+  requireRole("VOLUNTARIO"),
+  eventRegistrationController.registerForEvent,
 );
 router.get("/eventos/:eventId", eventPublicationController.renderEventDetail);
 

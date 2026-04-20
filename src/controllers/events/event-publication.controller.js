@@ -1,6 +1,8 @@
 const prisma = require("../../config/prisma");
 const createEvent = require("../../services/events/create-event.service");
 const getEventDetail = require("../../services/events/get-event-detail.service");
+const getEventRegistrationStatus = require("../../services/events/get-event-registration-status.service");
+const getEntitySubscriptionStatus = require("../../services/entities/get-entity-subscription-status.service");
 const listPublishedEvents = require("../../services/events/list-published-events.service");
 const { getCurrentEntityId } = require("./event-management.controller");
 const {
@@ -163,9 +165,43 @@ async function renderEventDetail(req, res, next) {
       });
     }
 
+    const isVolunteer = req.currentUser && req.currentUser.role === "VOLUNTARIO";
+    const isSubscribed = isVolunteer
+      ? await getEntitySubscriptionStatus({
+          volunteerUserId: req.currentUser.id,
+          entityId: event.entity.id,
+        })
+      : false;
+    const isRegistered = isVolunteer
+      ? await getEventRegistrationStatus({
+          volunteerUserId: req.currentUser.id,
+          eventId: event.id,
+        })
+      : false;
+    const availableSlots = Math.max(0, event.totalSlots - event._count.registrations);
+
     return res.render("pages/events/detail", {
       pageTitle: event.title,
       event,
+      availableSlots,
+      canSubscribe: isVolunteer,
+      isSubscribed,
+      canRegister: isVolunteer,
+      isRegistered,
+      infoMessage:
+        req.query.subscribed === "1"
+          ? "Te has suscrito correctamente a esta entidad."
+          : req.query.alreadySubscribed === "1"
+            ? "Ya estabas suscrito a esta entidad."
+            : req.query.registered === "1"
+              ? "Te has inscrito correctamente en esta actividad."
+              : req.query.alreadyRegistered === "1"
+                ? "Ya estabas inscrito en esta actividad."
+                : req.query.full === "1"
+                  ? "No quedan plazas disponibles para esta actividad."
+                  : req.query.inactive === "1"
+                    ? "La actividad ya no admite nuevas inscripciones."
+            : null,
     });
   } catch (error) {
     return next(error);
