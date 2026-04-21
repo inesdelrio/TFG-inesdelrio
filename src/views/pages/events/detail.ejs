@@ -30,6 +30,10 @@
       <% if (canRegister) { %>
         <% if (isRegistered) { %>
           <p class="registration-state">Ya estas inscrito en esta actividad.</p>
+          <form class="subscription-form" action="/eventos/<%= event.id %>/cancelar-inscripcion" method="post">
+            <input type="hidden" name="redirectTo" value="/eventos/<%= event.id %>" />
+            <button class="danger-button" type="submit">Cancelar inscripcion</button>
+          </form>
         <% } else if (availableSlots > 0) { %>
           <form class="subscription-form" action="/eventos/<%= event.id %>/inscribirse" method="post">
             <input type="hidden" name="redirectTo" value="/eventos/<%= event.id %>" />

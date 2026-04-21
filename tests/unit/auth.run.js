@@ -29,6 +29,10 @@ const {
   testCreateEventRegistrationRejectsWhenEventIsFull,
 } = require("./services/events/create-event-registration.service.test");
 const {
+  testDeleteEventRegistrationDeletesOwnedRegistration,
+  testDeleteEventRegistrationRejectsWhenRegistrationDoesNotExist,
+} = require("./services/events/delete-event-registration.service.test");
+const {
   testDeleteOwnedEventDeletesEventForOwnerEntity,
   testDeleteOwnedEventRejectsEventFromAnotherEntity,
 } = require("./services/events/delete-owned-event.service.test");
@@ -154,6 +158,14 @@ async function main() {
   await runTest(
     "createEventRegistration bloquea la inscripcion cuando no hay plazas",
     testCreateEventRegistrationRejectsWhenEventIsFull,
+  );
+  await runTest(
+    "deleteEventRegistration elimina una inscripcion existente",
+    testDeleteEventRegistrationDeletesOwnedRegistration,
+  );
+  await runTest(
+    "deleteEventRegistration informa si no existia inscripcion",
+    testDeleteEventRegistrationRejectsWhenRegistrationDoesNotExist,
   );
   await runTest(
     "updateOwnedEvent actualiza un evento propio",

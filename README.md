@@ -22,6 +22,7 @@ Actualmente estan cerrados los requisitos:
 - RF10 - Busqueda y filtros de eventos
 - RF11 - Suscripcion a entidades
 - RF12 - Inscripcion en actividades
+- RF13 - Cancelacion de inscripcion
 
 Estado tecnico validado:
 
@@ -86,4 +87,5 @@ npm run prisma:validate
 - [RF10](docs/requisitos/RF10.md)
 - [RF11](docs/requisitos/RF11.md)
 - [RF12](docs/requisitos/RF12.md)
+- [RF13](docs/requisitos/RF13.md)
 - [Estructura inicial](docs/arquitectura/estructura-inicial.md)

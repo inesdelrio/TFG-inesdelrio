@@ -44,6 +44,12 @@ router.post(
   requireRole("VOLUNTARIO"),
   eventRegistrationController.registerForEvent,
 );
+router.post(
+  "/eventos/:eventId/cancelar-inscripcion",
+  requireAuth,
+  requireRole("VOLUNTARIO"),
+  eventRegistrationController.cancelEventRegistration,
+);
 router.get("/eventos/:eventId", eventPublicationController.renderEventDetail);
 
 module.exports = router;

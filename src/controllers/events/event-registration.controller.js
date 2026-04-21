@@ -1,4 +1,5 @@
 const createEventRegistration = require("../../services/events/create-event-registration.service");
+const deleteEventRegistration = require("../../services/events/delete-event-registration.service");
 
 function resolveRedirectPath(rawRedirectTo, eventId) {
   if (typeof rawRedirectTo === "string" && rawRedirectTo === `/eventos/${eventId}`) {
@@ -42,6 +43,27 @@ async function registerForEvent(req, res, next) {
   }
 }
 
+async function cancelEventRegistration(req, res, next) {
+  const eventId = Number(req.params.eventId);
+  const redirectTo = resolveRedirectPath(req.body.redirectTo, eventId);
+
+  try {
+    await deleteEventRegistration({
+      volunteerUserId: req.currentUser.id,
+      eventId,
+    });
+
+    return res.redirect(`${redirectTo}?cancelled=1`);
+  } catch (error) {
+    if (error.code === "EVENT_REGISTRATION_NOT_FOUND") {
+      return res.redirect(`${redirectTo}?notRegistered=1`);
+    }
+
+    return next(error);
+  }
+}
+
 module.exports = {
+  cancelEventRegistration,
   registerForEvent,
 };

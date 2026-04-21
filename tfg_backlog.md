@@ -401,6 +401,7 @@ No se debe dar por hecho ningún paso técnico importante. Si algo requiere inst
   - RF12-12: Documentar el requisito técnico y cómo comprobarlo manualmente
 
 ### RF13 — Cancelación de inscripción
+- **Estado:** Cerrado
 - **Descripción:** Permitir al voluntario cancelar su participación en una actividad.
 - **Criterio de validación:** La inscripción puede anularse y la plaza vuelve a quedar disponible.
 - **Estimación:** 6 h
