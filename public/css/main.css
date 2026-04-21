@@ -336,6 +336,15 @@ code {
   gap: 1rem;
 }
 
+.attendees-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.attendee-card h2 {
+  margin-bottom: 0.7rem;
+}
+
 .event-card h2 {
   margin-bottom: 0.7rem;
 }

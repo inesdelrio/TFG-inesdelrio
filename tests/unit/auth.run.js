@@ -43,6 +43,10 @@ const {
   testGetEventDetailReturnsEventWithOrganizerData,
 } = require("./services/events/get-event-detail.service.test");
 const {
+  testListOwnedEventRegistrationsPropagatesOwnershipErrors,
+  testListOwnedEventRegistrationsReturnsVolunteerDataForOwnedEvent,
+} = require("./services/events/list-owned-event-registrations.service.test");
+const {
   testListPublishedEventsAppliesCombinedFilters,
   testListPublishedEventsReturnsOrderedPaginatedActiveEvents,
 } = require("./services/events/list-published-events.service.test");
@@ -190,6 +194,14 @@ async function main() {
   await runTest(
     "getEventDetail devuelve el evento con datos de la entidad organizadora",
     testGetEventDetailReturnsEventWithOrganizerData,
+  );
+  await runTest(
+    "listOwnedEventRegistrations devuelve los inscritos con datos basicos del voluntario",
+    testListOwnedEventRegistrationsReturnsVolunteerDataForOwnedEvent,
+  );
+  await runTest(
+    "listOwnedEventRegistrations mantiene el control de propiedad del evento",
+    testListOwnedEventRegistrationsPropagatesOwnershipErrors,
   );
   await runTest(
     "getEventRegistrationStatus detecta inscripcion existente",

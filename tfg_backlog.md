@@ -420,6 +420,7 @@ No se debe dar por hecho ningún paso técnico importante. Si algo requiere inst
   - RF13-10: Documentar el requisito técnico y cómo comprobarlo manualmente
 
 ### RF14 — Consulta de inscritos por parte de la entidad
+- **Estado:** Cerrado
 - **Descripción:** Permitir que la entidad vea los voluntarios apuntados a sus eventos.
 - **Criterio de validación:** La entidad propietaria puede acceder al listado de inscritos de sus actividades.
 - **Estimación:** 6 h
