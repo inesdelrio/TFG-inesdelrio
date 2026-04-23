@@ -1,0 +1,45 @@
+<%- include("../../partials/head") %>
+<%- include("../../partials/header") %>
+
+<main class="container dashboard-page">
+  <section class="dashboard-hero">
+    <span class="eyebrow">RF17</span>
+    <h1>Panel principal de administracion</h1>
+    <p>
+      Area base del rol administrador con accesos directos a entidades, usuarios y publicaciones, junto con metricas simples del estado actual de la plataforma.
+    </p>
+  </section>
+
+  <% if (infoMessage) { %>
+    <div class="feedback-banner success">
+      <strong>Actualizacion completada.</strong>
+      <p><%= infoMessage %></p>
+    </div>
+  <% } %>
+
+  <section class="status-grid admin-grid">
+    <article class="status-card">
+      <h2>Entidades</h2>
+      <p><strong>Total:</strong> <%= summary.totalEntities %></p>
+      <p><strong>Pendientes:</strong> <%= summary.pendingEntities %></p>
+      <p><strong>Verificadas:</strong> <%= summary.verifiedEntities %></p>
+      <a class="secondary-link" href="/admin/entidades">Ir a entidades</a>
+    </article>
+
+    <article class="status-card">
+      <h2>Usuarios</h2>
+      <p><strong>Total:</strong> <%= summary.totalUsers %></p>
+      <p><strong>Voluntarios:</strong> <%= summary.totalVolunteers %></p>
+      <a class="secondary-link" href="/admin/usuarios">Ir a usuarios</a>
+    </article>
+
+    <article class="status-card">
+      <h2>Publicaciones</h2>
+      <p><strong>Total eventos:</strong> <%= summary.totalEvents %></p>
+      <p><strong>Proximos:</strong> <%= summary.upcomingEvents %></p>
+      <a class="secondary-link" href="/admin/publicaciones">Ir a publicaciones</a>
+    </article>
+  </section>
+</main>
+
+<%- include("../../partials/footer") %>

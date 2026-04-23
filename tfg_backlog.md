@@ -438,6 +438,7 @@ No se debe dar por hecho ningún paso técnico importante. Si algo requiere inst
   - RF14-09: Documentar el requisito técnico y cómo comprobarlo manualmente
 
 ### RF15 — Notificaciones internas
+- **Estado:** Cerrado
 - **Descripción:** Generar avisos internos cuando una entidad seguida publica o modifica una actividad.
 - **Criterio de validación:** El voluntario suscrito recibe notificaciones y puede marcarlas como leídas.
 - **Estimación:** 8 h
@@ -457,6 +458,7 @@ No se debe dar por hecho ningún paso técnico importante. Si algo requiere inst
   - RF15-11: Documentar el requisito técnico y cómo comprobarlo manualmente
 
 ### RF16 — Calendario personal del voluntario
+- **Estado:** Cerrado
 - **Descripción:** Mostrar dentro de la aplicación un calendario con los eventos a los que el voluntario está inscrito.
 - **Criterio de validación:** El calendario refleja correctamente las actividades inscritas y enlaza con su detalle.
 - **Estimación:** 7 h
@@ -475,6 +477,7 @@ No se debe dar por hecho ningún paso técnico importante. Si algo requiere inst
   - RF16-10: Documentar el requisito técnico y cómo comprobarlo manualmente
 
 ### RF17 — Panel principal de administración
+- **Estado:** Cerrado
 - **Descripción:** Crear el área base de administración de la plataforma.
 - **Criterio de validación:** El administrador puede acceder a un panel con accesos a entidades, usuarios y publicaciones.
 - **Estimación:** 6 h

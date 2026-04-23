@@ -24,6 +24,9 @@ Actualmente estan cerrados los requisitos:
 - RF12 - Inscripcion en actividades
 - RF13 - Cancelacion de inscripcion
 - RF14 - Consulta de inscritos por parte de la entidad
+- RF15 - Notificaciones internas
+- RF16 - Calendario personal del voluntario
+- RF17 - Panel principal de administracion
 
 Estado tecnico validado:
 
@@ -90,4 +93,7 @@ npm run prisma:validate
 - [RF12](docs/requisitos/RF12.md)
 - [RF13](docs/requisitos/RF13.md)
 - [RF14](docs/requisitos/RF14.md)
+- [RF15](docs/requisitos/RF15.md)
+- [RF16](docs/requisitos/RF16.md)
+- [RF17](docs/requisitos/RF17.md)
 - [Estructura inicial](docs/arquitectura/estructura-inicial.md)

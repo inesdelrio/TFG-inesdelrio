@@ -1,0 +1,25 @@
+<%- include("../../partials/head") %>
+<%- include("../../partials/header") %>
+
+<main class="container dashboard-page">
+  <section class="dashboard-hero">
+    <span class="eyebrow">RF17</span>
+    <h1>Usuarios registrados</h1>
+    <p>
+      Vista administrativa basica para consultar las cuentas existentes en la plataforma.
+    </p>
+  </section>
+
+  <section class="event-list">
+    <% users.forEach((user) => { %>
+      <article class="status-card">
+        <h2><%= user.firstName %> <%= user.lastName %></h2>
+        <p><strong>Email:</strong> <%= user.email %></p>
+        <p><strong>Rol:</strong> <%= user.role %></p>
+        <p><strong>Alta:</strong> <%= new Date(user.createdAt).toLocaleString("es-ES") %></p>
+      </article>
+    <% }) %>
+  </section>
+</main>
+
+<%- include("../../partials/footer") %>

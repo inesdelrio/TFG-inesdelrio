@@ -4,6 +4,7 @@ const adminRouter = require("./admin");
 const authRouter = require("./auth");
 const entityRouter = require("./entities");
 const eventRouter = require("./events");
+const notificationRouter = require("./notifications");
 const volunteerRouter = require("./volunteers");
 const homeController = require("../controllers/home.controller");
 
@@ -15,6 +16,7 @@ router.get("/health/db", homeController.renderDbCheck);
 router.use("/", authRouter);
 router.use("/", entityRouter);
 router.use("/", eventRouter);
+router.use("/", notificationRouter);
 router.use("/", volunteerRouter);
 router.use("/", adminRouter);
 

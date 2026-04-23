@@ -2,6 +2,7 @@ const prisma = require("../../config/prisma");
 const {
   assertEntityCanPublishEvents,
 } = require("../entities/entity-publication-access.service");
+const createEventNotifications = require("../notifications/create-event-notifications.service");
 
 function buildStartsAt(eventDate, eventTime) {
   return new Date(`${eventDate}T${eventTime}:00`);
@@ -9,6 +10,9 @@ function buildStartsAt(eventDate, eventTime) {
 
 async function createEvent(input, dependencies = {}) {
   const prismaClient = dependencies.prisma || prisma;
+  const createNotifications =
+    dependencies.createEventNotifications ||
+    ((payload) => createEventNotifications(payload, { prisma: prismaClient }));
 
   const entity = await prismaClient.entity.findUnique({
     where: {
@@ -24,7 +28,7 @@ async function createEvent(input, dependencies = {}) {
 
   assertEntityCanPublishEvents(entity);
 
-  return prismaClient.event.create({
+  const event = await prismaClient.event.create({
     data: {
       title: input.title,
       description: input.description,
@@ -38,6 +42,16 @@ async function createEvent(input, dependencies = {}) {
       entity: true,
     },
   });
+
+  await createNotifications({
+    entityId: entity.id,
+    entityName: entity.organizationName,
+    eventId: event.id,
+    eventTitle: event.title,
+    type: "EVENT_PUBLISHED",
+  });
+
+  return event;
 }
 
 module.exports = createEvent;

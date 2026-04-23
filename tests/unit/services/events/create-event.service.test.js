@@ -4,11 +4,13 @@ const createEvent = require("../../../../src/services/events/create-event.servic
 
 async function testCreateEventCreatesEventForVerifiedEntity() {
   let createdPayload = null;
+  let notificationsPayload = null;
   const prismaMock = {
     entity: {
       findUnique: async () => ({
         id: 3,
         validationStatus: "VERIFICADA",
+        organizationName: "Fundacion Horizonte",
       }),
     },
     event: {
@@ -32,12 +34,23 @@ async function testCreateEventCreatesEventForVerifiedEntity() {
     },
     {
       prisma: prismaMock,
+      createEventNotifications: async (payload) => {
+        notificationsPayload = payload;
+        return { createdCount: 2 };
+      },
     },
   );
 
   assert.equal(createdPayload.entityId, 3);
   assert.equal(createdPayload.totalSlots, 25);
   assert.equal(event.title, "Recogida solidaria");
+  assert.deepEqual(notificationsPayload, {
+    entityId: 3,
+    entityName: "Fundacion Horizonte",
+    eventId: 10,
+    eventTitle: "Recogida solidaria",
+    type: "EVENT_PUBLISHED",
+  });
 }
 
 async function testCreateEventRejectsUnverifiedEntity() {

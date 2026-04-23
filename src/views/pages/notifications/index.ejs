@@ -1,0 +1,58 @@
+<%- include("../../partials/head") %>
+<%- include("../../partials/header") %>
+
+<main class="container dashboard-page">
+  <section class="dashboard-hero">
+    <span class="eyebrow">RF15</span>
+    <h1>Notificaciones internas</h1>
+    <p>
+      Aqui puedes revisar los avisos generados por las entidades a las que sigues y marcar cada notificacion como leida.
+    </p>
+  </section>
+
+  <% if (infoMessage) { %>
+    <div class="feedback-banner success">
+      <strong>Estado actualizado.</strong>
+      <p><%= infoMessage %></p>
+    </div>
+  <% } %>
+
+  <section class="event-list">
+    <% if (notifications.length === 0) { %>
+      <article class="status-card">
+        <h2>Sin notificaciones</h2>
+        <p>Todavia no tienes avisos internos de entidades seguidas.</p>
+      </article>
+    <% } %>
+
+    <% notifications.forEach((notification) => { %>
+      <article class="status-card notification-card <%= notification.isRead ? "notification-card-read" : "notification-card-unread" %>">
+        <div class="notification-card-header">
+          <div>
+            <p class="notification-type"><%= notification.type === "EVENT_UPDATED" ? "Actividad actualizada" : "Nueva actividad" %></p>
+            <h2><%= notification.title %></h2>
+          </div>
+          <span class="notification-state"><%= notification.isRead ? "Leida" : "Nueva" %></span>
+        </div>
+
+        <p><%= notification.message %></p>
+        <p><strong>Entidad:</strong> <%= notification.entity.organizationName %></p>
+        <p><strong>Fecha:</strong> <%= new Date(notification.createdAt).toLocaleString("es-ES") %></p>
+
+        <div class="event-actions">
+          <% if (notification.event) { %>
+            <a class="secondary-link" href="/eventos/<%= notification.event.id %>">Ver actividad</a>
+          <% } %>
+
+          <% if (!notification.isRead) { %>
+            <form class="inline-form" action="/notificaciones/<%= notification.id %>/leida" method="post">
+              <button class="primary-button" type="submit">Marcar como leida</button>
+            </form>
+          <% } %>
+        </div>
+      </article>
+    <% }) %>
+  </section>
+</main>
+
+<%- include("../../partials/footer") %>

@@ -9,7 +9,25 @@ router.get(
   "/admin/area",
   requireAuth,
   requireRole("ADMIN"),
+  entityModerationController.renderAdminDashboard,
+);
+router.get(
+  "/admin/entidades",
+  requireAuth,
+  requireRole("ADMIN"),
   entityModerationController.renderPendingEntitiesList,
+);
+router.get(
+  "/admin/usuarios",
+  requireAuth,
+  requireRole("ADMIN"),
+  entityModerationController.renderAdminUsersList,
+);
+router.get(
+  "/admin/publicaciones",
+  requireAuth,
+  requireRole("ADMIN"),
+  entityModerationController.renderAdminPublicationsList,
 );
 router.get(
   "/admin/entidades/:entityId",

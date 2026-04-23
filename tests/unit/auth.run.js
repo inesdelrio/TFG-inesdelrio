@@ -3,6 +3,9 @@ const {
   testAuthenticateUserReturnsUserWithValidCredentials,
 } = require("./services/auth/authenticate-user.service.test");
 const {
+  testGetAdminDashboardSummaryReturnsBasicCounters,
+} = require("./services/admin/get-admin-dashboard-summary.service.test");
+const {
   testUpdateEntityValidationStatusChangesStatusAndCreatesAdminLog,
 } = require("./services/admin/update-entity-validation-status.service.test");
 const {
@@ -19,6 +22,17 @@ const {
 const {
   testGetEntitySubscriptionStatusReturnsTrueWhenSubscriptionExists,
 } = require("./services/entities/get-entity-subscription-status.service.test");
+const {
+  testCreateEventNotificationsCreatesOneNotificationPerSubscriber,
+  testCreateEventNotificationsReturnsZeroWhenThereAreNoSubscribers,
+} = require("./services/notifications/create-event-notifications.service.test");
+const {
+  testListVolunteerNotificationsReturnsNotificationsOrderedByDate,
+} = require("./services/notifications/list-volunteer-notifications.service.test");
+const {
+  testMarkNotificationAsReadRejectsForeignNotification,
+  testMarkNotificationAsReadUpdatesUnreadOwnedNotification,
+} = require("./services/notifications/mark-notification-as-read.service.test");
 const {
   testCreateEventCreatesEventForVerifiedEntity,
   testCreateEventRejectsUnverifiedEntity,
@@ -65,6 +79,11 @@ const {
 const {
   testUpdateVolunteerProfileUpdatesAllowedFields,
 } = require("./services/volunteers/update-volunteer-profile.service.test");
+const {
+  testBuildCalendarDaysPlacesEventsOnTheirDate,
+  testGetMonthMetaNormalizesInvalidMonthInput,
+  testGetVolunteerCalendarLoadsRegisteredEventsForSelectedMonth,
+} = require("./services/volunteers/get-volunteer-calendar.service.test");
 const {
   testValidateLoginInputRejectsInvalidData,
 } = require("./validators/auth/login.validator.test");
@@ -130,6 +149,30 @@ async function main() {
   await runTest(
     "getEntitySubscriptionStatus detecta suscripcion existente",
     testGetEntitySubscriptionStatusReturnsTrueWhenSubscriptionExists,
+  );
+  await runTest(
+    "createEventNotifications crea una notificacion por cada voluntario suscrito",
+    testCreateEventNotificationsCreatesOneNotificationPerSubscriber,
+  );
+  await runTest(
+    "createEventNotifications no crea registros si no hay suscriptores",
+    testCreateEventNotificationsReturnsZeroWhenThereAreNoSubscribers,
+  );
+  await runTest(
+    "listVolunteerNotifications devuelve avisos ordenados por fecha",
+    testListVolunteerNotificationsReturnsNotificationsOrderedByDate,
+  );
+  await runTest(
+    "markNotificationAsRead marca como leida una notificacion propia",
+    testMarkNotificationAsReadUpdatesUnreadOwnedNotification,
+  );
+  await runTest(
+    "markNotificationAsRead bloquea notificaciones ajenas",
+    testMarkNotificationAsReadRejectsForeignNotification,
+  );
+  await runTest(
+    "getAdminDashboardSummary devuelve metricas basicas del panel admin",
+    testGetAdminDashboardSummaryReturnsBasicCounters,
   );
   await runTest(
     "updateEntityValidationStatus cambia el estado y registra la accion administrativa",
@@ -214,6 +257,18 @@ async function main() {
   await runTest(
     "updateVolunteerProfile actualiza los datos personales permitidos",
     testUpdateVolunteerProfileUpdatesAllowedFields,
+  );
+  await runTest(
+    "getVolunteerCalendar carga los eventos inscritos del mes seleccionado",
+    testGetVolunteerCalendarLoadsRegisteredEventsForSelectedMonth,
+  );
+  await runTest(
+    "buildCalendarDays coloca los eventos en su fecha correspondiente",
+    testBuildCalendarDaysPlacesEventsOnTheirDate,
+  );
+  await runTest(
+    "getMonthMeta normaliza meses invalidos",
+    testGetMonthMetaNormalizesInvalidMonthInput,
   );
   await runTest(
     "validateVolunteerRegistrationInput detecta datos invalidos en el registro",

@@ -1,6 +1,26 @@
+const getAdminDashboardSummary = require("../../services/admin/get-admin-dashboard-summary.service");
 const listPendingEntities = require("../../services/admin/list-pending-entities.service");
+const listAdminPublications = require("../../services/admin/list-admin-publications.service");
+const listAdminUsers = require("../../services/admin/list-admin-users.service");
 const getEntityReviewDetail = require("../../services/admin/get-entity-review-detail.service");
 const updateEntityValidationStatus = require("../../services/admin/update-entity-validation-status.service");
+
+async function renderAdminDashboard(req, res, next) {
+  try {
+    const summary = await getAdminDashboardSummary();
+
+    return res.render("pages/admin/dashboard", {
+      pageTitle: "Panel de administracion",
+      summary,
+      infoMessage:
+        req.query.updated === "1"
+          ? "El estado de la entidad se ha actualizado correctamente."
+          : null,
+    });
+  } catch (error) {
+    return next(error);
+  }
+}
 
 async function renderPendingEntitiesList(req, res, next) {
   try {
@@ -9,10 +29,33 @@ async function renderPendingEntitiesList(req, res, next) {
     return res.render("pages/admin/entities-list", {
       pageTitle: "Entidades pendientes",
       entities,
-      infoMessage:
-        req.query.updated === "1"
-          ? "El estado de la entidad se ha actualizado correctamente."
-          : null,
+      infoMessage: null,
+    });
+  } catch (error) {
+    return next(error);
+  }
+}
+
+async function renderAdminUsersList(req, res, next) {
+  try {
+    const users = await listAdminUsers();
+
+    return res.render("pages/admin/users-list", {
+      pageTitle: "Usuarios registrados",
+      users,
+    });
+  } catch (error) {
+    return next(error);
+  }
+}
+
+async function renderAdminPublicationsList(req, res, next) {
+  try {
+    const publications = await listAdminPublications();
+
+    return res.render("pages/admin/publications-list", {
+      pageTitle: "Publicaciones",
+      publications,
     });
   } catch (error) {
     return next(error);
@@ -75,6 +118,9 @@ async function updateEntityStatus(req, res, next) {
 }
 
 module.exports = {
+  renderAdminDashboard,
+  renderAdminPublicationsList,
+  renderAdminUsersList,
   renderEntityReviewDetail,
   renderPendingEntitiesList,
   updateEntityStatus,

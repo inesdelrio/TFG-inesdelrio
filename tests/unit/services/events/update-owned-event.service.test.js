@@ -4,6 +4,7 @@ const updateOwnedEvent = require("../../../../src/services/events/update-owned-e
 
 async function testUpdateOwnedEventUpdatesEventForOwnerEntity() {
   let updatedPayload = null;
+  let notificationsPayload = null;
   const prismaMock = {
     event: {
       update: async ({ data }) => {
@@ -31,13 +32,28 @@ async function testUpdateOwnedEventUpdatesEventForOwnerEntity() {
         event: {
           id: 12,
         },
+        entity: {
+          id: 5,
+          organizationName: "Asociacion Rio Vivo",
+        },
       }),
+      createEventNotifications: async (payload) => {
+        notificationsPayload = payload;
+        return { createdCount: 1 };
+      },
     },
   );
 
   assert.equal(updatedPayload.title, "Evento editado");
   assert.equal(updatedPayload.totalSlots, 40);
   assert.equal(event.city, "Leganes");
+  assert.deepEqual(notificationsPayload, {
+    entityId: 5,
+    entityName: "Asociacion Rio Vivo",
+    eventId: 12,
+    eventTitle: "Evento editado",
+    type: "EVENT_UPDATED",
+  });
 }
 
 module.exports = {
