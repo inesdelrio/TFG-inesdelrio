@@ -496,6 +496,7 @@ No se debe dar por hecho ningún paso técnico importante. Si algo requiere inst
   - RF17-10: Documentar el requisito técnico y cómo comprobarlo manualmente
 
 ### RF18 — Moderación y suspensión
+- **Estado:** Cerrado
 - **Descripción:** Permitir al administrador suspender entidades y retirar contenido.
 - **Criterio de validación:** La moderación actualiza estados y oculta el contenido o acceso correspondiente.
 - **Estimación:** 7 h

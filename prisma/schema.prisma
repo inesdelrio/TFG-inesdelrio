@@ -20,6 +20,11 @@ enum EntityValidationStatus {
   SUSPENDIDA
 }
 
+enum EventPublicationStatus {
+  ACTIVO
+  RETIRADO
+}
+
 model SystemCheck {
   id        Int      @id @default(autoincrement())
   key       String   @unique
@@ -68,19 +73,21 @@ model Entity {
 }
 
 model Event {
-  id            Int                 @id @default(autoincrement())
-  title         String
-  description   String
-  city          String
-  address       String
-  startsAt      DateTime
-  totalSlots    Int
-  entity        Entity              @relation(fields: [entityId], references: [id])
-  entityId      Int
-  registrations EventRegistration[]
-  notifications InternalNotification[]
-  createdAt     DateTime            @default(now())
-  updatedAt     DateTime            @updatedAt
+  id                Int                    @id @default(autoincrement())
+  title             String
+  description       String
+  city              String
+  address           String
+  startsAt          DateTime
+  totalSlots        Int
+  publicationStatus EventPublicationStatus @default(ACTIVO)
+  entity            Entity                 @relation(fields: [entityId], references: [id])
+  entityId          Int
+  registrations     EventRegistration[]
+  notifications     InternalNotification[]
+  adminActionLogs   AdminActionLog[]
+  createdAt         DateTime               @default(now())
+  updatedAt         DateTime               @updatedAt
 }
 
 model EntitySubscription {
@@ -123,12 +130,14 @@ model InternalNotification {
 model AdminActionLog {
   id            Int                    @id @default(autoincrement())
   action        String
-  fromStatus    EntityValidationStatus
-  toStatus      EntityValidationStatus
+  fromStatus    EntityValidationStatus?
+  toStatus      EntityValidationStatus?
   notes         String?
   adminUser     User                   @relation(fields: [adminUserId], references: [id])
   adminUserId   Int
-  entity        Entity                 @relation(fields: [entityId], references: [id])
-  entityId      Int
+  entity        Entity?                @relation(fields: [entityId], references: [id])
+  entityId      Int?
+  event         Event?                 @relation(fields: [eventId], references: [id])
+  eventId       Int?
   createdAt     DateTime               @default(now())
 }

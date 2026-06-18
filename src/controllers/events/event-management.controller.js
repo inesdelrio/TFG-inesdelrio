@@ -59,10 +59,14 @@ async function renderEventEditForm(req, res, next) {
       });
     }
 
-    if (error.code === "EVENT_NOT_OWNED_BY_ENTITY") {
+    if (
+      error.code === "EVENT_NOT_OWNED_BY_ENTITY" ||
+      error.code === "ENTITY_SUSPENDED_FOR_EVENT_OPERATION" ||
+      error.code === "EVENT_WITHDRAWN"
+    ) {
       return res.status(403).render("pages/errors/500", {
         pageTitle: "Acceso denegado",
-        errorMessage: "Solo la entidad autora puede editar este evento.",
+        errorMessage: "Este evento no puede editarse desde la entidad actual.",
       });
     }
 
@@ -114,10 +118,14 @@ async function updateEvent(req, res, next) {
       });
     }
 
-    if (error.code === "EVENT_NOT_OWNED_BY_ENTITY") {
+    if (
+      error.code === "EVENT_NOT_OWNED_BY_ENTITY" ||
+      error.code === "ENTITY_SUSPENDED_FOR_EVENT_OPERATION" ||
+      error.code === "EVENT_WITHDRAWN"
+    ) {
       return res.status(403).render("pages/errors/500", {
         pageTitle: "Acceso denegado",
-        errorMessage: "Solo la entidad autora puede actualizar este evento.",
+        errorMessage: "Este evento no puede actualizarse desde la entidad actual.",
       });
     }
 
@@ -142,10 +150,14 @@ async function deleteEvent(req, res, next) {
       });
     }
 
-    if (error.code === "EVENT_NOT_OWNED_BY_ENTITY") {
+    if (
+      error.code === "EVENT_NOT_OWNED_BY_ENTITY" ||
+      error.code === "ENTITY_SUSPENDED_FOR_EVENT_OPERATION" ||
+      error.code === "EVENT_WITHDRAWN"
+    ) {
       return res.status(403).render("pages/errors/500", {
         pageTitle: "Acceso denegado",
-        errorMessage: "Solo la entidad autora puede eliminar este evento.",
+        errorMessage: "Este evento no puede eliminarse desde la entidad actual.",
       });
     }
 

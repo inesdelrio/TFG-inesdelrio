@@ -9,11 +9,15 @@ const {
   testUpdateEntityValidationStatusChangesStatusAndCreatesAdminLog,
 } = require("./services/admin/update-entity-validation-status.service.test");
 const {
+  testWithdrawEventPublicationMarksEventAsWithdrawnAndCreatesAdminLog,
+} = require("./services/admin/withdraw-event-publication.service.test");
+const {
   testCreateEntityRequestCreatesPendingEntityAndPromotesUserRole,
 } = require("./services/entities/create-entity-request.service.test");
 const {
   testAssertEntityCanPublishEventsAllowsVerifiedEntity,
   testAssertEntityCanPublishEventsRejectsPendingEntity,
+  testAssertEntityCanPublishEventsRejectsSuspendedEntity,
 } = require("./services/entities/entity-publication-access.service.test");
 const {
   testCreateEntitySubscriptionCreatesSubscriptionWithoutDuplicates,
@@ -62,6 +66,7 @@ const {
 } = require("./services/events/list-owned-event-registrations.service.test");
 const {
   testListPublishedEventsAppliesCombinedFilters,
+  testListPublishedEventsExcludesWithdrawnEventsAndSuspendedEntities,
   testListPublishedEventsReturnsOrderedPaginatedActiveEvents,
 } = require("./services/events/list-published-events.service.test");
 const {
@@ -179,12 +184,20 @@ async function main() {
     testUpdateEntityValidationStatusChangesStatusAndCreatesAdminLog,
   );
   await runTest(
+    "withdrawEventPublication retira un evento y registra la accion administrativa",
+    testWithdrawEventPublicationMarksEventAsWithdrawnAndCreatesAdminLog,
+  );
+  await runTest(
     "assertEntityCanPublishEvents permite una entidad verificada",
     testAssertEntityCanPublishEventsAllowsVerifiedEntity,
   );
   await runTest(
     "assertEntityCanPublishEvents bloquea una entidad pendiente",
     testAssertEntityCanPublishEventsRejectsPendingEntity,
+  );
+  await runTest(
+    "assertEntityCanPublishEvents bloquea una entidad suspendida",
+    testAssertEntityCanPublishEventsRejectsSuspendedEntity,
   );
   await runTest(
     "createEvent crea un evento para una entidad verificada",
@@ -233,6 +246,10 @@ async function main() {
   await runTest(
     "listPublishedEvents aplica filtros combinados de fecha, entidad y ciudad",
     testListPublishedEventsAppliesCombinedFilters,
+  );
+  await runTest(
+    "listPublishedEvents excluye eventos retirados y entidades suspendidas",
+    testListPublishedEventsExcludesWithdrawnEventsAndSuspendedEntities,
   );
   await runTest(
     "getEventDetail devuelve el evento con datos de la entidad organizadora",

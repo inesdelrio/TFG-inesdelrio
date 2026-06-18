@@ -3,9 +3,13 @@ const prisma = require("../../config/prisma");
 async function getEventDetail(eventId, dependencies = {}) {
   const prismaClient = dependencies.prisma || prisma;
 
-  return prismaClient.event.findUnique({
+  return prismaClient.event.findFirst({
     where: {
       id: eventId,
+      publicationStatus: "ACTIVO",
+      entity: {
+        validationStatus: "VERIFICADA",
+      },
     },
     include: {
       _count: {

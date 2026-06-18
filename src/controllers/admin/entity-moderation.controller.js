@@ -4,6 +4,7 @@ const listAdminPublications = require("../../services/admin/list-admin-publicati
 const listAdminUsers = require("../../services/admin/list-admin-users.service");
 const getEntityReviewDetail = require("../../services/admin/get-entity-review-detail.service");
 const updateEntityValidationStatus = require("../../services/admin/update-entity-validation-status.service");
+const withdrawEventPublication = require("../../services/admin/withdraw-event-publication.service");
 
 async function renderAdminDashboard(req, res, next) {
   try {
@@ -56,6 +57,10 @@ async function renderAdminPublicationsList(req, res, next) {
     return res.render("pages/admin/publications-list", {
       pageTitle: "Publicaciones",
       publications,
+      infoMessage:
+        req.query.withdrawn === "1"
+          ? "La publicacion se ha retirado correctamente."
+          : null,
     });
   } catch (error) {
     return next(error);
@@ -117,6 +122,26 @@ async function updateEntityStatus(req, res, next) {
   }
 }
 
+async function withdrawEventPublicationAction(req, res, next) {
+  try {
+    await withdrawEventPublication({
+      adminUserId: req.currentUser.id,
+      eventId: Number(req.params.eventId),
+      notes: typeof req.body.notes === "string" ? req.body.notes.trim() : "",
+    });
+
+    return res.redirect("/admin/publicaciones?withdrawn=1");
+  } catch (error) {
+    if (error.code === "EVENT_NOT_FOUND") {
+      return res.status(404).render("pages/errors/404", {
+        pageTitle: "Evento no encontrado",
+      });
+    }
+
+    return next(error);
+  }
+}
+
 module.exports = {
   renderAdminDashboard,
   renderAdminPublicationsList,
@@ -124,4 +149,5 @@ module.exports = {
   renderEntityReviewDetail,
   renderPendingEntitiesList,
   updateEntityStatus,
+  withdrawEventPublicationAction,
 };

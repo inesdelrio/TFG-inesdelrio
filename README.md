@@ -27,6 +27,7 @@ Actualmente estan cerrados los requisitos:
 - RF15 - Notificaciones internas
 - RF16 - Calendario personal del voluntario
 - RF17 - Panel principal de administracion
+- RF18 - Moderacion y suspension
 
 Estado tecnico validado:
 
@@ -71,6 +72,7 @@ npm run prisma:generate
 npm run prisma:migrate
 npm run prisma:reset
 npm run prisma:validate
+npm test
 ```
 
 ## Documentacion
@@ -96,4 +98,5 @@ npm run prisma:validate
 - [RF15](docs/requisitos/RF15.md)
 - [RF16](docs/requisitos/RF16.md)
 - [RF17](docs/requisitos/RF17.md)
+- [RF18](docs/requisitos/RF18.md)
 - [Estructura inicial](docs/arquitectura/estructura-inicial.md)

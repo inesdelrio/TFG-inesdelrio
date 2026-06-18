@@ -41,5 +41,11 @@ router.post(
   requireRole("ADMIN"),
   entityModerationController.updateEntityStatus,
 );
+router.post(
+  "/admin/publicaciones/:eventId/retirar",
+  requireAuth,
+  requireRole("ADMIN"),
+  entityModerationController.withdrawEventPublicationAction,
+);
 
 module.exports = router;

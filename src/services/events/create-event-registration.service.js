@@ -8,6 +8,11 @@ async function createEventRegistration(input, dependencies = {}) {
       id: input.eventId,
     },
     include: {
+      entity: {
+        select: {
+          validationStatus: true,
+        },
+      },
       _count: {
         select: {
           registrations: true,
@@ -24,6 +29,12 @@ async function createEventRegistration(input, dependencies = {}) {
 
   if (event.startsAt <= new Date()) {
     const error = new Error("Event is no longer active.");
+    error.code = "EVENT_NOT_ACTIVE";
+    throw error;
+  }
+
+  if (event.publicationStatus !== "ACTIVO" || event.entity.validationStatus !== "VERIFICADA") {
+    const error = new Error("Event is no longer visible.");
     error.code = "EVENT_NOT_ACTIVE";
     throw error;
   }

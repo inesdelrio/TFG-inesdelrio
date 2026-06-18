@@ -11,6 +11,12 @@
   </section>
 
   <section class="event-list">
+    <% if (infoMessage) { %>
+      <article class="status-card success-card">
+        <p><%= infoMessage %></p>
+      </article>
+    <% } %>
+
     <% if (publications.length === 0) { %>
       <article class="status-card">
         <h2>Sin publicaciones</h2>
@@ -23,9 +29,18 @@
         <h2><%= publication.title %></h2>
         <p><strong>Entidad:</strong> <%= publication.entity.organizationName %></p>
         <p><strong>Estado entidad:</strong> <%= publication.entity.validationStatus %></p>
+        <p><strong>Estado publicacion:</strong> <%= publication.publicationStatus %></p>
         <p><strong>Fecha:</strong> <%= new Date(publication.startsAt).toLocaleString("es-ES") %></p>
         <p><strong>Inscritos:</strong> <%= publication._count.registrations %></p>
-        <a class="secondary-link" href="/eventos/<%= publication.id %>">Ver detalle publico</a>
+        <% if (publication.publicationStatus === "ACTIVO" && publication.entity.validationStatus === "VERIFICADA") { %>
+          <a class="secondary-link" href="/eventos/<%= publication.id %>">Ver detalle publico</a>
+        <% } %>
+        <% if (publication.publicationStatus !== "RETIRADO") { %>
+          <form method="POST" action="/admin/publicaciones/<%= publication.id %>/retirar" class="inline-form">
+            <input type="hidden" name="notes" value="Publicacion retirada desde el panel de administracion">
+            <button type="submit" class="danger-button">Retirar publicacion</button>
+          </form>
+        <% } %>
       </article>
     <% }) %>
   </section>

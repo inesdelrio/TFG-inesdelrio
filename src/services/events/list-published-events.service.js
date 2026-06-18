@@ -11,6 +11,10 @@ async function listPublishedEvents(options = {}, dependencies = {}) {
     startsAt: {
       gte: now,
     },
+    publicationStatus: "ACTIVO",
+    entity: {
+      validationStatus: "VERIFICADA",
+    },
   };
 
   if (filters.eventDate) {
@@ -32,6 +36,7 @@ async function listPublishedEvents(options = {}, dependencies = {}) {
 
   if (filters.entity) {
     where.entity = {
+      ...where.entity,
       organizationName: {
         contains: filters.entity,
         mode: "insensitive",

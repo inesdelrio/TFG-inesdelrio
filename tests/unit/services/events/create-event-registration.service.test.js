@@ -10,6 +10,10 @@ async function testCreateEventRegistrationCreatesRegistrationWhenSlotsAvailable(
         id: 5,
         totalSlots: 10,
         startsAt: new Date("2099-12-20T10:00:00Z"),
+        publicationStatus: "ACTIVO",
+        entity: {
+          validationStatus: "VERIFICADA",
+        },
         _count: {
           registrations: 3,
         },
@@ -48,6 +52,10 @@ async function testCreateEventRegistrationRejectsDuplicateRegistration() {
         id: 5,
         totalSlots: 10,
         startsAt: new Date("2099-12-20T10:00:00Z"),
+        publicationStatus: "ACTIVO",
+        entity: {
+          validationStatus: "VERIFICADA",
+        },
         _count: {
           registrations: 3,
         },
@@ -83,6 +91,10 @@ async function testCreateEventRegistrationRejectsWhenEventIsFull() {
         id: 5,
         totalSlots: 2,
         startsAt: new Date("2099-12-20T10:00:00Z"),
+        publicationStatus: "ACTIVO",
+        entity: {
+          validationStatus: "VERIFICADA",
+        },
         _count: {
           registrations: 2,
         },

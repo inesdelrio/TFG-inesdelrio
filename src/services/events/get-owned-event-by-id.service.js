@@ -33,6 +33,18 @@ async function getOwnedEventById(input, dependencies = {}) {
     throw error;
   }
 
+  if (entity.validationStatus === "SUSPENDIDA") {
+    const error = new Error("Suspended entity cannot operate events.");
+    error.code = "ENTITY_SUSPENDED_FOR_EVENT_OPERATION";
+    throw error;
+  }
+
+  if (event.publicationStatus === "RETIRADO") {
+    const error = new Error("Withdrawn event cannot be operated.");
+    error.code = "EVENT_WITHDRAWN";
+    throw error;
+  }
+
   return {
     event,
     entity,

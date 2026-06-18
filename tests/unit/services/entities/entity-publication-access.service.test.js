@@ -15,7 +15,15 @@ function testAssertEntityCanPublishEventsRejectsPendingEntity() {
   );
 }
 
+function testAssertEntityCanPublishEventsRejectsSuspendedEntity() {
+  assert.throws(
+    () => assertEntityCanPublishEvents({ validationStatus: "SUSPENDIDA" }),
+    (error) => error.code === "ENTITY_SUSPENDED_FOR_PUBLISHING",
+  );
+}
+
 module.exports = {
   testAssertEntityCanPublishEventsAllowsVerifiedEntity,
   testAssertEntityCanPublishEventsRejectsPendingEntity,
+  testAssertEntityCanPublishEventsRejectsSuspendedEntity,
 };

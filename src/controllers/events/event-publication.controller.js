@@ -41,7 +41,10 @@ async function renderEventCreationForm(req, res, next) {
     try {
       assertEntityCanPublishEvents(entity);
     } catch (error) {
-      if (error.code === "ENTITY_NOT_VERIFIED_FOR_PUBLISHING") {
+      if (
+        error.code === "ENTITY_NOT_VERIFIED_FOR_PUBLISHING" ||
+        error.code === "ENTITY_SUSPENDED_FOR_PUBLISHING"
+      ) {
         return res.status(403).render(
           "pages/events/create",
           buildCreateViewModel({
@@ -79,7 +82,10 @@ async function publishEvent(req, res, next) {
     try {
       assertEntityCanPublishEvents(entity);
     } catch (error) {
-      if (error.code === "ENTITY_NOT_VERIFIED_FOR_PUBLISHING") {
+      if (
+        error.code === "ENTITY_NOT_VERIFIED_FOR_PUBLISHING" ||
+        error.code === "ENTITY_SUSPENDED_FOR_PUBLISHING"
+      ) {
         return res.status(403).render(
           "pages/events/create",
           buildCreateViewModel({

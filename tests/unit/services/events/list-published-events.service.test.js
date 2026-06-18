@@ -83,7 +83,38 @@ async function testListPublishedEventsAppliesCombinedFilters() {
   assert.ok(calls[0].where.startsAt.lte);
 }
 
+async function testListPublishedEventsExcludesWithdrawnEventsAndSuspendedEntities() {
+  const calls = [];
+  const prismaMock = {
+    event: {
+      count: async ({ where }) => {
+        calls.push({ type: "count", where });
+        return 0;
+      },
+      findMany: async (query) => {
+        calls.push({ type: "findMany", query });
+        return [];
+      },
+    },
+  };
+
+  await listPublishedEvents(
+    {
+      now: new Date("2099-01-01T00:00:00Z"),
+    },
+    {
+      prisma: prismaMock,
+    },
+  );
+
+  assert.equal(calls[0].where.publicationStatus, "ACTIVO");
+  assert.equal(calls[0].where.entity.validationStatus, "VERIFICADA");
+  assert.equal(calls[1].query.where.publicationStatus, "ACTIVO");
+  assert.equal(calls[1].query.where.entity.validationStatus, "VERIFICADA");
+}
+
 module.exports = {
   testListPublishedEventsAppliesCombinedFilters,
+  testListPublishedEventsExcludesWithdrawnEventsAndSuspendedEntities,
   testListPublishedEventsReturnsOrderedPaginatedActiveEvents,
 };
