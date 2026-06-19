@@ -1,0 +1,68 @@
+<%- include("../../partials/head") %>
+<%- include("../../partials/header") %>
+
+<main class="container dashboard-page">
+  <section class="dashboard-hero">
+    <span class="eyebrow">RF19</span>
+    <h1>Historial de participacion</h1>
+    <p>
+      Consulta tus actividades inscritas separadas entre proximas actividades y actividades pasadas.
+    </p>
+  </section>
+
+  <section class="event-list">
+    <article class="status-card">
+      <h2>Actividades futuras</h2>
+
+      <% if (history.futureActivities.length === 0) { %>
+        <p>No tienes actividades futuras inscritas.</p>
+      <% } %>
+
+      <% history.futureActivities.forEach((activity) => { %>
+        <div class="history-item">
+          <h3><%= activity.title %></h3>
+          <p><strong>Entidad:</strong> <%= activity.entityName %></p>
+          <p><strong>Fecha:</strong> <%= new Date(activity.startsAt).toLocaleString("es-ES", { dateStyle: "medium", timeStyle: "short" }) %></p>
+          <p><strong>Ubicacion:</strong> <%= activity.city %> - <%= activity.address %></p>
+          <p><strong>Estado:</strong> <%= activity.publicationStatus %></p>
+
+          <% if (activity.canOpenDetail) { %>
+            <a class="secondary-link" href="/eventos/<%= activity.eventId %>">Ver detalle</a>
+          <% } else { %>
+            <p class="history-disabled-link">Detalle no disponible: evento retirado o entidad no verificada.</p>
+          <% } %>
+        </div>
+      <% }) %>
+    </article>
+
+    <article class="status-card">
+      <h2>Actividades pasadas</h2>
+
+      <% if (history.pastActivities.length === 0) { %>
+        <p>No tienes actividades pasadas registradas.</p>
+      <% } %>
+
+      <% history.pastActivities.forEach((activity) => { %>
+        <div class="history-item">
+          <h3><%= activity.title %></h3>
+          <p><strong>Entidad:</strong> <%= activity.entityName %></p>
+          <p><strong>Fecha:</strong> <%= new Date(activity.startsAt).toLocaleString("es-ES", { dateStyle: "medium", timeStyle: "short" }) %></p>
+          <p><strong>Ubicacion:</strong> <%= activity.city %> - <%= activity.address %></p>
+          <p><strong>Estado:</strong> <%= activity.publicationStatus %></p>
+
+          <% if (activity.canOpenDetail) { %>
+            <a class="secondary-link" href="/eventos/<%= activity.eventId %>">Ver detalle</a>
+          <% } else { %>
+            <p class="history-disabled-link">Detalle no disponible: evento retirado o entidad no verificada.</p>
+          <% } %>
+        </div>
+      <% }) %>
+    </article>
+  </section>
+
+  <div class="profile-actions">
+    <a class="secondary-link" href="/voluntariado/area">Volver al area</a>
+  </div>
+</main>
+
+<%- include("../../partials/footer") %>

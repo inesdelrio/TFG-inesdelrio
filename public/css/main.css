@@ -336,6 +336,25 @@ code {
   gap: 1rem;
 }
 
+.history-item {
+  padding: 1rem 0;
+  border-top: 1px solid var(--border);
+}
+
+.history-item:first-of-type {
+  border-top: 0;
+}
+
+.history-item h3 {
+  margin: 0 0 0.6rem;
+}
+
+.history-disabled-link {
+  margin: 0.6rem 0 0;
+  color: var(--muted);
+  font-weight: 700;
+}
+
 .attendees-list {
   display: grid;
   gap: 1rem;

@@ -515,6 +515,7 @@ No se debe dar por hecho ningún paso técnico importante. Si algo requiere inst
   - RF18-10: Documentar el requisito técnico y cómo comprobarlo manualmente
 
 ### RF19 — Historial de participación
+- **Estado:** Cerrado
 - **Descripción:** Permitir al voluntario consultar sus actividades pasadas y futuras.
 - **Criterio de validación:** El sistema muestra el historial clasificado y con acceso al detalle.
 - **Estimación:** 6 h

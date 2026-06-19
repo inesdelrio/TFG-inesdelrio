@@ -90,6 +90,9 @@ const {
   testGetVolunteerCalendarLoadsRegisteredEventsForSelectedMonth,
 } = require("./services/volunteers/get-volunteer-calendar.service.test");
 const {
+  testGetVolunteerHistorySeparatesFutureAndPastRegistrations,
+} = require("./services/volunteers/get-volunteer-history.service.test");
+const {
   testValidateLoginInputRejectsInvalidData,
 } = require("./validators/auth/login.validator.test");
 const {
@@ -282,6 +285,10 @@ async function main() {
   await runTest(
     "getVolunteerCalendar carga los eventos inscritos del mes seleccionado",
     testGetVolunteerCalendarLoadsRegisteredEventsForSelectedMonth,
+  );
+  await runTest(
+    "getVolunteerHistory separa inscripciones futuras y pasadas",
+    testGetVolunteerHistorySeparatesFutureAndPastRegistrations,
   );
   await runTest(
     "buildCalendarDays coloca los eventos en su fecha correspondiente",

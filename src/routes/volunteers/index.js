@@ -1,6 +1,7 @@
 const express = require("express");
 
 const volunteerCalendarController = require("../../controllers/volunteers/volunteer-calendar.controller");
+const volunteerHistoryController = require("../../controllers/volunteers/volunteer-history.controller");
 const volunteerProfileController = require("../../controllers/volunteers/volunteer-profile.controller");
 const { requireAuth, requireRole } = require("../../middlewares/auth.middleware");
 
@@ -11,6 +12,12 @@ router.get(
   requireAuth,
   requireRole("VOLUNTARIO"),
   volunteerCalendarController.renderVolunteerCalendar,
+);
+router.get(
+  "/voluntariado/historial",
+  requireAuth,
+  requireRole("VOLUNTARIO"),
+  volunteerHistoryController.renderVolunteerHistory,
 );
 router.get(
   "/voluntariado/perfil",

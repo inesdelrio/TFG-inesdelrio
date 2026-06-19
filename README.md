@@ -28,6 +28,7 @@ Actualmente estan cerrados los requisitos:
 - RF16 - Calendario personal del voluntario
 - RF17 - Panel principal de administracion
 - RF18 - Moderacion y suspension
+- RF19 - Historial de participacion
 
 Estado tecnico validado:
 
@@ -106,4 +107,5 @@ npm test
 - [RF16](docs/requisitos/RF16.md)
 - [RF17](docs/requisitos/RF17.md)
 - [RF18](docs/requisitos/RF18.md)
+- [RF19](docs/requisitos/RF19.md)
 - [Estructura inicial](docs/arquitectura/estructura-inicial.md)
