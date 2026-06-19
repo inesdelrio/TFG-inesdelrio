@@ -110,6 +110,10 @@ const {
 const {
   testValidateVolunteerRegistrationInputRejectsInvalidData,
 } = require("./validators/auth/register-volunteer.validator.test");
+const {
+  testResolveAdminSeedConfigRequiresAdminEmailAndPassword,
+  testResolveAdminSeedConfigReturnsEnvironmentValues,
+} = require("./scripts/seed-admin-config.test");
 
 async function runTest(name, fn) {
   try {
@@ -314,6 +318,14 @@ async function main() {
   await runTest(
     "validateVolunteerProfileInput detecta datos invalidos en el perfil",
     testValidateVolunteerProfileInputRejectsInvalidData,
+  );
+  await runTest(
+    "resolveAdminSeedConfig exige ADMIN_EMAIL y ADMIN_PASSWORD",
+    testResolveAdminSeedConfigRequiresAdminEmailAndPassword,
+  );
+  await runTest(
+    "resolveAdminSeedConfig devuelve las credenciales desde variables de entorno",
+    testResolveAdminSeedConfigReturnsEnvironmentValues,
   );
 }
 

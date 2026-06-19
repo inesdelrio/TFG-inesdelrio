@@ -53,6 +53,12 @@ npm install
 
 2. Revisar variables de entorno en `.env`.
 
+Para crear o actualizar el administrador local, configurar `ADMIN_EMAIL` y `ADMIN_PASSWORD` en `.env` y ejecutar:
+
+```bash
+npm run seed:admin
+```
+
 3. Arrancar en desarrollo:
 
 ```bash
@@ -72,6 +78,7 @@ npm run prisma:generate
 npm run prisma:migrate
 npm run prisma:reset
 npm run prisma:validate
+npm run seed:admin
 npm test
 ```
 

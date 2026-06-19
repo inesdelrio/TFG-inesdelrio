@@ -2,10 +2,10 @@ require("dotenv").config();
 
 const prisma = require("../src/config/prisma");
 const { hashPassword } = require("../src/utils/password");
+const { resolveAdminSeedConfig } = require("./seed-admin-config");
 
 async function main() {
-  const email = process.env.ADMIN_SEED_EMAIL || "admin@tfg.local";
-  const password = process.env.ADMIN_SEED_PASSWORD || "Admin1234!";
+  const { email, password } = resolveAdminSeedConfig();
 
   const existingAdmin = await prisma.user.findUnique({
     where: {
@@ -49,7 +49,7 @@ async function main() {
 
 main()
   .catch((error) => {
-    console.error(error);
+    console.error(error.message);
     process.exitCode = 1;
   })
   .finally(async () => {
