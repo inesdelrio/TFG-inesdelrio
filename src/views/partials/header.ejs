@@ -1,11 +1,10 @@
 <header class="site-header">
   <div class="container">
-    <a class="brand" href="/">TFG Voluntariado</a>
+    <a class="brand" href="/">VolunRed</a>
     <nav class="site-nav">
       <a href="/">Inicio</a>
       <a href="/eventos">Eventos</a>
       <% if (currentUser) { %>
-        <a href="/login">Sesion</a>
         <% if (currentUser.role === "VOLUNTARIO") { %>
           <a href="/voluntariado/perfil">Mi perfil</a>
           <a href="/voluntariado/calendario">Calendario</a>
@@ -25,8 +24,6 @@
         <a href="/registro">Registro</a>
         <a href="/login">Login</a>
       <% } %>
-      <a href="/health">Health</a>
-      <a href="/health/db">DB Check</a>
     </nav>
   </div>
 </header>

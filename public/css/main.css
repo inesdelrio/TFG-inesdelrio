@@ -1,6 +1,6 @@
 :root {
-  --bg: #f4efe6;
-  --surface: #fffdf9;
+  --bg: #f7f5f1;
+  --surface: #ffffff;
   --ink: #1f1a17;
   --muted: #6f655c;
   --border: #ddd2c5;
@@ -11,13 +11,23 @@
   box-sizing: border-box;
 }
 
+html,
+body {
+  min-height: 100%;
+}
+
 body {
   margin: 0;
   font-family: Georgia, "Times New Roman", serif;
   color: var(--ink);
-  background:
-    radial-gradient(circle at top left, rgba(31, 122, 90, 0.14), transparent 28%),
-    linear-gradient(180deg, #f7f1e8 0%, var(--bg) 100%);
+  background: var(--bg);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
 }
 
 a {
@@ -38,8 +48,17 @@ code {
 
 .site-header,
 .site-footer {
-  background: rgba(255, 253, 249, 0.9);
-  backdrop-filter: blur(8px);
+  background: var(--surface);
+  border-color: var(--border);
+}
+
+.site-header {
+  border-bottom: 1px solid var(--border);
+}
+
+.site-footer {
+  border-top: 1px solid var(--border);
+  color: var(--muted);
 }
 
 .site-header .container,
@@ -52,9 +71,10 @@ code {
 }
 
 .brand {
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   font-weight: 700;
   text-decoration: none;
+  color: #1f7a5a;
 }
 
 .site-nav {
@@ -90,6 +110,146 @@ code {
 
 .hero {
   padding: 4rem 0 5rem;
+}
+
+.home-page {
+  display: grid;
+  gap: 3.5rem;
+  padding: 3rem 0 4rem;
+}
+
+.home-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(280px, 0.75fr);
+  gap: 2rem;
+  align-items: center;
+}
+
+.home-hero-copy h1 {
+  max-width: 12ch;
+  margin: 0.8rem 0 1rem;
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  line-height: 0.98;
+}
+
+.home-hero-copy p {
+  max-width: 65ch;
+  color: var(--muted);
+  font-size: 1.08rem;
+  line-height: 1.75;
+}
+
+.home-actions {
+  display: flex;
+  gap: 0.9rem;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
+}
+
+.button-link {
+  text-decoration: none;
+}
+
+.outline-button {
+  display: inline-block;
+  border: 1px solid #1f7a5a;
+  border-radius: 999px;
+  padding: 0.9rem 1.25rem;
+  color: #1f7a5a;
+  font-weight: 700;
+  background: #fff;
+}
+
+.outline-button:hover {
+  background: rgba(31, 122, 90, 0.08);
+}
+
+.home-summary {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  padding: 1.5rem;
+}
+
+.home-summary h2 {
+  margin-top: 0;
+}
+
+.home-summary p {
+  margin-bottom: 0;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.home-section {
+  padding: 3rem 0;
+  background: #fff;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.section-heading {
+  max-width: 62ch;
+  margin-bottom: 1.5rem;
+}
+
+.section-heading h2 {
+  margin: 0 0 0.6rem;
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+}
+
+.section-heading p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.feature-card {
+  padding: 1.2rem;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: #fff;
+}
+
+.feature-card h3 {
+  margin: 0 0 0.6rem;
+}
+
+.feature-card p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.entity-band {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: var(--shadow);
+}
+
+.entity-band h2 {
+  margin: 0.7rem 0 0.6rem;
+}
+
+.entity-band p {
+  max-width: 72ch;
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.7;
 }
 
 .dashboard-page {
@@ -539,6 +699,7 @@ code {
 }
 
 .primary-button {
+  display: inline-block;
   appearance: none;
   border: 0;
   border-radius: 999px;
@@ -548,6 +709,7 @@ code {
   font: inherit;
   font-weight: 700;
   cursor: pointer;
+  text-decoration: none;
 }
 
 .primary-button:hover {
@@ -612,6 +774,37 @@ code {
 
   .hero {
     padding-top: 2.5rem;
+  }
+
+  .home-page {
+    padding-top: 2rem;
+    gap: 2rem;
+  }
+
+  .home-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .home-hero-copy h1 {
+    max-width: none;
+  }
+
+  .home-actions {
+    align-items: stretch;
+  }
+
+  .button-link {
+    width: 100%;
+    text-align: center;
+  }
+
+  .feature-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .entity-band {
+    align-items: stretch;
+    flex-direction: column;
   }
 
   .auth-shell {

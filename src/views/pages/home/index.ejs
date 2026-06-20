@@ -1,49 +1,74 @@
 <%- include("../../partials/head") %>
 <%- include("../../partials/header") %>
 
-<main class="container hero">
-  <section class="hero-copy">
-    <span class="eyebrow">Estado actual</span>
-    <h1>Plataforma base de voluntariado ya operativa</h1>
-    <p>
-      La aplicacion ya arranca con Node.js, Express y EJS, conecta con PostgreSQL
-      mediante Prisma, permite registro, login, alta y verificacion de entidades,
-      perfiles editables, publicacion inicial de eventos y notificaciones internas para voluntarios suscritos.
-    </p>
+<main class="home-page">
+  <section class="container home-hero">
+    <div class="home-hero-copy">
+      <span class="eyebrow">VolunRed</span>
+      <h1>VolunRed — Conectando personas con ganas de ayudar</h1>
+      <p>
+        Una plataforma para que voluntarios encuentren actividades solidarias y
+        para que las entidades publiquen oportunidades de voluntariado de forma
+        organizada, clara y accesible.
+      </p>
 
-    <div class="status-grid">
-      <article class="status-card">
-        <h2>Servidor</h2>
-        <p>Ruta principal renderizada con EJS.</p>
-      </article>
-
-      <article class="status-card">
-        <h2>Static assets</h2>
-        <p>CSS y JavaScript servidos desde la carpeta <code>public/</code>.</p>
-      </article>
-
-      <article class="status-card">
-        <h2>Prisma</h2>
-        <p>Cliente configurado, migraciones aplicadas y conexion operativa con PostgreSQL.</p>
-      </article>
-
-      <article class="status-card">
-        <h2>Eventos</h2>
-        <p>Las entidades verificadas ya pueden publicar actividades en el listado publico.</p>
-      </article>
-
-      <article class="status-card">
-        <h2>Notificaciones</h2>
-        <p>Los voluntarios pueden recibir y marcar avisos internos de entidades seguidas.</p>
-      </article>
+      <div class="home-actions">
+        <a class="button-link primary-button" href="/eventos">Ver eventos</a>
+        <a class="button-link outline-button" href="/registro">Registrarse</a>
+        <a class="button-link secondary-link" href="/login">Iniciar sesion</a>
+      </div>
     </div>
 
-    <% if (dbStatus) { %>
-      <div class="db-status <%= dbStatus.ok ? "success" : "error" %>">
-        <strong><%= dbStatus.ok ? "Base de datos disponible." : "Base de datos no disponible." %></strong>
-        <p><%= dbStatus.message %></p>
+    <aside class="home-summary" aria-label="Resumen de VolunRed">
+      <h2>Voluntariado cerca de ti</h2>
+      <p>
+        Encuentra propuestas publicadas por entidades verificadas, consulta sus
+        detalles y organiza tu participacion desde tu area personal.
+      </p>
+    </aside>
+  </section>
+
+  <section class="home-section">
+    <div class="container">
+      <div class="section-heading">
+        <h2>Que puedes hacer en VolunRed</h2>
+        <p>Todo lo necesario para descubrir, seguir y organizar actividades solidarias.</p>
       </div>
-    <% } %>
+
+      <div class="feature-grid">
+        <article class="feature-card">
+          <h3>Buscar actividades</h3>
+          <p>Explora oportunidades de voluntariado por fecha, ciudad o entidad.</p>
+        </article>
+
+        <article class="feature-card">
+          <h3>Inscribirte en eventos</h3>
+          <p>Reserva tu plaza en actividades disponibles y consulta su informacion clave.</p>
+        </article>
+
+        <article class="feature-card">
+          <h3>Seguir entidades</h3>
+          <p>Mantente al tanto de las organizaciones que encajan con tus intereses.</p>
+        </article>
+
+        <article class="feature-card">
+          <h3>Recibir avisos</h3>
+          <p>Consulta notificaciones y revisa tu calendario personal de participacion.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="container entity-band">
+    <div>
+      <span class="eyebrow">Para entidades</span>
+      <h2>Publica oportunidades de voluntariado con orden</h2>
+      <p>
+        Las entidades pueden solicitar el alta, ser validadas y publicar actividades
+        para conectar con personas voluntarias interesadas en colaborar.
+      </p>
+    </div>
+    <a class="button-link outline-button" href="/entidades/solicitud">Solicitar alta</a>
   </section>
 </main>
 
