@@ -5,28 +5,9 @@
   <section class="dashboard-hero">
     <h1>Inscritos en <%= event.title %></h1>
     <p>
-      Consulta el listado de voluntarios apuntados a este evento y revisa los
-      datos basicos permitidos para la gestion de la actividad.
+      <%= new Date(event.startsAt).toLocaleString("es-ES") %> -
+      <%= registrations.length %> inscrito(s) de <%= event.totalSlots %> plazas.
     </p>
-  </section>
-
-  <section class="status-grid">
-    <article class="status-card">
-      <h2>Entidad</h2>
-      <p><strong><%= entity.organizationName %></strong></p>
-    </article>
-
-    <article class="status-card">
-      <h2>Evento</h2>
-      <p><strong>Fecha:</strong> <%= new Date(event.startsAt).toLocaleString("es-ES") %></p>
-      <p><strong>Ciudad:</strong> <%= event.city %></p>
-    </article>
-
-    <article class="status-card">
-      <h2>Inscritos</h2>
-      <p><strong>Total:</strong> <%= registrations.length %></p>
-      <p><strong>Plazas:</strong> <%= event.totalSlots %></p>
-    </article>
   </section>
 
   <% if (registrations.length === 0) { %>

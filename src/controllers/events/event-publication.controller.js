@@ -144,17 +144,29 @@ async function renderPublicEventsList(req, res, next) {
       pageTitle: "Eventos",
       events: result.events,
       pagination: result.pagination,
-      currentEntityId,
-      filters,
-      hasActiveFilters: Object.values(filters).some(Boolean),
-      infoMessage:
-        req.query.created === "1"
-          ? "El evento se ha publicado correctamente y ya aparece en el listado general."
+        currentEntityId,
+        filters,
+        hasActiveFilters: Object.values(filters).some(Boolean),
+        infoTitle:
+          req.query.created === "1"
+            ? "Evento publicado."
+            : req.query.updated === "1" || req.query.deleted === "1"
+              ? "Evento actualizado."
+              : req.query.registered === "1" || req.query.cancelled === "1"
+                ? "Inscripcion actualizada."
+                : null,
+        infoMessage:
+          req.query.created === "1"
+            ? "El evento se ha publicado correctamente y ya aparece en el listado general."
           : req.query.updated === "1"
             ? "El evento se ha actualizado correctamente."
             : req.query.deleted === "1"
               ? "El evento se ha eliminado correctamente."
-          : null,
+              : req.query.registered === "1"
+                ? "Te has inscrito correctamente."
+                : req.query.cancelled === "1"
+                  ? "Has cancelado tu inscripcion."
+            : null,
     });
   } catch (error) {
     return next(error);
@@ -192,25 +204,28 @@ async function renderEventDetail(req, res, next) {
       availableSlots,
       canSubscribe: isVolunteer,
       isSubscribed,
-      canRegister: isVolunteer,
-      isRegistered,
-      infoMessage:
+        canRegister: isVolunteer,
+        isRegistered,
+        redirectBackToEventsOnBack: req.query.backToEvents === "1",
+        infoMessage:
         req.query.subscribed === "1"
           ? "Te has suscrito correctamente a esta entidad."
           : req.query.alreadySubscribed === "1"
             ? "Ya estabas suscrito a esta entidad."
-            : req.query.registered === "1"
-              ? "Te has inscrito correctamente en esta actividad."
-              : req.query.alreadyRegistered === "1"
-                ? "Ya estabas inscrito en esta actividad."
-                : req.query.cancelled === "1"
-                  ? "Has cancelado tu inscripcion correctamente."
-                  : req.query.notRegistered === "1"
-                    ? "No existia una inscripcion activa para cancelar."
-                : req.query.full === "1"
-                  ? "No quedan plazas disponibles para esta actividad."
-                  : req.query.inactive === "1"
-                    ? "La actividad ya no admite nuevas inscripciones."
+            : req.query.unsubscribed === "1"
+              ? "Has dejado de seguir a esta entidad."
+              : req.query.registered === "1"
+                ? "Te has inscrito correctamente en esta actividad."
+                : req.query.alreadyRegistered === "1"
+                  ? "Ya estabas inscrito en esta actividad."
+                  : req.query.cancelled === "1"
+                    ? "Has cancelado tu inscripcion correctamente."
+                    : req.query.notRegistered === "1"
+                      ? "No existia una inscripcion activa para cancelar."
+                      : req.query.full === "1"
+                        ? "No quedan plazas disponibles para esta actividad."
+                        : req.query.inactive === "1"
+                          ? "La actividad ya no admite nuevas inscripciones."
             : null,
     });
   } catch (error) {

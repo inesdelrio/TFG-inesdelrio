@@ -19,7 +19,7 @@ async function registerForEvent(req, res, next) {
       eventId,
     });
 
-    return res.redirect(`${redirectTo}?registered=1`);
+    return res.redirect(`${redirectTo}?registered=1&backToEvents=1`);
   } catch (error) {
     if (error.code === "EVENT_REGISTRATION_ALREADY_EXISTS") {
       return res.redirect(`${redirectTo}?alreadyRegistered=1`);
@@ -53,7 +53,7 @@ async function cancelEventRegistration(req, res, next) {
       eventId,
     });
 
-    return res.redirect(`${redirectTo}?cancelled=1`);
+    return res.redirect(`${redirectTo}?cancelled=1&backToEvents=1`);
   } catch (error) {
     if (error.code === "EVENT_REGISTRATION_NOT_FOUND") {
       return res.redirect(`${redirectTo}?notRegistered=1`);

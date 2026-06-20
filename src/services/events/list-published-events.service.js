@@ -56,6 +56,11 @@ async function listPublishedEvents(options = {}, dependencies = {}) {
     skip: (currentPage - 1) * pageSize,
     take: pageSize,
     include: {
+      _count: {
+        select: {
+          registrations: true,
+        },
+      },
       entity: {
         select: {
           id: true,

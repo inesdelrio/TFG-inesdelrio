@@ -565,6 +565,28 @@ code {
   margin-bottom: 0.7rem;
 }
 
+.event-card-full {
+  background: #f2f3f3;
+  border-color: #d6d9d8;
+  color: #5e6763;
+}
+
+.event-card-full .secondary-link {
+  color: #4f6258;
+}
+
+.event-status-badge {
+  display: inline-flex;
+  width: fit-content;
+  margin-bottom: 0.8rem;
+  border-radius: 999px;
+  background: #e1e4e3;
+  color: #4b5550;
+  font-size: 0.78rem;
+  font-weight: 800;
+  padding: 0.35rem 0.7rem;
+}
+
 .event-actions {
   display: flex;
   gap: 0.8rem;

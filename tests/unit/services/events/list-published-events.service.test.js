@@ -44,6 +44,11 @@ async function testListPublishedEventsReturnsOrderedPaginatedActiveEvents() {
   assert.equal(result.pagination.totalPages, 3);
   assert.equal(calls[1].query.skip, 3);
   assert.equal(calls[1].query.take, 3);
+  assert.deepEqual(calls[1].query.include._count, {
+    select: {
+      registrations: true,
+    },
+  });
 }
 
 async function testListPublishedEventsAppliesCombinedFilters() {

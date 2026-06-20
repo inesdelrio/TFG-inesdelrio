@@ -24,6 +24,10 @@ const {
   testCreateEntitySubscriptionRejectsDuplicateSubscription,
 } = require("./services/entities/create-entity-subscription.service.test");
 const {
+  testDeleteEntitySubscriptionDeletesExistingSubscription,
+  testDeleteEntitySubscriptionReturnsNullWhenSubscriptionDoesNotExist,
+} = require("./services/entities/delete-entity-subscription.service.test");
+const {
   testGetEntitySubscriptionStatusReturnsTrueWhenSubscriptionExists,
 } = require("./services/entities/get-entity-subscription-status.service.test");
 const {
@@ -84,6 +88,14 @@ const {
 const {
   testRenderLoginFormShowsRegisteredMessageAndPrefillsEmail,
 } = require("./controllers/auth/auth-session.controller.test");
+const {
+  testSubscribeToEntityRedirectsToDetailWithBackToEventsFlagAfterSuccess,
+  testUnsubscribeFromEntityRedirectsToDetailWithBackToEventsFlagAfterSuccess,
+} = require("./controllers/entities/entity-subscription.controller.test");
+const {
+  testCancelEventRegistrationRedirectsToDetailWithBackToEventsFlagAfterSuccess,
+  testRegisterForEventRedirectsToDetailWithBackToEventsFlagAfterSuccess,
+} = require("./controllers/events/event-registration.controller.test");
 const {
   testUpdateVolunteerProfileUpdatesAllowedFields,
 } = require("./services/volunteers/update-volunteer-profile.service.test");
@@ -150,6 +162,22 @@ async function main() {
     testDestroyUserSessionDestroysSessionWithoutError,
   );
   await runTest(
+    "registerForEvent vuelve al detalle y prepara vuelta al listado",
+    testRegisterForEventRedirectsToDetailWithBackToEventsFlagAfterSuccess,
+  );
+  await runTest(
+    "cancelEventRegistration vuelve al detalle y prepara vuelta al listado",
+    testCancelEventRegistrationRedirectsToDetailWithBackToEventsFlagAfterSuccess,
+  );
+  await runTest(
+    "subscribeToEntity vuelve al detalle y prepara vuelta al listado",
+    testSubscribeToEntityRedirectsToDetailWithBackToEventsFlagAfterSuccess,
+  );
+  await runTest(
+    "unsubscribeFromEntity vuelve al detalle y prepara vuelta al listado",
+    testUnsubscribeFromEntityRedirectsToDetailWithBackToEventsFlagAfterSuccess,
+  );
+  await runTest(
     "renderLoginForm muestra cuenta creada y prerrellena email tras registro",
     testRenderLoginFormShowsRegisteredMessageAndPrefillsEmail,
   );
@@ -164,6 +192,14 @@ async function main() {
   await runTest(
     "createEntitySubscription bloquea una suscripcion duplicada",
     testCreateEntitySubscriptionRejectsDuplicateSubscription,
+  );
+  await runTest(
+    "deleteEntitySubscription elimina una suscripcion existente",
+    testDeleteEntitySubscriptionDeletesExistingSubscription,
+  );
+  await runTest(
+    "deleteEntitySubscription no falla si no existe suscripcion",
+    testDeleteEntitySubscriptionReturnsNullWhenSubscriptionDoesNotExist,
   );
   await runTest(
     "getEntitySubscriptionStatus detecta suscripcion existente",

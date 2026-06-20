@@ -37,5 +37,11 @@ router.post(
   requireRole("VOLUNTARIO"),
   entitySubscriptionController.subscribeToEntity,
 );
+router.post(
+  "/entidades/:entityId/dejar-de-seguir",
+  requireAuth,
+  requireRole("VOLUNTARIO"),
+  entitySubscriptionController.unsubscribeFromEntity,
+);
 
 module.exports = router;

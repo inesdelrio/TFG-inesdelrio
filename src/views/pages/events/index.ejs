@@ -44,7 +44,7 @@
 
   <% if (infoMessage) { %>
     <div class="feedback-banner success">
-      <strong>Evento publicado.</strong>
+      <strong><%= infoTitle || "Estado actualizado." %></strong>
       <p><%= infoMessage %></p>
     </div>
   <% } %>
@@ -61,13 +61,21 @@
   <% } else { %>
     <section class="event-list">
       <% events.forEach((event) => { %>
-        <article class="status-card event-card">
+        <%
+          const registrationsCount = event._count?.registrations ?? 0;
+          const availableSlots = Math.max(0, event.totalSlots - registrationsCount);
+          const isFull = availableSlots === 0;
+        %>
+        <article class="status-card event-card <%= isFull ? "event-card-full" : "" %>">
+          <% if (isFull) { %>
+            <span class="event-status-badge">Completo</span>
+          <% } %>
           <h2><%= event.title %></h2>
           <p><strong>Entidad:</strong> <%= event.entity.organizationName %></p>
           <p><strong>Fecha:</strong> <%= new Date(event.startsAt).toLocaleString("es-ES") %></p>
           <p><strong>Ciudad:</strong> <%= event.city %></p>
           <p><strong>Direccion:</strong> <%= event.address %></p>
-          <p><strong>Plazas:</strong> <%= event.totalSlots %></p>
+          <p><strong>Plazas:</strong> <%= availableSlots %> disponibles de <%= event.totalSlots %></p>
           <p><%= event.description %></p>
           <a class="secondary-link" href="/eventos/<%= event.id %>">Ver detalle</a>
 

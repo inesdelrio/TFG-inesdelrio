@@ -24,6 +24,9 @@
       <p><strong>Direccion:</strong> <%= event.address %></p>
       <p><strong>Plazas totales:</strong> <%= event.totalSlots %></p>
       <p><strong>Plazas disponibles:</strong> <%= availableSlots %></p>
+      <% if (availableSlots === 0) { %>
+        <p class="registration-state registration-state-full">Evento completo. No quedan plazas disponibles.</p>
+      <% } %>
       <p><%= event.description %></p>
 
       <% if (canRegister) { %>
@@ -38,8 +41,6 @@
             <input type="hidden" name="redirectTo" value="/eventos/<%= event.id %>" />
             <button class="primary-button" type="submit">Apuntarse</button>
           </form>
-        <% } else { %>
-          <p class="registration-state registration-state-full">Actividad completa sin plazas disponibles.</p>
         <% } %>
       <% } %>
     </article>
@@ -56,6 +57,10 @@
       <% if (canSubscribe) { %>
         <% if (isSubscribed) { %>
           <p class="subscription-state">Ya sigues a esta entidad.</p>
+          <form class="subscription-form" action="/entidades/<%= event.entity.id %>/dejar-de-seguir" method="post">
+            <input type="hidden" name="redirectTo" value="/eventos/<%= event.id %>" />
+            <button class="danger-button" type="submit">Dejar de seguir</button>
+          </form>
         <% } else { %>
           <form class="subscription-form" action="/entidades/<%= event.entity.id %>/suscribirse" method="post">
             <input type="hidden" name="redirectTo" value="/eventos/<%= event.id %>" />
@@ -66,5 +71,22 @@
     </article>
   </section>
 </main>
+
+<% if (redirectBackToEventsOnBack) { %>
+  <script>
+    (() => {
+      if (!window.history || !window.history.pushState) {
+        return;
+      }
+
+      const marker = { redirectToEvents: true };
+      window.history.replaceState(marker, "", window.location.href);
+      window.history.pushState(marker, "", window.location.href);
+      window.addEventListener("popstate", () => {
+        window.location.replace("/eventos");
+      });
+    })();
+  </script>
+<% } %>
 
 <%- include("../../partials/footer") %>
