@@ -3,11 +3,15 @@
 
 <main class="container dashboard-page">
   <section class="dashboard-hero">
-    <span class="eyebrow">Actividades</span>
     <h1>Eventos publicados</h1>
     <p>
       Listado general de actividades visibles en la plataforma para consulta publica.
     </p>
+    <% if (currentUser && currentUser.role === "ENTIDAD") { %>
+      <div class="profile-actions">
+        <a class="button-link primary-button" href="/eventos/nuevo">Publicar evento</a>
+      </div>
+    <% } %>
   </section>
 
   <section class="filter-shell">
@@ -58,7 +62,6 @@
     <section class="event-list">
       <% events.forEach((event) => { %>
         <article class="status-card event-card">
-          <span class="eyebrow">Evento</span>
           <h2><%= event.title %></h2>
           <p><strong>Entidad:</strong> <%= event.entity.organizationName %></p>
           <p><strong>Fecha:</strong> <%= new Date(event.startsAt).toLocaleString("es-ES") %></p>

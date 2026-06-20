@@ -2,7 +2,6 @@ const express = require("express");
 
 const authSessionController = require("../../controllers/auth/auth-session.controller");
 const registrationController = require("../../controllers/auth/register-volunteer.controller");
-const userAreaController = require("../../controllers/auth/user-area.controller");
 const { requireAuth, requireRole } = require("../../middlewares/auth.middleware");
 
 const router = express.Router();
@@ -12,7 +11,11 @@ router.post("/registro", registrationController.registerVolunteer);
 router.get("/login", authSessionController.renderLoginForm);
 router.post("/login", authSessionController.loginUser);
 router.post("/logout", authSessionController.logoutUser);
-router.get("/voluntariado/area", requireAuth, requireRole("VOLUNTARIO"), userAreaController.renderVolunteerArea);
-router.get("/entidad/area", requireAuth, requireRole("ENTIDAD"), userAreaController.renderEntityArea);
+router.get("/voluntariado/area", requireAuth, requireRole("VOLUNTARIO"), (req, res) =>
+  res.redirect("/voluntariado/perfil"),
+);
+router.get("/entidad/area", requireAuth, requireRole("ENTIDAD"), (req, res) =>
+  res.redirect("/entidad/perfil"),
+);
 
 module.exports = router;

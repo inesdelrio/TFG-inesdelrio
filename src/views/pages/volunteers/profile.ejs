@@ -3,11 +3,10 @@
 
 <main class="container dashboard-page">
   <section class="dashboard-hero">
-    <span class="eyebrow">Perfil</span>
-    <h1>Perfil de voluntario</h1>
+    <h1><%= formData.firstName ? `Perfil de ${formData.firstName}` : "Mi perfil" %></h1>
     <p>
-      Desde esta pantalla puedes consultar y editar los datos personales que la
-      plataforma permite modificar sin afectar a tus credenciales de acceso.
+      Gestiona tus datos personales y accede a las principales opciones de tu
+      cuenta de voluntariado.
     </p>
   </section>
 
@@ -20,6 +19,19 @@
         El email se muestra como referencia de login y no se edita desde este
         formulario.
       </p>
+
+      <div class="account-options">
+        <h2>Opciones de cuenta</h2>
+        <p>
+          Si representas una entidad, puedes solicitar su validacion para publicar
+          actividades en VolunRed.
+        </p>
+        <a class="secondary-link" href="/entidades/solicitud">Solicitar alta de entidad</a>
+
+        <form class="logout-form" action="/logout" method="post">
+          <button class="logout-button" type="submit">Cerrar sesion</button>
+        </form>
+      </div>
     </div>
 
     <div class="auth-card">
@@ -96,7 +108,6 @@
 
         <div class="profile-actions">
           <button class="primary-button" type="submit">Guardar cambios</button>
-          <a class="secondary-link" href="/voluntariado/area">Volver al area</a>
         </div>
       </form>
     </div>

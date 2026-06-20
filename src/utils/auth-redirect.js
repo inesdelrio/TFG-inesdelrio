@@ -3,10 +3,10 @@ function getRedirectPathForRole(role) {
     case "ADMIN":
       return "/admin/area";
     case "ENTIDAD":
-      return "/entidad/area";
+      return "/entidad/perfil";
     case "VOLUNTARIO":
     default:
-      return "/voluntariado/area";
+      return "/voluntariado/perfil";
   }
 }
 

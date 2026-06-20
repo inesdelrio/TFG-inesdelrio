@@ -10,16 +10,13 @@
           <a href="/voluntariado/calendario">Calendario</a>
           <a href="/voluntariado/historial">Historial</a>
           <a href="/notificaciones">Notificaciones</a>
-          <a href="/entidades/solicitud">Alta entidad</a>
         <% } %>
         <% if (currentUser.role === "ENTIDAD") { %>
           <a href="/entidad/perfil">Perfil entidad</a>
-          <a href="/eventos/nuevo">Publicar evento</a>
         <% } %>
-        <a href="<%= currentUser.role === 'ADMIN' ? '/admin/area' : currentUser.role === 'ENTIDAD' ? '/entidad/area' : '/voluntariado/area' %>">Mi area</a>
-        <form class="inline-form" action="/logout" method="post">
-          <button class="nav-button" type="submit">Cerrar sesion</button>
-        </form>
+        <% if (currentUser.role === "ADMIN") { %>
+          <a href="/admin/area">Panel admin</a>
+        <% } %>
       <% } else { %>
         <a href="/registro">Registro</a>
         <a href="/login">Login</a>

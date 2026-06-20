@@ -3,11 +3,10 @@
 
 <main class="container dashboard-page">
   <section class="dashboard-hero">
-    <span class="eyebrow">Entidad</span>
     <h1>Perfil de entidad</h1>
     <p>
-      Desde aqui puedes mantener actualizada la informacion publica y de contacto
-      de tu entidad sin alterar los datos institucionales de identificacion.
+      Mantén actualizada la informacion publica de tu entidad y accede a las
+      acciones principales de gestion.
     </p>
   </section>
 
@@ -20,6 +19,15 @@
       <p class="field-help">
         La razon social y el CIF/NIF se muestran como referencia y no se editan desde este perfil.
       </p>
+
+      <div class="account-options">
+        <h2>Opciones de cuenta</h2>
+        <p>Cierra la sesion de la entidad cuando termines de gestionar el perfil.</p>
+
+        <form class="logout-form" action="/logout" method="post">
+          <button class="logout-button" type="submit">Cerrar sesion</button>
+        </form>
+      </div>
     </div>
 
     <div class="auth-card">
@@ -157,7 +165,6 @@
 
         <div class="profile-actions">
           <button class="primary-button" type="submit">Guardar cambios</button>
-          <a class="secondary-link" href="/entidad/area">Volver al area</a>
         </div>
       </form>
     </div>
