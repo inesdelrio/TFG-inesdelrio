@@ -22,10 +22,19 @@ function renderLoginForm(req, res) {
 
   const infoMessage =
     req.query.registered === "1"
-      ? "Tu cuenta ya esta creada. Inicia sesion con tu email y contraseña."
+      ? "Cuenta creada correctamente. Ya puedes iniciar sesion."
       : null;
+  const email = typeof req.query.email === "string" ? req.query.email : "";
 
-  return res.render("pages/auth/login", buildLoginViewModel({ infoMessage }));
+  return res.render(
+    "pages/auth/login",
+    buildLoginViewModel({
+      infoMessage,
+      formData: {
+        email,
+      },
+    }),
+  );
 }
 
 async function loginUser(req, res, next) {
@@ -69,7 +78,7 @@ async function loginUser(req, res, next) {
         buildLoginViewModel({
           formData: sanitizedData,
           errors: {
-            credentials: "Email o contraseña incorrectos.",
+            credentials: "Email o contrasena incorrectos.",
           },
         }),
       );

@@ -82,6 +82,9 @@ const {
   testDestroyUserSessionDestroysSessionWithoutError,
 } = require("./services/auth/session.service.test");
 const {
+  testRenderLoginFormShowsRegisteredMessageAndPrefillsEmail,
+} = require("./controllers/auth/auth-session.controller.test");
+const {
   testUpdateVolunteerProfileUpdatesAllowedFields,
 } = require("./services/volunteers/update-volunteer-profile.service.test");
 const {
@@ -145,6 +148,10 @@ async function main() {
   await runTest(
     "destroyUserSession destruye la sesion sin error",
     testDestroyUserSessionDestroysSessionWithoutError,
+  );
+  await runTest(
+    "renderLoginForm muestra cuenta creada y prerrellena email tras registro",
+    testRenderLoginFormShowsRegisteredMessageAndPrefillsEmail,
   );
   await runTest(
     "createEntityRequest crea una entidad pendiente y promociona el rol del usuario",

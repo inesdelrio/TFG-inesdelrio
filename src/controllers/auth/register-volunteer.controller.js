@@ -53,7 +53,7 @@ async function registerVolunteer(req, res, next) {
       password: req.body.password,
     });
 
-    return res.redirect("/registro?registered=1");
+    return res.redirect(`/login?registered=1&email=${encodeURIComponent(sanitizedData.email)}`);
   } catch (error) {
     if (error.code === "EMAIL_ALREADY_EXISTS") {
       return res.status(409).render(
