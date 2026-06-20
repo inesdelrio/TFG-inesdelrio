@@ -46,31 +46,43 @@ Estado tecnico validado:
 
 ## Puesta en marcha
 
-1. Instalar dependencias:
+1. Revisar variables de entorno en `.env`.
+
+2. Si tienes `make` instalado, preparar y arrancar la aplicacion en desarrollo:
+
+```bash
+make run
+```
+
+3. Abrir `http://localhost:3000`.
+
+Si no tienes `make`, puedes usar los comandos npm equivalentes:
 
 ```bash
 npm install
+npm run prisma:validate
+npm run prisma:generate
+npm run prisma:migrate
+npm run dev
 ```
 
-2. Revisar variables de entorno en `.env`.
-
 Para crear o actualizar el administrador local, configurar `ADMIN_EMAIL` y `ADMIN_PASSWORD` en `.env` y ejecutar:
+
+```bash
+make seed
+```
+
+Sin `make`, usar:
 
 ```bash
 npm run seed:admin
 ```
 
-3. Arrancar en desarrollo:
-
-```bash
-npm run dev
-```
-
-4. Abrir `http://localhost:3000`.
-
-5. Verificar la base de datos en `http://localhost:3000/health/db`.
+Para verificar la base de datos, abrir `http://localhost:3000/health/db`.
 
 ## Scripts disponibles
+
+Los scripts npm siguen disponibles para entornos donde no se use `make`:
 
 ```bash
 npm run dev
@@ -82,6 +94,32 @@ npm run prisma:validate
 npm run seed:admin
 npm test
 ```
+
+## Comandos Make
+
+Si tienes `make` instalado, puedes usar atajos para las tareas habituales:
+
+```bash
+make install
+make db
+make seed
+make dev
+make start
+make test
+make check
+make run
+```
+
+- `make install`: instala dependencias.
+- `make db`: valida Prisma, genera el cliente y aplica migraciones pendientes.
+- `make seed`: crea o actualiza el administrador configurado en `.env`.
+- `make dev`: arranca la aplicacion en desarrollo.
+- `make start`: arranca la aplicacion en modo normal.
+- `make test`: ejecuta los tests unitarios.
+- `make check`: ejecuta tests y validacion de Prisma.
+- `make run`: instala, prepara la base de datos y arranca en desarrollo.
+
+En Windows puede ser necesario instalar `make` o ejecutar estos comandos desde Git Bash.
 
 ## Documentacion
 
