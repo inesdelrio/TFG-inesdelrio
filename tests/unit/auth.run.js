@@ -145,6 +145,26 @@ const {
   testResolveAdminSeedConfigRequiresAdminEmailAndPassword,
   testResolveAdminSeedConfigReturnsEnvironmentValues,
 } = require("./scripts/seed-admin-config.test");
+const {
+  testValidateAccountDeletionRequiresExactConfirmation,
+} = require("./validators/accounts/account-deletion.validator.test");
+const {
+  testDeleteVolunteerAccountAnonymizesAndRemovesFutureRelations,
+  testDeleteVolunteerAccountRejectsWrongRole,
+} = require("./services/accounts/delete-volunteer-account.service.test");
+const {
+  testDeleteEntityAccountAnonymizesAndCleansFutureData,
+  testDeleteEntityAccountRejectsMissingEntity,
+} = require("./services/accounts/delete-entity-account.service.test");
+const {
+  testDeleteVolunteerAccountActionDestroysSessionAndRedirects,
+  testDeleteVolunteerAccountActionRequiresConfirmation,
+  testRenderVolunteerAccountDeletionShowsConfirmation,
+} = require("./controllers/accounts/account-deletion.controller.test");
+const {
+  testRequireAuthRefreshesActiveUserFromDatabase,
+  testRequireAuthRejectsAnonymizedUserFromStaleSession,
+} = require("./middlewares/auth.middleware.test");
 
 async function runTest(name, fn) {
   try {
@@ -417,6 +437,46 @@ async function main() {
   await runTest(
     "resolveAdminSeedConfig devuelve las credenciales desde variables de entorno",
     testResolveAdminSeedConfigReturnsEnvironmentValues,
+  );
+  await runTest(
+    "validateAccountDeletion exige escribir ELIMINAR",
+    testValidateAccountDeletionRequiresExactConfirmation,
+  );
+  await runTest(
+    "deleteVolunteerAccount anonimiza y elimina relaciones futuras",
+    testDeleteVolunteerAccountAnonymizesAndRemovesFutureRelations,
+  );
+  await runTest(
+    "deleteVolunteerAccount rechaza cuentas que no son voluntarias",
+    testDeleteVolunteerAccountRejectsWrongRole,
+  );
+  await runTest(
+    "deleteEntityAccount anonimiza y limpia datos futuros",
+    testDeleteEntityAccountAnonymizesAndCleansFutureData,
+  );
+  await runTest(
+    "deleteEntityAccount rechaza una entidad inexistente",
+    testDeleteEntityAccountRejectsMissingEntity,
+  );
+  await runTest(
+    "renderVolunteerAccountDeletion muestra la confirmacion",
+    testRenderVolunteerAccountDeletionShowsConfirmation,
+  );
+  await runTest(
+    "deleteVolunteerAccountAction exige confirmacion",
+    testDeleteVolunteerAccountActionRequiresConfirmation,
+  );
+  await runTest(
+    "deleteVolunteerAccountAction destruye la sesion y redirige",
+    testDeleteVolunteerAccountActionDestroysSessionAndRedirects,
+  );
+  await runTest(
+    "requireAuth refresca el usuario activo desde base de datos",
+    testRequireAuthRefreshesActiveUserFromDatabase,
+  );
+  await runTest(
+    "requireAuth bloquea sesiones antiguas de usuarios anonimizados",
+    testRequireAuthRejectsAnonymizedUserFromStaleSession,
   );
 }
 

@@ -23,6 +23,8 @@ function renderLoginForm(req, res) {
   const infoMessage =
     req.query.registered === "1"
       ? "Cuenta creada correctamente. Ya puedes iniciar sesion."
+      : req.query.deleted === "1"
+        ? "La cuenta se ha eliminado definitivamente."
       : null;
   const email = typeof req.query.email === "string" ? req.query.email : "";
 

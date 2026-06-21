@@ -1,0 +1,49 @@
+<%- include("../../partials/head") %>
+<%- include("../../partials/header") %>
+
+<main class="container auth-page">
+  <section class="auth-shell">
+    <div class="auth-intro">
+      <h1>Eliminar cuenta</h1>
+      <p>
+        La cuenta quedara inutilizable y sus datos personales se anonimizaran.
+        Esta accion no se puede deshacer ni permite reactivar la cuenta.
+      </p>
+      <% if (accountType === "ENTIDAD") { %>
+        <p>Los eventos futuros se retiraran y sus inscripciones futuras se eliminaran.</p>
+      <% } else { %>
+        <p>Tus inscripciones futuras y tus suscripciones a entidades se eliminaran.</p>
+      <% } %>
+    </div>
+
+    <div class="auth-card">
+      <% if (errors.confirmation) { %>
+        <div class="feedback-banner error">
+          <strong>No se ha eliminado la cuenta.</strong>
+          <p><%= errors.confirmation %></p>
+        </div>
+      <% } %>
+
+      <form class="auth-form danger-form" action="<%= actionPath %>" method="post" novalidate>
+        <div class="form-row">
+          <label for="confirmation">Escribe ELIMINAR para confirmar</label>
+          <input
+            id="confirmation"
+            name="confirmation"
+            type="text"
+            autocomplete="off"
+            required
+            value="<%= confirmation %>"
+          />
+        </div>
+
+        <div class="profile-actions">
+          <button class="danger-button" type="submit">Eliminar cuenta definitivamente</button>
+          <a class="secondary-link" href="<%= cancelPath %>">Cancelar</a>
+        </div>
+      </form>
+    </div>
+  </section>
+</main>
+
+<%- include("../../partials/footer") %>

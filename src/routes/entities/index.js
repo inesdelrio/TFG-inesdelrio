@@ -1,5 +1,6 @@
 const express = require("express");
 
+const accountDeletionController = require("../../controllers/accounts/account-deletion.controller");
 const entityCalendarController = require("../../controllers/entities/entity-calendar.controller");
 const entityProfileController = require("../../controllers/entities/entity-profile.controller");
 const entitySubscriptionController = require("../../controllers/entities/entity-subscription.controller");
@@ -8,6 +9,18 @@ const { requireAuth, requireRole } = require("../../middlewares/auth.middleware"
 
 const router = express.Router();
 
+router.get(
+  "/entidad/eliminar-cuenta",
+  requireAuth,
+  requireRole("ENTIDAD"),
+  accountDeletionController.renderEntityAccountDeletion,
+);
+router.post(
+  "/entidad/eliminar-cuenta",
+  requireAuth,
+  requireRole("ENTIDAD"),
+  accountDeletionController.deleteEntityAccountAction,
+);
 router.get(
   "/entidad/calendario",
   requireAuth,
