@@ -19,4 +19,18 @@ router.post(
   volunteerNotificationController.markVolunteerNotificationAsRead,
 );
 
+router.post(
+  "/notificaciones/:notificationId/no-leida",
+  requireAuth,
+  requireRole("VOLUNTARIO"),
+  volunteerNotificationController.markVolunteerNotificationAsUnread,
+);
+
+router.post(
+  "/notificaciones/:notificationId/eventos/:eventId/abrir",
+  requireAuth,
+  requireRole("VOLUNTARIO"),
+  volunteerNotificationController.openVolunteerNotificationEvent,
+);
+
 module.exports = router;

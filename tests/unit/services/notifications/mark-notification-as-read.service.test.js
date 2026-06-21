@@ -1,6 +1,7 @@
 const assert = require("node:assert/strict");
 
 const markNotificationAsRead = require("../../../../src/services/notifications/mark-notification-as-read.service");
+const setNotificationReadStatus = require("../../../../src/services/notifications/set-notification-read-status.service");
 
 async function testMarkNotificationAsReadUpdatesUnreadOwnedNotification() {
   let updatedPayload = null;
@@ -65,7 +66,46 @@ async function testMarkNotificationAsReadRejectsForeignNotification() {
   );
 }
 
+async function testSetNotificationReadStatusMarksOwnedNotificationAsUnread() {
+  let updatedPayload = null;
+  const prismaMock = {
+    internalNotification: {
+      findUnique: async () => ({
+        id: 7,
+        volunteerUserId: 4,
+        isRead: true,
+      }),
+      update: async ({ where, data }) => {
+        updatedPayload = { where, data };
+        return {
+          id: where.id,
+          volunteerUserId: 4,
+          isRead: data.isRead,
+        };
+      },
+    },
+  };
+
+  const result = await setNotificationReadStatus(
+    {
+      notificationId: 7,
+      volunteerUserId: 4,
+      isRead: false,
+    },
+    {
+      prisma: prismaMock,
+    },
+  );
+
+  assert.deepEqual(updatedPayload, {
+    where: { id: 7 },
+    data: { isRead: false },
+  });
+  assert.equal(result.isRead, false);
+}
+
 module.exports = {
   testMarkNotificationAsReadRejectsForeignNotification,
   testMarkNotificationAsReadUpdatesUnreadOwnedNotification,
+  testSetNotificationReadStatusMarksOwnedNotificationAsUnread,
 };

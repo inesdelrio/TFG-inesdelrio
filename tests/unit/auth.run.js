@@ -40,6 +40,7 @@ const {
 const {
   testMarkNotificationAsReadRejectsForeignNotification,
   testMarkNotificationAsReadUpdatesUnreadOwnedNotification,
+  testSetNotificationReadStatusMarksOwnedNotificationAsUnread,
 } = require("./services/notifications/mark-notification-as-read.service.test");
 const {
   testCreateEventCreatesEventForVerifiedEntity,
@@ -165,6 +166,9 @@ const {
   testRequireAuthRefreshesActiveUserFromDatabase,
   testRequireAuthRejectsAnonymizedUserFromStaleSession,
 } = require("./middlewares/auth.middleware.test");
+const {
+  testOpenVolunteerNotificationEventMarksAsReadAndRedirects,
+} = require("./controllers/notifications/volunteer-notification.controller.test");
 
 async function runTest(name, fn) {
   try {
@@ -257,6 +261,10 @@ async function main() {
   await runTest(
     "markNotificationAsRead bloquea notificaciones ajenas",
     testMarkNotificationAsReadRejectsForeignNotification,
+  );
+  await runTest(
+    "setNotificationReadStatus marca una notificacion como no leida",
+    testSetNotificationReadStatusMarksOwnedNotificationAsUnread,
   );
   await runTest(
     "getAdminDashboardSummary devuelve metricas basicas del panel admin",
@@ -477,6 +485,10 @@ async function main() {
   await runTest(
     "requireAuth bloquea sesiones antiguas de usuarios anonimizados",
     testRequireAuthRejectsAnonymizedUserFromStaleSession,
+  );
+  await runTest(
+    "openVolunteerNotificationEvent marca como leida y abre la actividad",
+    testOpenVolunteerNotificationEventMarksAsReadAndRedirects,
   );
 }
 

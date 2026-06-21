@@ -234,6 +234,8 @@ async function renderEventDetail(req, res, next, dependencies = {}) {
         canRegister: isVolunteer,
         isRegistered,
         redirectBackToEventsOnBack: req.query.backToEvents === "1",
+        redirectBackToNotificationsOnBack:
+          req.query.backToNotifications === "1",
         infoMessage:
         req.query.subscribed === "1"
           ? "Te has suscrito correctamente a esta entidad."

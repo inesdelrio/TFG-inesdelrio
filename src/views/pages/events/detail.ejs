@@ -115,18 +115,21 @@
   <% } %>
 </main>
 
-<% if (redirectBackToEventsOnBack) { %>
+<% if (redirectBackToEventsOnBack || redirectBackToNotificationsOnBack) { %>
   <script>
     (() => {
       if (!window.history || !window.history.pushState) {
         return;
       }
 
-      const marker = { redirectToEvents: true };
+      const redirectPath = <%- JSON.stringify(
+        redirectBackToNotificationsOnBack ? "/notificaciones" : "/eventos"
+      ) %>;
+      const marker = { redirectPath };
       window.history.replaceState(marker, "", window.location.href);
       window.history.pushState(marker, "", window.location.href);
       window.addEventListener("popstate", () => {
-        window.location.replace("/eventos");
+        window.location.replace(redirectPath);
       });
     })();
   </script>
