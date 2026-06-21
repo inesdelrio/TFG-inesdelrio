@@ -1,0 +1,67 @@
+<%- include("../../partials/head") %>
+<%- include("../../partials/header") %>
+
+<main class="container dashboard-page">
+  <section class="dashboard-hero">
+    <h1>Calendario de eventos</h1>
+    <p>Consulta por mes los eventos publicados por <%= calendar.entity.organizationName %>.</p>
+  </section>
+
+  <section class="status-card calendar-shell">
+    <div class="calendar-toolbar">
+      <a class="secondary-link" href="/entidad/calendario?month=<%= calendar.previousMonthKey %>">Mes anterior</a>
+      <div>
+        <h2><%= calendar.monthLabel %></h2>
+        <p><%= calendar.events.length %> evento(s) en este mes.</p>
+      </div>
+      <a class="secondary-link" href="/entidad/calendario?month=<%= calendar.nextMonthKey %>">Mes siguiente</a>
+    </div>
+
+    <div class="calendar-grid calendar-grid-head">
+      <span>Lunes</span>
+      <span>Martes</span>
+      <span>Miercoles</span>
+      <span>Jueves</span>
+      <span>Viernes</span>
+      <span>Sabado</span>
+      <span>Domingo</span>
+    </div>
+
+    <% if (calendar.events.length === 0) { %>
+      <div class="feedback-banner error">
+        <strong>Sin eventos en este mes.</strong>
+        <p>Los eventos que publique la entidad apareceran aqui en su fecha correspondiente.</p>
+      </div>
+    <% } %>
+
+    <% calendar.weeks.forEach((week) => { %>
+      <div class="calendar-grid">
+        <% week.forEach((day) => { %>
+          <% if (!day) { %>
+            <article class="calendar-day calendar-day-empty" aria-hidden="true"></article>
+          <% } else { %>
+            <article class="calendar-day <%= day.events.length > 0 ? "calendar-day-active" : "" %>">
+              <div class="calendar-day-number"><%= day.dayNumber %></div>
+
+              <% if (day.events.length === 0) { %>
+                <p class="calendar-empty-state">Sin eventos</p>
+              <% } %>
+
+              <% day.events.forEach((event) => { %>
+                <a class="calendar-event" href="/eventos/<%= event.id %>">
+                  <strong><%= event.title %></strong>
+                  <span>
+                    <%= new Date(event.startsAt).toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" }) %>
+                    · <%= event.city %>
+                  </span>
+                </a>
+              <% }) %>
+            </article>
+          <% } %>
+        <% }) %>
+      </div>
+    <% }) %>
+  </section>
+</main>
+
+<%- include("../../partials/footer") %>

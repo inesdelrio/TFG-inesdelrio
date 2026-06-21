@@ -113,6 +113,11 @@ const {
   testGetVolunteerCalendarLoadsRegisteredEventsForSelectedMonth,
 } = require("./services/volunteers/get-volunteer-calendar.service.test");
 const {
+  testBuildEntityCalendarDaysPlacesEventsOnTheirDate,
+  testGetEntityCalendarLoadsOnlyOwnedEventsForSelectedMonth,
+  testGetEntityCalendarReturnsEmptyMonthWithoutEvents,
+} = require("./services/entities/get-entity-calendar.service.test");
+const {
   testGetVolunteerHistorySeparatesFutureAndPastRegistrations,
 } = require("./services/volunteers/get-volunteer-history.service.test");
 const {
@@ -352,6 +357,18 @@ async function main() {
   await runTest(
     "getVolunteerCalendar carga los eventos inscritos del mes seleccionado",
     testGetVolunteerCalendarLoadsRegisteredEventsForSelectedMonth,
+  );
+  await runTest(
+    "getEntityCalendar carga solo eventos propios del mes seleccionado",
+    testGetEntityCalendarLoadsOnlyOwnedEventsForSelectedMonth,
+  );
+  await runTest(
+    "buildEntityCalendarDays coloca eventos propios en su fecha",
+    testBuildEntityCalendarDaysPlacesEventsOnTheirDate,
+  );
+  await runTest(
+    "getEntityCalendar devuelve un mes vacio sin eventos",
+    testGetEntityCalendarReturnsEmptyMonthWithoutEvents,
   );
   await runTest(
     "getVolunteerHistory separa inscripciones futuras y pasadas",

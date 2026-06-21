@@ -1,5 +1,6 @@
 const express = require("express");
 
+const entityCalendarController = require("../../controllers/entities/entity-calendar.controller");
 const entityProfileController = require("../../controllers/entities/entity-profile.controller");
 const entitySubscriptionController = require("../../controllers/entities/entity-subscription.controller");
 const entityRegistrationController = require("../../controllers/entities/entity-registration.controller");
@@ -7,6 +8,12 @@ const { requireAuth, requireRole } = require("../../middlewares/auth.middleware"
 
 const router = express.Router();
 
+router.get(
+  "/entidad/calendario",
+  requireAuth,
+  requireRole("ENTIDAD"),
+  entityCalendarController.renderEntityCalendar,
+);
 router.get(
   "/entidades/solicitud",
   requireAuth,
