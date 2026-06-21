@@ -4,9 +4,11 @@
 <main class="container dashboard-page">
   <section class="dashboard-hero">
     <h1><%= event.title %></h1>
-    <p>
-      Consulta el detalle completo de la actividad y la informacion de la entidad organizadora.
-    </p>
+    <% if (!Array.isArray(registrations)) { %>
+      <p>
+        Consulta el detalle completo de la actividad y la informacion de la entidad organizadora.
+      </p>
+    <% } %>
   </section>
 
   <% if (infoMessage) { %>
@@ -16,6 +18,21 @@
     </div>
   <% } %>
 
+  <% if (Array.isArray(registrations)) { %>
+    <section>
+      <p><strong>Fecha y hora:</strong> <%= new Date(event.startsAt).toLocaleString("es-ES") %></p>
+      <p><strong>Ubicacion:</strong> <%= event.city %>, <%= event.address %></p>
+      <p><strong>Plazas:</strong> <%= availableSlots %> disponibles de <%= event.totalSlots %></p>
+
+      <% if (event.publicationStatus === "RETIRADO") { %>
+        <p class="registration-state registration-state-full">Evento retirado.</p>
+      <% } else if (availableSlots === 0) { %>
+        <p class="registration-state registration-state-full">Evento completo. No quedan plazas disponibles.</p>
+      <% } %>
+
+      <p><%= event.description %></p>
+    </section>
+  <% } else { %>
   <section class="event-detail-grid">
     <article class="status-card">
       <h2>Datos del evento</h2>
@@ -70,6 +87,32 @@
       <% } %>
     </article>
   </section>
+  <% } %>
+
+  <% if (Array.isArray(registrations)) { %>
+    <section class="dashboard-section">
+      <div class="section-heading">
+        <h2>Personas inscritas</h2>
+        <p><%= registrations.length %> inscrito(s) de <%= event.totalSlots %> plazas.</p>
+      </div>
+
+      <% if (registrations.length === 0) { %>
+        <p>Todavia no hay personas inscritas.</p>
+      <% } else { %>
+        <div class="attendees-list">
+          <% registrations.forEach((registration) => { %>
+            <article class="status-card attendee-card">
+              <h3><%= registration.volunteerUser.firstName %> <%= registration.volunteerUser.lastName %></h3>
+              <p><strong>Email:</strong> <%= registration.volunteerUser.email %></p>
+              <% if (registration.volunteerUser.phone) { %>
+                <p><strong>Telefono:</strong> <%= registration.volunteerUser.phone %></p>
+              <% } %>
+            </article>
+          <% }) %>
+        </div>
+      <% } %>
+    </section>
+  <% } %>
 </main>
 
 <% if (redirectBackToEventsOnBack) { %>

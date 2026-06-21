@@ -97,6 +97,14 @@ const {
   testRegisterForEventRedirectsToDetailWithBackToEventsFlagAfterSuccess,
 } = require("./controllers/events/event-registration.controller.test");
 const {
+  testRenderEventDetailHidesRegistrationsFromUnauthorizedUsers,
+  testRenderEventDetailIncludesRegistrationsForOwnerEntity,
+} = require("./controllers/events/event-publication.controller.test");
+const {
+  testRenderEventAttendeesKeepsOwnershipControl,
+  testRenderEventAttendeesRedirectsOwnedEventToDetail,
+} = require("./controllers/events/event-attendance.controller.test");
+const {
   testUpdateVolunteerProfileUpdatesAllowedFields,
 } = require("./services/volunteers/update-volunteer-profile.service.test");
 const {
@@ -304,6 +312,22 @@ async function main() {
   await runTest(
     "getEventDetail devuelve el evento con datos de la entidad organizadora",
     testGetEventDetailReturnsEventWithOrganizerData,
+  );
+  await runTest(
+    "renderEventDetail incluye inscritos para la entidad propietaria",
+    testRenderEventDetailIncludesRegistrationsForOwnerEntity,
+  );
+  await runTest(
+    "renderEventDetail oculta inscritos a usuarios no autorizados",
+    testRenderEventDetailHidesRegistrationsFromUnauthorizedUsers,
+  );
+  await runTest(
+    "renderEventAttendees redirige el evento propio a su detalle",
+    testRenderEventAttendeesRedirectsOwnedEventToDetail,
+  );
+  await runTest(
+    "renderEventAttendees mantiene el control de propiedad",
+    testRenderEventAttendeesKeepsOwnershipControl,
   );
   await runTest(
     "listOwnedEventRegistrations devuelve los inscritos con datos basicos del voluntario",

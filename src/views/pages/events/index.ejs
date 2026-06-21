@@ -82,7 +82,7 @@
           <% if (currentEntityId && currentEntityId === event.entityId) { %>
             <div class="event-actions">
               <a class="secondary-link" href="/eventos/<%= event.id %>/editar">Editar</a>
-              <a class="secondary-link" href="/eventos/<%= event.id %>/inscritos">Inscritos</a>
+              <a class="secondary-link" href="/eventos/<%= event.id %>">Inscritos</a>
               <form class="inline-form" action="/eventos/<%= event.id %>/eliminar" method="post">
                 <button class="danger-button" type="submit">Eliminar</button>
               </form>

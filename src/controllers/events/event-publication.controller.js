@@ -2,6 +2,7 @@ const prisma = require("../../config/prisma");
 const createEvent = require("../../services/events/create-event.service");
 const getEventDetail = require("../../services/events/get-event-detail.service");
 const getEventRegistrationStatus = require("../../services/events/get-event-registration-status.service");
+const listOwnedEventRegistrations = require("../../services/events/list-owned-event-registrations.service");
 const getEntitySubscriptionStatus = require("../../services/entities/get-entity-subscription-status.service");
 const listPublishedEvents = require("../../services/events/list-published-events.service");
 const { getCurrentEntityId } = require("./event-management.controller");
@@ -173,9 +174,17 @@ async function renderPublicEventsList(req, res, next) {
   }
 }
 
-async function renderEventDetail(req, res, next) {
+async function renderEventDetail(req, res, next, dependencies = {}) {
+  const loadEventDetail = dependencies.getEventDetail || getEventDetail;
+  const loadOwnedEventRegistrations =
+    dependencies.listOwnedEventRegistrations || listOwnedEventRegistrations;
+  const loadEntitySubscriptionStatus =
+    dependencies.getEntitySubscriptionStatus || getEntitySubscriptionStatus;
+  const loadEventRegistrationStatus =
+    dependencies.getEventRegistrationStatus || getEventRegistrationStatus;
+
   try {
-    const event = await getEventDetail(Number(req.params.eventId));
+    const event = await loadEventDetail(Number(req.params.eventId));
 
     if (!event) {
       return res.status(404).render("pages/errors/404", {
@@ -184,14 +193,31 @@ async function renderEventDetail(req, res, next) {
     }
 
     const isVolunteer = req.currentUser && req.currentUser.role === "VOLUNTARIO";
+    const isEntity = req.currentUser && req.currentUser.role === "ENTIDAD";
+    let registrations = null;
+
+    if (isEntity) {
+      try {
+        const result = await loadOwnedEventRegistrations({
+          userId: req.currentUser.id,
+          eventId: event.id,
+        });
+        registrations = result.registrations;
+      } catch (error) {
+        if (error.code !== "EVENT_NOT_OWNED_BY_ENTITY") {
+          throw error;
+        }
+      }
+    }
+
     const isSubscribed = isVolunteer
-      ? await getEntitySubscriptionStatus({
+      ? await loadEntitySubscriptionStatus({
           volunteerUserId: req.currentUser.id,
           entityId: event.entity.id,
         })
       : false;
     const isRegistered = isVolunteer
-      ? await getEventRegistrationStatus({
+      ? await loadEventRegistrationStatus({
           volunteerUserId: req.currentUser.id,
           eventId: event.id,
         })
@@ -202,6 +228,7 @@ async function renderEventDetail(req, res, next) {
       pageTitle: event.title,
       event,
       availableSlots,
+      registrations,
       canSubscribe: isVolunteer,
       isSubscribed,
         canRegister: isVolunteer,

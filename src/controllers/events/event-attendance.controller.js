@@ -1,20 +1,17 @@
 const listOwnedEventRegistrations = require("../../services/events/list-owned-event-registrations.service");
 
-async function renderEventAttendees(req, res, next) {
+async function renderEventAttendees(req, res, next, dependencies = {}) {
+  const loadOwnedEventRegistrations =
+    dependencies.listOwnedEventRegistrations || listOwnedEventRegistrations;
   const eventId = Number(req.params.eventId);
 
   try {
-    const result = await listOwnedEventRegistrations({
+    const result = await loadOwnedEventRegistrations({
       userId: req.currentUser.id,
       eventId,
     });
 
-    return res.render("pages/events/attendees", {
-      pageTitle: `Inscritos - ${result.event.title}`,
-      entity: result.entity,
-      event: result.event,
-      registrations: result.registrations,
-    });
+    return res.redirect(`/eventos/${result.event.id}`);
   } catch (error) {
     if (error.code === "EVENT_NOT_FOUND") {
       return res.status(404).render("pages/errors/404", {
