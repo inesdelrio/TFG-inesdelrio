@@ -34,7 +34,7 @@ async function createEventNotifications(input, dependencies = {}) {
 
   const result = await prismaClient.internalNotification.createMany({
     data: subscriptions.map((subscription) => ({
-      volunteerUserId: subscription.volunteerUserId,
+      recipientUserId: subscription.volunteerUserId,
       entityId: input.entityId,
       eventId: input.eventId,
       type: input.type,

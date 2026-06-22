@@ -1,7 +1,14 @@
 const prisma = require("../../config/prisma");
+const createEntityRegistrationNotification = require("../notifications/create-entity-registration-notification.service");
+const createEventFullNotification = require("../notifications/create-event-full-notification.service");
 
 async function createEventRegistration(input, dependencies = {}) {
   const prismaClient = dependencies.prisma || prisma;
+  const createNotification =
+    dependencies.createEntityRegistrationNotification ||
+    createEntityRegistrationNotification;
+  const createFullNotification =
+    dependencies.createEventFullNotification || createEventFullNotification;
 
   const event = await prismaClient.event.findUnique({
     where: {
@@ -10,6 +17,8 @@ async function createEventRegistration(input, dependencies = {}) {
     include: {
       entity: {
         select: {
+          id: true,
+          requestedByUserId: true,
           validationStatus: true,
         },
       },
@@ -60,11 +69,43 @@ async function createEventRegistration(input, dependencies = {}) {
     throw error;
   }
 
-  return prismaClient.eventRegistration.create({
-    data: {
-      volunteerUserId: input.volunteerUserId,
-      eventId: input.eventId,
-    },
+  return prismaClient.$transaction(async (transaction) => {
+    const registration = await transaction.eventRegistration.create({
+      data: {
+        volunteerUserId: input.volunteerUserId,
+        eventId: input.eventId,
+      },
+    });
+
+    await createNotification(
+      {
+        recipientUserId: event.entity.requestedByUserId,
+        actorUserId: input.volunteerUserId,
+        entityId: event.entity.id,
+        eventId: event.id,
+        eventTitle: event.title,
+      },
+      {
+        prisma: transaction,
+      },
+    );
+
+    if (event._count.registrations === event.totalSlots - 1) {
+      await createFullNotification(
+        {
+          recipientUserId: event.entity.requestedByUserId,
+          actorUserId: null,
+          entityId: event.entity.id,
+          eventId: event.id,
+          eventTitle: event.title,
+        },
+        {
+          prisma: transaction,
+        },
+      );
+    }
+
+    return registration;
   });
 }
 

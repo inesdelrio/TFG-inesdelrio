@@ -31,6 +31,7 @@ async function testCreateEventNotificationsCreatesOneNotificationPerSubscriber()
 
   assert.equal(result.createdCount, 2);
   assert.equal(createdData.length, 2);
+  assert.equal(createdData[0].recipientUserId, 2);
   assert.equal(createdData[0].entityId, 6);
   assert.equal(createdData[0].eventId, 14);
   assert.equal(createdData[0].type, "EVENT_PUBLISHED");

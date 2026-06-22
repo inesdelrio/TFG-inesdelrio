@@ -44,7 +44,8 @@ model User {
   entity              Entity?
   entitySubscriptions EntitySubscription[]
   eventRegistrations  EventRegistration[]
-  notifications       InternalNotification[]
+  receivedNotifications InternalNotification[] @relation("NotificationRecipient")
+  actedNotifications    InternalNotification[] @relation("NotificationActor")
   adminActionLogs     AdminActionLog[]
   createdAt           DateTime               @default(now())
   updatedAt           DateTime               @updatedAt
@@ -114,8 +115,10 @@ model EventRegistration {
 
 model InternalNotification {
   id              Int      @id @default(autoincrement())
-  volunteerUser   User     @relation(fields: [volunteerUserId], references: [id])
-  volunteerUserId Int
+  recipientUser   User     @relation("NotificationRecipient", fields: [recipientUserId], references: [id])
+  recipientUserId Int
+  actorUser       User?    @relation("NotificationActor", fields: [actorUserId], references: [id])
+  actorUserId     Int?
   entity          Entity   @relation(fields: [entityId], references: [id])
   entityId        Int
   event           Event?   @relation(fields: [eventId], references: [id])

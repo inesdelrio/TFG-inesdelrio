@@ -15,8 +15,8 @@ async function setNotificationReadStatus(input, dependencies = {}) {
     throw error;
   }
 
-  if (notification.volunteerUserId !== input.volunteerUserId) {
-    const error = new Error("Notification does not belong to current volunteer.");
+  if (notification.recipientUserId !== input.recipientUserId) {
+    const error = new Error("Notification does not belong to current user.");
     error.code = "NOTIFICATION_FORBIDDEN";
     throw error;
   }
