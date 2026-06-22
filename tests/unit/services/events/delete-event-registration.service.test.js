@@ -4,15 +4,38 @@ const deleteEventRegistration = require("../../../../src/services/events/delete-
 
 async function testDeleteEventRegistrationDeletesOwnedRegistration() {
   let deletedId = null;
-  const prismaMock = {
+  const deletedNotificationFilters = [];
+  let transactionUsed = false;
+  const transaction = {
     eventRegistration: {
-      findUnique: async () => ({
-        id: 21,
-      }),
       delete: async ({ where }) => {
         deletedId = where.id;
         return { id: where.id };
       },
+    },
+    internalNotification: {
+      deleteMany: async ({ where }) => {
+        deletedNotificationFilters.push(where);
+        return { count: 1 };
+      },
+    },
+  };
+  const prismaMock = {
+    $transaction: async (callback) => {
+      transactionUsed = true;
+      return callback(transaction);
+    },
+    eventRegistration: {
+      findUnique: async () => ({
+        id: 21,
+        volunteerUserId: 7,
+        eventId: 4,
+        event: {
+          entity: {
+            requestedByUserId: 12,
+          },
+        },
+      }),
     },
   };
 
@@ -26,8 +49,22 @@ async function testDeleteEventRegistrationDeletesOwnedRegistration() {
     },
   );
 
+  assert.equal(transactionUsed, true);
   assert.equal(deletedId, 21);
   assert.equal(deletedRegistration.id, 21);
+  assert.deepEqual(deletedNotificationFilters, [
+    {
+      recipientUserId: 12,
+      actorUserId: 7,
+      eventId: 4,
+      type: "EVENT_REGISTRATION_CREATED",
+    },
+    {
+      recipientUserId: 12,
+      eventId: 4,
+      type: "EVENT_FULL",
+    },
+  ]);
 }
 
 async function testDeleteEventRegistrationRejectsWhenRegistrationDoesNotExist() {

@@ -734,12 +734,63 @@ code {
   margin: 0;
 }
 
+.notification-card-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  flex: 0 0 auto;
+}
+
+.notification-trash-button {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  width: 2.15rem;
+  height: 2.15rem;
+  padding: 0.3rem;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.notification-trash-button svg {
+  width: 1.55rem;
+  height: 1.55rem;
+}
+
+.notification-trash-button:hover,
+.notification-trash-button:focus-visible {
+  color: #aa3c2b;
+}
+
+.notification-trash-button:focus-visible {
+  outline: 2px solid rgba(170, 60, 43, 0.25);
+  border-radius: 6px;
+}
+
 .notification-card .event-actions {
   margin-top: 0.35rem;
 }
 
 .notification-card .primary-button {
   padding: 0.65rem 1rem;
+}
+
+.notification-delete-button {
+  padding: 0.65rem 1rem;
+  background: #fff;
+  border: 1px solid rgba(170, 60, 43, 0.35);
+  color: #8f3224;
+}
+
+.notification-delete-button:hover {
+  background: rgba(170, 60, 43, 0.08);
+  border-color: rgba(170, 60, 43, 0.55);
+  color: #8f3224;
 }
 
 .notification-state {
@@ -762,6 +813,47 @@ code {
 .notification-card-read .notification-state {
   background: rgba(111, 101, 92, 0.12);
   color: var(--muted);
+}
+
+.confirmation-modal {
+  width: min(440px, calc(100% - 2rem));
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: 0 24px 70px rgba(31, 26, 23, 0.22);
+}
+
+.confirmation-modal::backdrop {
+  background: rgba(31, 26, 23, 0.48);
+  backdrop-filter: blur(2px);
+}
+
+.confirmation-modal-content {
+  padding: 1.5rem;
+}
+
+.confirmation-modal-content h2 {
+  margin: 0 0 0.65rem;
+}
+
+.confirmation-modal-content p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.confirmation-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.confirmation-modal-actions .outline-button {
+  font: inherit;
+  cursor: pointer;
 }
 
 .pagination-nav {

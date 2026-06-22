@@ -10,6 +10,17 @@ async function deleteEventRegistration(input, dependencies = {}) {
         eventId: input.eventId,
       },
     },
+    include: {
+      event: {
+        select: {
+          entity: {
+            select: {
+              requestedByUserId: true,
+            },
+          },
+        },
+      },
+    },
   });
 
   if (!registration) {
@@ -18,10 +29,31 @@ async function deleteEventRegistration(input, dependencies = {}) {
     throw error;
   }
 
-  return prismaClient.eventRegistration.delete({
-    where: {
-      id: registration.id,
-    },
+  return prismaClient.$transaction(async (transaction) => {
+    const deletedRegistration = await transaction.eventRegistration.delete({
+      where: {
+        id: registration.id,
+      },
+    });
+
+    await transaction.internalNotification.deleteMany({
+      where: {
+        recipientUserId: registration.event.entity.requestedByUserId,
+        actorUserId: input.volunteerUserId,
+        eventId: input.eventId,
+        type: "EVENT_REGISTRATION_CREATED",
+      },
+    });
+
+    await transaction.internalNotification.deleteMany({
+      where: {
+        recipientUserId: registration.event.entity.requestedByUserId,
+        eventId: input.eventId,
+        type: "EVENT_FULL",
+      },
+    });
+
+    return deletedRegistration;
   });
 }
 

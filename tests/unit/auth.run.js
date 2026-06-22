@@ -35,8 +35,17 @@ const {
   testCreateEventNotificationsReturnsZeroWhenThereAreNoSubscribers,
 } = require("./services/notifications/create-event-notifications.service.test");
 const {
-  testListVolunteerNotificationsReturnsNotificationsOrderedByDate,
-} = require("./services/notifications/list-volunteer-notifications.service.test");
+  testCreateEntityRegistrationNotificationTargetsEntityOwner,
+} = require("./services/notifications/create-entity-registration-notification.service.test");
+const {
+  testCreateEntityFollowedNotificationTargetsEntityOwner,
+} = require("./services/notifications/create-entity-followed-notification.service.test");
+const {
+  testCreateEventFullNotificationTargetsEntityOwner,
+} = require("./services/notifications/create-event-full-notification.service.test");
+const {
+  testListUserNotificationsReturnsOwnNotificationsOrderedByDate,
+} = require("./services/notifications/list-user-notifications.service.test");
 const {
   testMarkNotificationAsReadRejectsForeignNotification,
   testMarkNotificationAsReadUpdatesUnreadOwnedNotification,
@@ -48,6 +57,7 @@ const {
 } = require("./services/events/create-event.service.test");
 const {
   testCreateEventRegistrationCreatesRegistrationWhenSlotsAvailable,
+  testCreateEventRegistrationNotifiesWhenLastSlotIsFilled,
   testCreateEventRegistrationRejectsDuplicateRegistration,
   testCreateEventRegistrationRejectsWhenEventIsFull,
 } = require("./services/events/create-event-registration.service.test");
@@ -167,8 +177,19 @@ const {
   testRequireAuthRejectsAnonymizedUserFromStaleSession,
 } = require("./middlewares/auth.middleware.test");
 const {
-  testOpenVolunteerNotificationEventMarksAsReadAndRedirects,
-} = require("./controllers/notifications/volunteer-notification.controller.test");
+  testDeleteNotificationActionRedirectsAfterDeletingOwnNotification,
+  testOpenNotificationEventUsesStoredEventAndRedirects,
+  testRenderNotificationDetailShowsStoredActorOnly,
+} = require("./controllers/notifications/notification.controller.test");
+const {
+  testDeleteNotificationDeletesOwnedNotification,
+  testDeleteNotificationRejectsForeignNotification,
+  testDeleteNotificationRemovesItFromSubsequentListing,
+} = require("./services/notifications/delete-notification.service.test");
+const {
+  testGetNotificationDetailRejectsForeignNotification,
+  testGetNotificationDetailReturnsOnlyStoredActorAndEvent,
+} = require("./services/notifications/get-notification-detail.service.test");
 
 async function runTest(name, fn) {
   try {
@@ -251,8 +272,20 @@ async function main() {
     testCreateEventNotificationsReturnsZeroWhenThereAreNoSubscribers,
   );
   await runTest(
-    "listVolunteerNotifications devuelve avisos ordenados por fecha",
-    testListVolunteerNotificationsReturnsNotificationsOrderedByDate,
+    "createEntityRegistrationNotification notifica a la entidad propietaria",
+    testCreateEntityRegistrationNotificationTargetsEntityOwner,
+  );
+  await runTest(
+    "createEntityFollowedNotification notifica a la entidad seguida",
+    testCreateEntityFollowedNotificationTargetsEntityOwner,
+  );
+  await runTest(
+    "createEventFullNotification notifica al completar las plazas",
+    testCreateEventFullNotificationTargetsEntityOwner,
+  );
+  await runTest(
+    "listUserNotifications devuelve avisos propios ordenados por fecha",
+    testListUserNotificationsReturnsOwnNotificationsOrderedByDate,
   );
   await runTest(
     "markNotificationAsRead marca como leida una notificacion propia",
@@ -301,6 +334,10 @@ async function main() {
   await runTest(
     "createEventRegistration crea una inscripcion con plazas disponibles",
     testCreateEventRegistrationCreatesRegistrationWhenSlotsAvailable,
+  );
+  await runTest(
+    "createEventRegistration avisa cuando se ocupa la ultima plaza",
+    testCreateEventRegistrationNotifiesWhenLastSlotIsFilled,
   );
   await runTest(
     "createEventRegistration bloquea una inscripcion duplicada",
@@ -487,8 +524,36 @@ async function main() {
     testRequireAuthRejectsAnonymizedUserFromStaleSession,
   );
   await runTest(
-    "openVolunteerNotificationEvent marca como leida y abre la actividad",
-    testOpenVolunteerNotificationEventMarksAsReadAndRedirects,
+    "openNotificationEvent usa el evento guardado y abre la actividad",
+    testOpenNotificationEventUsesStoredEventAndRedirects,
+  );
+  await runTest(
+    "getNotificationDetail devuelve solo el actor y evento guardados",
+    testGetNotificationDetailReturnsOnlyStoredActorAndEvent,
+  );
+  await runTest(
+    "getNotificationDetail bloquea notificaciones ajenas",
+    testGetNotificationDetailRejectsForeignNotification,
+  );
+  await runTest(
+    "renderNotificationDetail muestra solo el actor almacenado",
+    testRenderNotificationDetailShowsStoredActorOnly,
+  );
+  await runTest(
+    "deleteNotification elimina una notificacion propia",
+    testDeleteNotificationDeletesOwnedNotification,
+  );
+  await runTest(
+    "deleteNotification bloquea una notificacion ajena",
+    testDeleteNotificationRejectsForeignNotification,
+  );
+  await runTest(
+    "deleteNotification elimina la notificacion del listado posterior",
+    testDeleteNotificationRemovesItFromSubsequentListing,
+  );
+  await runTest(
+    "deleteNotificationAction elimina y redirige al listado",
+    testDeleteNotificationActionRedirectsAfterDeletingOwnNotification,
   );
 }
 

@@ -1,0 +1,54 @@
+<%- include("../../partials/head") %>
+<%- include("../../partials/header") %>
+
+<main class="container dashboard-page">
+  <section class="dashboard-hero">
+    <h1><%= notification.title %></h1>
+    <p><%= notification.message %></p>
+  </section>
+
+  <% if (notification.actorUser) { %>
+    <section class="status-card">
+      <h2>Voluntario</h2>
+      <p><strong>Nombre:</strong> <%= notification.actorUser.firstName %> <%= notification.actorUser.lastName %></p>
+      <p><strong>Email:</strong> <%= notification.actorUser.email %></p>
+      <% if (notification.actorUser.phone) { %>
+        <p><strong>Telefono:</strong> <%= notification.actorUser.phone %></p>
+      <% } %>
+    </section>
+  <% } %>
+
+  <% if (notification.event) { %>
+    <section class="status-card">
+      <h2>Evento relacionado</h2>
+      <p><strong><%= notification.event.title %></strong></p>
+      <p><strong>Fecha:</strong> <%= new Date(notification.event.startsAt).toLocaleString("es-ES") %></p>
+      <p><strong>Ciudad:</strong> <%= notification.event.city %></p>
+      <a class="secondary-link" href="/eventos/<%= notification.event.id %>">Ver evento</a>
+    </section>
+  <% } %>
+
+  <div class="event-actions">
+    <a class="secondary-link" href="/notificaciones">Volver a notificaciones</a>
+    <form
+      class="inline-form notification-delete-form"
+      action="/notificaciones/<%= notification.id %>/eliminar"
+      method="post"
+    >
+      <button class="danger-button notification-delete-button" type="submit">Eliminar notificacion</button>
+    </form>
+  </div>
+
+  <dialog class="confirmation-modal" data-notification-delete-modal>
+    <div class="confirmation-modal-content">
+      <h2>¿Quieres borrar esta notificación?</h2>
+      <p>Esta acción no se puede deshacer.</p>
+      <div class="confirmation-modal-actions">
+        <button class="outline-button" type="button" data-notification-delete-cancel>Cancelar</button>
+        <button class="danger-button" type="button" data-notification-delete-confirm>Eliminar</button>
+      </div>
+    </div>
+  </dialog>
+</main>
+
+<%- include("../../partials/footer") %>

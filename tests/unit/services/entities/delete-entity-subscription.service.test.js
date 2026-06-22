@@ -4,13 +4,36 @@ const deleteEntitySubscription = require("../../../../src/services/entities/dele
 
 async function testDeleteEntitySubscriptionDeletesExistingSubscription() {
   let deletedWhere = null;
-  const prismaMock = {
+  let deletedNotificationWhere = null;
+  let transactionUsed = false;
+  const transaction = {
     entitySubscription: {
-      findUnique: async () => ({ id: 7, volunteerUserId: 4, entityId: 9 }),
       delete: async ({ where }) => {
         deletedWhere = where;
         return { id: 7, volunteerUserId: 4, entityId: 9 };
       },
+    },
+    internalNotification: {
+      deleteMany: async ({ where }) => {
+        deletedNotificationWhere = where;
+        return { count: 1 };
+      },
+    },
+  };
+  const prismaMock = {
+    $transaction: async (callback) => {
+      transactionUsed = true;
+      return callback(transaction);
+    },
+    entitySubscription: {
+      findUnique: async () => ({
+        id: 7,
+        volunteerUserId: 4,
+        entityId: 9,
+        entity: {
+          requestedByUserId: 12,
+        },
+      }),
     },
   };
 
@@ -24,11 +47,18 @@ async function testDeleteEntitySubscriptionDeletesExistingSubscription() {
     },
   );
 
+  assert.equal(transactionUsed, true);
   assert.deepEqual(deletedWhere, {
     volunteerUserId_entityId: {
       volunteerUserId: 4,
       entityId: 9,
     },
+  });
+  assert.deepEqual(deletedNotificationWhere, {
+    recipientUserId: 12,
+    actorUserId: 4,
+    entityId: 9,
+    type: "ENTITY_FOLLOWED",
   });
   assert.equal(deletedSubscription.id, 7);
 }

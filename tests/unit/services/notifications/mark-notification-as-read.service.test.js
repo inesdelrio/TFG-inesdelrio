@@ -9,14 +9,14 @@ async function testMarkNotificationAsReadUpdatesUnreadOwnedNotification() {
     internalNotification: {
       findUnique: async () => ({
         id: 7,
-        volunteerUserId: 4,
+        recipientUserId: 4,
         isRead: false,
       }),
       update: async ({ where, data }) => {
         updatedPayload = { where, data };
         return {
           id: where.id,
-          volunteerUserId: 4,
+          recipientUserId: 4,
           isRead: data.isRead,
         };
       },
@@ -26,7 +26,7 @@ async function testMarkNotificationAsReadUpdatesUnreadOwnedNotification() {
   const result = await markNotificationAsRead(
     {
       notificationId: 7,
-      volunteerUserId: 4,
+      recipientUserId: 4,
     },
     {
       prisma: prismaMock,
@@ -45,7 +45,7 @@ async function testMarkNotificationAsReadRejectsForeignNotification() {
     internalNotification: {
       findUnique: async () => ({
         id: 7,
-        volunteerUserId: 8,
+        recipientUserId: 8,
         isRead: false,
       }),
     },
@@ -56,7 +56,7 @@ async function testMarkNotificationAsReadRejectsForeignNotification() {
       markNotificationAsRead(
         {
           notificationId: 7,
-          volunteerUserId: 4,
+          recipientUserId: 4,
         },
         {
           prisma: prismaMock,
@@ -72,14 +72,14 @@ async function testSetNotificationReadStatusMarksOwnedNotificationAsUnread() {
     internalNotification: {
       findUnique: async () => ({
         id: 7,
-        volunteerUserId: 4,
+        recipientUserId: 4,
         isRead: true,
       }),
       update: async ({ where, data }) => {
         updatedPayload = { where, data };
         return {
           id: where.id,
-          volunteerUserId: 4,
+          recipientUserId: 4,
           isRead: data.isRead,
         };
       },
@@ -89,7 +89,7 @@ async function testSetNotificationReadStatusMarksOwnedNotificationAsUnread() {
   const result = await setNotificationReadStatus(
     {
       notificationId: 7,
-      volunteerUserId: 4,
+      recipientUserId: 4,
       isRead: false,
     },
     {

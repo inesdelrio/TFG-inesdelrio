@@ -28,6 +28,12 @@ async function testDeleteVolunteerAccountAnonymizesAndRemovesFutureRelations() {
         return { count: 1 };
       },
     },
+    internalNotification: {
+      deleteMany: async (query) => {
+        calls.push({ operation: "deleteActorNotifications", query });
+        return { count: 2 };
+      },
+    },
   };
 
   await deleteVolunteerAccount(
@@ -64,6 +70,13 @@ async function testDeleteVolunteerAccountAnonymizesAndRemovesFutureRelations() {
   assert.equal(updateCall.query.data.email, "deleted-user-8@volunred.local");
   assert.equal(updateCall.query.data.phone, null);
   assert.equal(updateCall.query.data.passwordHash, "unusable-hash");
+
+  const actorNotificationsCall = calls.find(
+    (call) => call.operation === "deleteActorNotifications",
+  );
+  assert.deepEqual(actorNotificationsCall.query.where, {
+    actorUserId: 8,
+  });
 }
 
 async function testDeleteVolunteerAccountRejectsWrongRole() {

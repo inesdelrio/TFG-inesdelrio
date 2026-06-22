@@ -44,6 +44,12 @@ async function deleteVolunteerAccount(input, dependencies = {}) {
       },
     });
 
+    await transaction.internalNotification.deleteMany({
+      where: {
+        actorUserId: user.id,
+      },
+    });
+
     return transaction.user.update({
       where: {
         id: user.id,
