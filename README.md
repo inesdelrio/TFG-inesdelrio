@@ -1,103 +1,137 @@
-# TFG Voluntariado
+# VolunRed
 
-Base tecnica inicial de una aplicacion web de voluntariado con Node.js, Express, EJS, PostgreSQL y Prisma.
+VolunRed es una aplicación web orientada a conectar personas voluntarias con entidades verificadas que publican actividades de apoyo comunitario.
 
-## Estado actual
+El objetivo principal del proyecto es centralizar la publicación, búsqueda e inscripción en actividades de voluntariado, evitando que las oportunidades se pierdan en canales informales o poco estructurados.
 
-Actualmente estan cerrados los requisitos:
+## Funcionalidades principales
 
-- PRE01 - Preparacion del entorno de desarrollo
-- PRE02 - Configuracion inicial de PostgreSQL y Prisma
-- PRE03 - Configuracion de PostgreSQL
-- PRE04 - Configuracion inicial de Prisma
-- RF01 - Registro de voluntario
-- RF02 - Inicio y cierre de sesion
-- RF03 - Solicitud de alta de entidad
-- RF04 - Verificacion de entidades
-- RF05 - Perfil de voluntario
-- RF06 - Perfil de entidad
-- RF07 - Publicacion de eventos
-- RF08 - Edicion y eliminacion de eventos
-- RF09 - Listado y detalle de eventos
-- RF10 - Busqueda y filtros de eventos
-- RF11 - Suscripcion a entidades
-- RF12 - Inscripcion en actividades
-- RF13 - Cancelacion de inscripcion
-- RF14 - Consulta de inscritos por parte de la entidad
-- RF15 - Notificaciones internas
-- RF16 - Calendario personal del voluntario
-- RF17 - Panel principal de administracion
-- RF18 - Moderacion y suspension
-- RF19 - Historial de participacion
+La aplicación incluye actualmente:
 
-Estado tecnico validado:
+- Registro de voluntarios.
+- Inicio y cierre de sesión.
+- Solicitud de alta de entidades.
+- Validación, rechazo y suspensión de entidades por parte de administración.
+- Perfil editable de voluntario.
+- Perfil editable de entidad.
+- Publicación, edición y retirada de eventos por entidades verificadas.
+- Listado, detalle y filtros de eventos.
+- Inscripción y cancelación de inscripción en eventos.
+- Visualización de eventos completos.
+- Redirección actualizada tras inscripción y cancelación.
+- Seguimiento y cancelación de seguimiento de entidades.
+- Notificaciones internas para voluntarios.
+- Calendario personal del voluntario.
+- Calendario de entidad.
+- Historial de participación.
+- Consulta de inscritos dentro del detalle del evento para entidades propietarias.
+- Panel de administración.
+- Moderación de publicaciones.
+- Baja definitiva de cuenta mediante anonimización y bloqueo de acceso.
 
-- PostgreSQL local operativo con la base de datos `tfg_inesdelrio`
-- Prisma conectado correctamente y con las migraciones actuales aplicadas
-- Ruta `http://localhost:3000/health/db` respondiendo correctamente
+## Roles del sistema
 
-## Stack
+La aplicación contempla tres roles:
+
+- `VOLUNTARIO`: usuario que consulta eventos, sigue entidades, se inscribe en actividades y consulta su calendario e historial.
+- `ENTIDAD`: organización validada que puede publicar eventos, consultar inscritos y gestionar su información.
+- `ADMIN`: usuario administrador encargado de validar entidades y moderar contenido.
+
+## Stack técnico
 
 - Node.js
 - Express
 - EJS
 - PostgreSQL
 - Prisma
+- express-session
+- bcrypt
+- HTML, CSS y JavaScript
 
-## Puesta en marcha
+La aplicación utiliza PostgreSQL como base de datos relacional y Prisma como ORM para modelar datos, ejecutar migraciones y realizar consultas desde el backend.
 
-1. Revisar variables de entorno en `.env`.
+## Estructura general
 
-2. Si tienes `make` instalado, preparar y arrancar la aplicacion en desarrollo:
-
-```bash
-make run
+```text
+/
+├── app.js
+├── src/
+│   ├── app.js
+│   ├── config/
+│   ├── controllers/
+│   ├── middlewares/
+│   ├── routes/
+│   ├── services/
+│   ├── utils/
+│   ├── validators/
+│   └── views/
+├── public/
+│   ├── css/
+│   ├── img/
+│   └── js/
+├── prisma/
+│   ├── schema.prisma
+│   └── migrations/
+├── tests/
+│   ├── unit/
+│   └── integration/
+├── docs/
+│   ├── arquitectura/
+│   └── requisitos/
+├── .env.example
+├── package.json
+├── Makefile
+└── README.md
 ```
 
-3. Abrir `http://localhost:3000`.
+## Configuración inicial
 
-Si no tienes `make`, puedes usar los comandos npm equivalentes:
+1. Instalar dependencias:
 
 ```bash
 npm install
+```
+
+2. Crear un archivo `.env` a partir de `.env.example`.
+
+3. Configurar la conexión a PostgreSQL:
+
+```env
+DATABASE_URL="postgresql://postgres:password@localhost:5432/tfg_inesdelrio?schema=public"
+SESSION_SECRET="cambiar_en_local"
+ADMIN_EMAIL="admin@example.com"
+ADMIN_PASSWORD="cambiar_en_local"
+```
+
+4. Preparar Prisma y base de datos:
+
+```bash
 npm run prisma:validate
 npm run prisma:generate
 npm run prisma:migrate
-npm run dev
 ```
 
-Para crear o actualizar el administrador local, configurar `ADMIN_EMAIL` y `ADMIN_PASSWORD` en `.env` y ejecutar:
-
-```bash
-make seed
-```
-
-Sin `make`, usar:
+5. Crear o actualizar el usuario administrador:
 
 ```bash
 npm run seed:admin
 ```
 
-Para verificar la base de datos, abrir `http://localhost:3000/health/db`.
-
-## Scripts disponibles
-
-Los scripts npm siguen disponibles para entornos donde no se use `make`:
+6. Arrancar la aplicación:
 
 ```bash
 npm run dev
-npm run start
-npm run prisma:generate
-npm run prisma:migrate
-npm run prisma:reset
-npm run prisma:validate
-npm run seed:admin
-npm test
 ```
 
-## Comandos Make
+La aplicación quedará disponible en:
 
-Si tienes `make` instalado, puedes usar atajos para las tareas habituales:
+```text
+http://localhost:3000
+```
+
+## Comandos con Make
+
+Si el entorno tiene `make` instalado:
 
 ```bash
 make install
@@ -110,40 +144,85 @@ make check
 make run
 ```
 
+Descripción:
+
 - `make install`: instala dependencias.
 - `make db`: valida Prisma, genera el cliente y aplica migraciones pendientes.
 - `make seed`: crea o actualiza el administrador configurado en `.env`.
-- `make dev`: arranca la aplicacion en desarrollo.
-- `make start`: arranca la aplicacion en modo normal.
+- `make dev`: arranca la aplicación en desarrollo.
+- `make start`: arranca la aplicación en modo normal.
 - `make test`: ejecuta los tests unitarios.
-- `make check`: ejecuta tests y validacion de Prisma.
-- `make run`: instala, prepara la base de datos y arranca en desarrollo.
+- `make check`: ejecuta tests y validación de Prisma.
+- `make run`: instala dependencias, prepara la base de datos y arranca en desarrollo.
 
 En Windows puede ser necesario instalar `make` o ejecutar estos comandos desde Git Bash.
 
-## Documentacion
+## Scripts npm
 
-- [PRE01](docs/requisitos/PRE01.md)
-- [PRE02](docs/requisitos/PRE02.md)
-- [PRE03](docs/requisitos/PRE03.md)
-- [PRE04](docs/requisitos/PRE04.md)
-- [RF01](docs/requisitos/RF01.md)
-- [RF02](docs/requisitos/RF02.md)
-- [RF03](docs/requisitos/RF03.md)
-- [RF04](docs/requisitos/RF04.md)
-- [RF05](docs/requisitos/RF05.md)
-- [RF06](docs/requisitos/RF06.md)
-- [RF07](docs/requisitos/RF07.md)
-- [RF08](docs/requisitos/RF08.md)
-- [RF09](docs/requisitos/RF09.md)
-- [RF10](docs/requisitos/RF10.md)
-- [RF11](docs/requisitos/RF11.md)
-- [RF12](docs/requisitos/RF12.md)
-- [RF13](docs/requisitos/RF13.md)
-- [RF14](docs/requisitos/RF14.md)
-- [RF15](docs/requisitos/RF15.md)
-- [RF16](docs/requisitos/RF16.md)
-- [RF17](docs/requisitos/RF17.md)
-- [RF18](docs/requisitos/RF18.md)
-- [RF19](docs/requisitos/RF19.md)
-- [Estructura inicial](docs/arquitectura/estructura-inicial.md)
+```bash
+npm run dev
+npm start
+npm run prisma:generate
+npm run prisma:migrate
+npm run prisma:reset
+npm run prisma:validate
+npm run seed:admin
+npm test
+```
+
+## Base de datos
+
+Base de datos usada en desarrollo:
+
+```text
+PostgreSQL
+Base de datos: tfg_inesdelrio
+Host: localhost
+Puerto: 5432
+Schema: public
+```
+
+Para abrir Prisma Studio:
+
+```bash
+npx prisma studio
+```
+
+## Pruebas
+
+Ejecutar tests unitarios:
+
+```bash
+npm test
+```
+
+Validar el esquema de Prisma:
+
+```bash
+npm run prisma:validate
+```
+
+Comprobar estado de migraciones:
+
+```bash
+npx prisma migrate status
+```
+
+## Documentación del proyecto
+
+La documentación técnica se encuentra en:
+
+- `tfg_backlog.md`
+- `docs/arquitectura/estructura-inicial.md`
+- `docs/arquitectura/estructura-actual.md`
+- `docs/requisitos/`
+
+Los requisitos se documentan de forma individual en `docs/requisitos/`.
+
+## Consideraciones importantes
+
+- No subir nunca el archivo `.env`.
+- Usar `.env.example` para documentar variables necesarias sin credenciales reales.
+- No modificar `schema.prisma` sin revisar si hace falta migración.
+- Después de cambios funcionales, ejecutar `npm test` y `npm run prisma:validate`.
+- Antes de cerrar un cambio, revisar `git status --short`.
