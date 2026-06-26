@@ -5,6 +5,11 @@
   --muted: #6f655c;
   --border: #ddd2c5;
   --shadow: 0 16px 40px rgba(31, 26, 23, 0.08);
+  --color-primary: #bd3e3d;
+  --color-primary-dark: #983130;
+  --color-primary-light: rgba(189, 62, 61, 0.12);
+  --color-primary-border: rgba(189, 62, 61, 0.35);
+  --font-main: "Quicksand", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
 * {
@@ -18,7 +23,8 @@ body {
 
 body {
   margin: 0;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--font-main);
+  font-weight: 400;
   color: var(--ink);
   background: var(--bg);
   min-height: 100vh;
@@ -32,11 +38,22 @@ main {
 
 a {
   color: inherit;
+  font-family: inherit;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-main);
+  font-weight: 700;
 }
 
 code {
   font-family: "Courier New", monospace;
-  background: rgba(31, 122, 90, 0.08);
+  background: var(--color-primary-light);
   border-radius: 4px;
   padding: 0.1rem 0.35rem;
 }
@@ -70,11 +87,23 @@ code {
   padding: 1rem 0;
 }
 
+.site-header .container {
+  padding: 0.35rem 0;
+}
+
 .brand {
-  font-size: 1.3rem;
-  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
   text-decoration: none;
-  color: #1f7a5a;
+  color: var(--color-primary);
+}
+
+.brand img {
+  display: block;
+  height: 4.6rem;
+  width: auto;
+  transform: scale(0.95);
+  transform-origin: left center;
 }
 
 .site-nav {
@@ -82,6 +111,8 @@ code {
   gap: 1rem;
   align-items: center;
   flex-wrap: wrap;
+  font-size: 1.22rem;
+  font-weight: 600;
 }
 
 .site-nav a {
@@ -132,6 +163,13 @@ code {
   line-height: 0.98;
 }
 
+.auth-brand-logo {
+  display: block;
+  height: 3.4rem;
+  width: auto;
+  margin-bottom: 1rem;
+}
+
 .home-hero-copy p {
   max-width: 65ch;
   color: var(--muted);
@@ -153,16 +191,16 @@ code {
 
 .outline-button {
   display: inline-block;
-  border: 1px solid #1f7a5a;
+  border: 1px solid var(--color-primary);
   border-radius: 999px;
   padding: 0.9rem 1.25rem;
-  color: #1f7a5a;
-  font-weight: 700;
+  color: var(--color-primary);
+  font-weight: 600;
   background: #fff;
 }
 
 .outline-button:hover {
-  background: rgba(31, 122, 90, 0.08);
+  background: var(--color-primary-light);
 }
 
 .home-summary {
@@ -322,7 +360,7 @@ code {
   background: #fff;
   color: #8f3224;
   font: inherit;
-  font-weight: 700;
+  font-weight: 600;
   cursor: pointer;
 }
 
@@ -353,13 +391,13 @@ code {
 
 .subscription-state {
   margin-top: 1rem;
-  color: #1f7a5a;
+  color: var(--color-primary);
   font-weight: 700;
 }
 
 .registration-state {
   margin-top: 1rem;
-  color: #1f7a5a;
+  color: var(--color-primary);
   font-weight: 700;
 }
 
@@ -409,7 +447,7 @@ code {
 
 .form-row label {
   font-size: 0.95rem;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .form-row input {
@@ -444,18 +482,18 @@ code {
 }
 
 .form-row input:focus {
-  outline: 2px solid rgba(31, 122, 90, 0.25);
-  border-color: #1f7a5a;
+  outline: 2px solid var(--color-primary-border);
+  border-color: var(--color-primary);
 }
 
 .form-row textarea:focus {
-  outline: 2px solid rgba(31, 122, 90, 0.25);
-  border-color: #1f7a5a;
+  outline: 2px solid var(--color-primary-border);
+  border-color: var(--color-primary);
 }
 
 .form-row select:focus {
-  outline: 2px solid rgba(31, 122, 90, 0.25);
-  border-color: #1f7a5a;
+  outline: 2px solid var(--color-primary-border);
+  border-color: var(--color-primary);
 }
 
 .field-error {
@@ -487,8 +525,8 @@ code {
 }
 
 .feedback-banner.success {
-  background: rgba(31, 122, 90, 0.12);
-  border: 1px solid rgba(31, 122, 90, 0.2);
+  background: var(--color-primary-light);
+  border: 1px solid rgba(189, 62, 61, 0.2);
 }
 
 .feedback-banner.error {
@@ -499,9 +537,17 @@ code {
 .secondary-link {
   display: inline-block;
   margin-top: 0.5rem;
-  color: #1f7a5a;
+  color: var(--color-primary);
   text-decoration: none;
-  font-weight: 700;
+  font-weight: 600;
+}
+
+.secondary-link.active-filter {
+  border: 1px solid var(--color-primary-border);
+  border-radius: 999px;
+  padding: 0.45rem 0.85rem;
+  background: var(--color-primary-light);
+  color: var(--color-primary-dark);
 }
 
 .secondary-link:hover {
@@ -558,7 +604,7 @@ code {
 .history-disabled-link {
   margin: 0.6rem 0 0;
   color: var(--muted);
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .attendees-list {
@@ -575,13 +621,13 @@ code {
 }
 
 .event-card-full {
-  background: #f2f3f3;
-  border-color: #d6d9d8;
-  color: #5e6763;
+  background: #f3f1ed;
+  border-color: #d8d0c8;
+  color: var(--muted);
 }
 
 .event-card-full .secondary-link {
-  color: #4f6258;
+  color: var(--muted);
 }
 
 .event-status-badge {
@@ -589,10 +635,10 @@ code {
   width: fit-content;
   margin-bottom: 0.8rem;
   border-radius: 999px;
-  background: #e1e4e3;
-  color: #4b5550;
+  background: #e6dfd8;
+  color: var(--muted);
   font-size: 0.78rem;
-  font-weight: 800;
+  font-weight: 700;
   padding: 0.35rem 0.7rem;
 }
 
@@ -641,7 +687,7 @@ code {
 
 .calendar-grid-head span {
   font-size: 0.85rem;
-  font-weight: 700;
+  font-weight: 600;
   color: var(--muted);
 }
 
@@ -659,7 +705,7 @@ code {
 }
 
 .calendar-day-active {
-  border-color: rgba(31, 122, 90, 0.35);
+  border-color: var(--color-primary-border);
   box-shadow: var(--shadow);
 }
 
@@ -688,8 +734,8 @@ code {
   text-decoration: none;
   padding: 0.2rem 0.45rem;
   border-radius: 6px;
-  background: rgba(31, 122, 90, 0.12);
-  color: #1f7a5a;
+  background: var(--color-primary-light);
+  color: var(--color-primary);
   font-size: 0.78rem;
   line-height: 1.15;
   white-space: nowrap;
@@ -801,13 +847,13 @@ code {
   padding: 0.35rem 0.75rem;
   border-radius: 999px;
   font-size: 0.82rem;
-  font-weight: 700;
-  background: rgba(31, 122, 90, 0.12);
-  color: #1f7a5a;
+  font-weight: 600;
+  background: var(--color-primary-light);
+  color: var(--color-primary);
 }
 
 .notification-card-unread {
-  border-color: rgba(31, 122, 90, 0.4);
+  border-color: rgba(189, 62, 61, 0.4);
 }
 
 .notification-card-read .notification-state {
@@ -877,7 +923,7 @@ code {
   background: #aa3c2b;
   color: #fff;
   font: inherit;
-  font-weight: 700;
+  font-weight: 600;
   cursor: pointer;
 }
 
@@ -891,16 +937,16 @@ code {
   border: 0;
   border-radius: 999px;
   padding: 0.95rem 1.4rem;
-  background: #1f7a5a;
+  background: var(--color-primary);
   color: #fff;
   font: inherit;
-  font-weight: 700;
+  font-weight: 600;
   cursor: pointer;
   text-decoration: none;
 }
 
 .primary-button:hover {
-  background: #196449;
+  background: var(--color-primary-dark);
 }
 
 .hero-copy h1 {
