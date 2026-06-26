@@ -1,9 +1,16 @@
 const prisma = require("../../config/prisma");
 
-const ALLOWED_TARGET_STATUSES = new Set(["VERIFICADA", "RECHAZADA", "SUSPENDIDA"]);
+const ALLOWED_TARGET_STATUSES = new Set([
+  "PENDIENTE",
+  "VERIFICADA",
+  "RECHAZADA",
+  "SUSPENDIDA",
+]);
 
 function buildActionLabel(nextStatus) {
   switch (nextStatus) {
+    case "PENDIENTE":
+      return "ENTITY_MARKED_PENDING";
     case "VERIFICADA":
       return "ENTITY_APPROVED";
     case "RECHAZADA":

@@ -1,6 +1,6 @@
 const assert = require("node:assert/strict");
 
-const { requireAuth } = require("../../../src/middlewares/auth.middleware");
+const { requireAuth, requireRole } = require("../../../src/middlewares/auth.middleware");
 
 async function testRequireAuthRefreshesActiveUserFromDatabase() {
   const req = {
@@ -85,7 +85,52 @@ async function testRequireAuthRejectsAnonymizedUserFromStaleSession() {
   assert.equal(redirectedTo, "/login");
 }
 
+function testRequireRoleRedirectsUnauthenticatedUsers() {
+  let redirectedTo = null;
+  const middleware = requireRole("ADMIN");
+
+  middleware(
+    {},
+    {
+      redirect(path) {
+        redirectedTo = path;
+      },
+    },
+    () => {
+      throw new Error("Unauthenticated users must not continue.");
+    },
+  );
+
+  assert.equal(redirectedTo, "/login");
+}
+
+function testRequireRoleRedirectsNonAdminUsers() {
+  let redirectedTo = null;
+  const middleware = requireRole("ADMIN");
+
+  middleware(
+    {
+      currentUser: {
+        id: 7,
+        role: "VOLUNTARIO",
+      },
+    },
+    {
+      redirect(path) {
+        redirectedTo = path;
+      },
+    },
+    () => {
+      throw new Error("Non-admin users must not continue.");
+    },
+  );
+
+  assert.equal(redirectedTo, "/voluntariado/perfil");
+}
+
 module.exports = {
+  testRequireRoleRedirectsNonAdminUsers,
+  testRequireRoleRedirectsUnauthenticatedUsers,
   testRequireAuthRefreshesActiveUserFromDatabase,
   testRequireAuthRejectsAnonymizedUserFromStaleSession,
 };

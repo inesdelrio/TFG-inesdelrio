@@ -6,7 +6,18 @@ const {
   testGetAdminDashboardSummaryReturnsBasicCounters,
 } = require("./services/admin/get-admin-dashboard-summary.service.test");
 const {
+  testListAdminEntitiesFiltersPendingEntities,
+  testListAdminEntitiesFiltersRejectedEntities,
+  testListAdminEntitiesFiltersSuspendedEntities,
+  testListAdminEntitiesFiltersVerifiedEntities,
+  testListAdminEntitiesReturnsAllEntitiesWithoutFilter,
+  testListAdminEntitiesTreatsInvalidFilterAsAll,
+} = require("./services/admin/list-admin-entities.service.test");
+const {
+  testUpdateEntityValidationStatusAllowsPendingStatus,
   testUpdateEntityValidationStatusChangesStatusAndCreatesAdminLog,
+  testUpdateEntityValidationStatusRejectsMissingEntity,
+  testUpdateEntityValidationStatusRejectsSameStatus,
 } = require("./services/admin/update-entity-validation-status.service.test");
 const {
   testWithdrawEventPublicationMarksEventAsWithdrawnAndCreatesAdminLog,
@@ -168,6 +179,12 @@ const {
   testDeleteEntityAccountRejectsMissingEntity,
 } = require("./services/accounts/delete-entity-account.service.test");
 const {
+  testRenderAdminEntitiesListPassesStatusFilterToService,
+  testRenderEntityReviewDetailRendersExistingEntity,
+  testRenderEntityReviewDetailShows404ForMissingEntity,
+  testUpdateEntityStatusRedirectsToDetailAfterChange,
+} = require("./controllers/admin/entity-moderation.controller.test");
+const {
   testDeleteVolunteerAccountActionDestroysSessionAndRedirects,
   testDeleteVolunteerAccountActionRequiresConfirmation,
   testRenderVolunteerAccountDeletionShowsConfirmation,
@@ -175,6 +192,8 @@ const {
 const {
   testRequireAuthRefreshesActiveUserFromDatabase,
   testRequireAuthRejectsAnonymizedUserFromStaleSession,
+  testRequireRoleRedirectsNonAdminUsers,
+  testRequireRoleRedirectsUnauthenticatedUsers,
 } = require("./middlewares/auth.middleware.test");
 const {
   testDeleteNotificationActionRedirectsAfterDeletingOwnNotification,
@@ -304,8 +323,60 @@ async function main() {
     testGetAdminDashboardSummaryReturnsBasicCounters,
   );
   await runTest(
+    "listAdminEntities devuelve todas las entidades sin filtro",
+    testListAdminEntitiesReturnsAllEntitiesWithoutFilter,
+  );
+  await runTest(
+    "listAdminEntities filtra entidades pendientes",
+    testListAdminEntitiesFiltersPendingEntities,
+  );
+  await runTest(
+    "listAdminEntities filtra entidades verificadas",
+    testListAdminEntitiesFiltersVerifiedEntities,
+  );
+  await runTest(
+    "listAdminEntities filtra entidades rechazadas",
+    testListAdminEntitiesFiltersRejectedEntities,
+  );
+  await runTest(
+    "listAdminEntities filtra entidades suspendidas",
+    testListAdminEntitiesFiltersSuspendedEntities,
+  );
+  await runTest(
+    "listAdminEntities trata filtros invalidos como todas",
+    testListAdminEntitiesTreatsInvalidFilterAsAll,
+  );
+  await runTest(
+    "renderAdminEntitiesList pasa el filtro de estado al servicio",
+    testRenderAdminEntitiesListPassesStatusFilterToService,
+  );
+  await runTest(
+    "renderEntityReviewDetail muestra el detalle de una entidad existente",
+    testRenderEntityReviewDetailRendersExistingEntity,
+  );
+  await runTest(
+    "renderEntityReviewDetail muestra 404 para una entidad inexistente",
+    testRenderEntityReviewDetailShows404ForMissingEntity,
+  );
+  await runTest(
+    "updateEntityStatus vuelve al detalle tras cambiar estado",
+    testUpdateEntityStatusRedirectsToDetailAfterChange,
+  );
+  await runTest(
     "updateEntityValidationStatus cambia el estado y registra la accion administrativa",
     testUpdateEntityValidationStatusChangesStatusAndCreatesAdminLog,
+  );
+  await runTest(
+    "updateEntityValidationStatus permite devolver una entidad a pendiente",
+    testUpdateEntityValidationStatusAllowsPendingStatus,
+  );
+  await runTest(
+    "updateEntityValidationStatus rechaza una entidad inexistente",
+    testUpdateEntityValidationStatusRejectsMissingEntity,
+  );
+  await runTest(
+    "updateEntityValidationStatus rechaza cambiar al mismo estado",
+    testUpdateEntityValidationStatusRejectsSameStatus,
   );
   await runTest(
     "withdrawEventPublication retira un evento y registra la accion administrativa",
@@ -522,6 +593,14 @@ async function main() {
   await runTest(
     "requireAuth bloquea sesiones antiguas de usuarios anonimizados",
     testRequireAuthRejectsAnonymizedUserFromStaleSession,
+  );
+  await runTest(
+    "requireRole redirige usuarios sin sesion",
+    testRequireRoleRedirectsUnauthenticatedUsers,
+  );
+  await runTest(
+    "requireRole redirige usuarios que no son admin",
+    testRequireRoleRedirectsNonAdminUsers,
   );
   await runTest(
     "openNotificationEvent usa el evento guardado y abre la actividad",

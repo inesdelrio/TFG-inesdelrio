@@ -15,7 +15,7 @@ router.get(
   "/admin/entidades",
   requireAuth,
   requireRole("ADMIN"),
-  entityModerationController.renderPendingEntitiesList,
+  entityModerationController.renderAdminEntitiesList,
 );
 router.get(
   "/admin/usuarios",

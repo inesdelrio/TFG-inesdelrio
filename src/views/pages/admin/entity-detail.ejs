@@ -10,6 +10,13 @@
     </p>
   </section>
 
+  <% if (infoMessage) { %>
+    <div class="feedback-banner success">
+      <strong>Actualizacion completada.</strong>
+      <p><%= infoMessage %></p>
+    </div>
+  <% } %>
+
   <section class="status-grid admin-grid">
     <article class="status-card">
       <h2>Estado actual</h2>
@@ -55,9 +62,18 @@
           <label for="nextStatus">Nuevo estado</label>
           <select id="nextStatus" name="nextStatus" required>
             <option value="">Selecciona una accion</option>
-            <option value="VERIFICADA">Verificar</option>
-            <option value="RECHAZADA">Rechazar</option>
-            <option value="SUSPENDIDA">Suspender</option>
+            <% if (entity.validationStatus !== "PENDIENTE") { %>
+              <option value="PENDIENTE">Marcar como pendiente</option>
+            <% } %>
+            <% if (entity.validationStatus !== "VERIFICADA") { %>
+              <option value="VERIFICADA">Verificar</option>
+            <% } %>
+            <% if (entity.validationStatus !== "RECHAZADA") { %>
+              <option value="RECHAZADA">Rechazar</option>
+            <% } %>
+            <% if (entity.validationStatus !== "SUSPENDIDA") { %>
+              <option value="SUSPENDIDA">Suspender</option>
+            <% } %>
           </select>
         </div>
 

@@ -3,12 +3,20 @@
 
 <main class="container dashboard-page">
   <section class="dashboard-hero">
-    <h1>Entidades pendientes de revision</h1>
+    <h1>Entidades</h1>
     <p>
-      Panel base de administracion para revisar solicitudes y cambiar el estado de
-      validacion de cada entidad.
+      Consulta y gestiona las entidades registradas en la plataforma segun su
+      estado de validacion.
     </p>
     <div class="profile-actions">
+      <% statusOptions.forEach((status) => { %>
+        <a
+          class="secondary-link <%= selectedStatus === status ? "active-filter" : "" %>"
+          href="<%= status === "TODAS" ? "/admin/entidades" : `/admin/entidades?status=${status}` %>"
+        >
+          <%= status %>
+        </a>
+      <% }) %>
       <a class="secondary-link" href="/admin/usuarios">Usuarios</a>
       <a class="secondary-link" href="/admin/publicaciones">Publicaciones</a>
     </div>
@@ -23,8 +31,8 @@
 
   <% if (entities.length === 0) { %>
     <div class="feedback-banner success">
-      <strong>Sin pendientes.</strong>
-      <p>No hay entidades en estado <strong>PENDIENTE</strong> en este momento.</p>
+      <strong>Sin resultados.</strong>
+      <p>No hay entidades para el filtro <strong><%= selectedStatus %></strong>.</p>
     </div>
   <% } else { %>
     <section class="status-grid admin-grid">
@@ -35,7 +43,8 @@
           <p><strong>Email:</strong> <%= entity.requestedByUser.email %></p>
           <p><strong>Estado:</strong> <%= entity.validationStatus %></p>
           <p><strong>Ciudad:</strong> <%= entity.city %></p>
-          <a class="secondary-link" href="/admin/entidades/<%= entity.id %>">Revisar solicitud</a>
+          <p><strong>Fecha:</strong> <%= new Date(entity.createdAt).toLocaleDateString("es-ES") %></p>
+          <a class="secondary-link" href="/admin/entidades/<%= entity.id %>">Ver detalle</a>
         </article>
       <% }) %>
     </section>
