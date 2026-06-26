@@ -11,7 +11,7 @@ La aplicación incluye actualmente:
 - Registro de voluntarios.
 - Inicio y cierre de sesión.
 - Solicitud de alta de entidades.
-- Validación, rechazo y suspensión de entidades por parte de administración.
+- Consulta, validación y cambio de estado de entidades por parte de administración.
 - Perfil editable de voluntario.
 - Perfil editable de entidad.
 - Publicación, edición y retirada de eventos por entidades verificadas.
@@ -25,7 +25,7 @@ La aplicación incluye actualmente:
 - Calendario de entidad.
 - Historial de participación.
 - Consulta de inscritos dentro del detalle del evento para entidades propietarias.
-- Panel de administración.
+- Panel de administración con listado de entidades, filtros por estado y detalle gestionable.
 - Moderación de publicaciones.
 - Baja definitiva de cuenta mediante anonimización y bloqueo de acceso.
 
@@ -35,7 +35,7 @@ La aplicación contempla tres roles:
 
 - `VOLUNTARIO`: usuario que consulta eventos, sigue entidades, se inscribe en actividades y consulta su calendario e historial.
 - `ENTIDAD`: organización validada que puede publicar eventos, consultar inscritos y gestionar su información.
-- `ADMIN`: usuario administrador encargado de validar entidades y moderar contenido.
+- `ADMIN`: usuario administrador encargado de consultar y gestionar entidades, cambiar su estado y moderar contenido.
 
 ## Stack técnico
 

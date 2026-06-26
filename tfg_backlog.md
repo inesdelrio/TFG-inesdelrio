@@ -20,7 +20,7 @@ El sistema se plantea como una plataforma centralizada donde las entidades puede
 
 - `VOLUNTARIO`: consulta eventos, sigue entidades, se inscribe, consulta notificaciones, calendario e historial.
 - `ENTIDAD`: publica eventos, gestiona su perfil, consulta inscritos y revisa su calendario.
-- `ADMIN`: valida entidades, revisa métricas básicas y modera publicaciones.
+- `ADMIN`: consulta y gestiona entidades, revisa métricas básicas y modera publicaciones.
 
 ## 4. Estado general
 
@@ -30,7 +30,7 @@ El proyecto cuenta con los flujos principales implementados:
 - conexión con PostgreSQL y Prisma;
 - autenticación por sesión;
 - registro de voluntarios;
-- solicitud y validación de entidades;
+- solicitud, validación y gestión de estado de entidades;
 - publicación y gestión de eventos;
 - inscripción y cancelación;
 - seguimiento de entidades;
@@ -125,9 +125,11 @@ El proyecto separa rutas, controladores, servicios, validadores y vistas. La ló
 
 Las entidades no pueden publicar eventos hasta ser validadas por administración. El estado de entidad permite distinguir entre entidades pendientes, verificadas, rechazadas y suspendidas.
 
+El panel de administración permite consultar todas las entidades desde `/admin/entidades`, filtrar por `TODAS`, `PENDIENTE`, `VERIFICADA`, `RECHAZADA` y `SUSPENDIDA`, y cambiar el estado desde el detalle de cada entidad. Cada cambio queda registrado en `AdminActionLog`.
+
 ### Moderación
 
-La administración puede retirar publicaciones y suspender entidades. Las acciones administrativas se registran para mantener trazabilidad.
+La administración puede retirar publicaciones y suspender entidades. Una entidad `SUSPENDIDA` no puede operar ni publicar eventos, y si vuelve a `VERIFICADA` recupera la capacidad de operar si cumple las reglas actuales. Las acciones administrativas se registran para mantener trazabilidad.
 
 ### Baja definitiva de cuenta
 
