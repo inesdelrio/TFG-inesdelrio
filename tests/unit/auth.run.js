@@ -10,6 +10,11 @@ const {
   testSearchMadridAddressesActionReturnsMockedSuggestions,
 } = require("./controllers/maps/geocoding.controller.test");
 const {
+  testResolveSessionSecretRequiresSecretInProduction,
+  testResolveSessionSecretReturnsConfiguredSecret,
+  testResolveSessionSecretUsesDevelopmentFallback,
+} = require("./config/session-config.test");
+const {
   testRenderAdminMapRendersMapView,
   testRenderEntityMapRendersMapView,
   testRenderVolunteerEventMapRendersMapView,
@@ -278,6 +283,18 @@ async function runTest(name, fn) {
 }
 
 async function main() {
+  await runTest(
+    "resolveSessionSecret exige SESSION_SECRET en produccion",
+    testResolveSessionSecretRequiresSecretInProduction,
+  );
+  await runTest(
+    "resolveSessionSecret permite fallback en desarrollo",
+    testResolveSessionSecretUsesDevelopmentFallback,
+  );
+  await runTest(
+    "resolveSessionSecret devuelve el secreto configurado",
+    testResolveSessionSecretReturnsConfiguredSecret,
+  );
   await runTest(
     "registerVolunteer crea un usuario voluntario con password hasheada",
     testRegisterVolunteerCreatesVolunteerUser,

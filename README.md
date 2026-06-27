@@ -221,6 +221,47 @@ Para abrir Prisma Studio:
 npx prisma studio
 ```
 
+## Despliegue en Render
+
+La plataforma recomendada para desplegar VolunRed es Render, usando un Web Service de Node.js y una base de datos PostgreSQL gestionada por Render.
+
+Pasos recomendados:
+
+1. Crear una base de datos PostgreSQL en Render.
+2. Crear un Web Service conectado al repositorio de GitHub.
+3. Configurar las variables de entorno del servicio.
+4. Usar `migrate deploy` para aplicar migraciones en producción.
+5. Crear el usuario administrador después del primer despliegue.
+
+Variables de entorno necesarias:
+
+```env
+NODE_ENV=production
+DATABASE_URL="postgresql://..."
+SESSION_SECRET="valor-largo-y-seguro"
+ADMIN_EMAIL="admin@example.com"
+ADMIN_PASSWORD="contraseña-inicial-segura"
+```
+
+`DATABASE_URL`, `SESSION_SECRET` y `ADMIN_PASSWORD` no deben subirse nunca a Git. En producción, la aplicación falla al arrancar si `SESSION_SECRET` no está configurada.
+
+Configuración recomendada en Render:
+
+```bash
+Build Command: npm ci && npx prisma generate
+Start Command: npm run prisma:deploy && npm start
+```
+
+Después del primer despliegue, ejecutar desde Render Shell:
+
+```bash
+npm run seed:admin
+```
+
+El comando `npm run prisma:deploy` ejecuta `prisma migrate deploy`, que es el flujo adecuado para aplicar migraciones ya creadas en entornos de producción.
+
+Actualmente las sesiones usan el store por defecto de `express-session` (`MemoryStore`). Para una demo o defensa de TFG con una sola instancia puede ser suficiente, asumiendo que las sesiones se pierden al reiniciar o redesplegar. Para producción real se recomienda sustituirlo por un almacén persistente, por ejemplo PostgreSQL con `connect-pg-simple` o Redis.
+
 ## Pruebas
 
 Ejecutar tests unitarios:
