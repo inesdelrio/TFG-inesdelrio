@@ -1,0 +1,25 @@
+<%- include("../../partials/head") %>
+<%- include("../../partials/header") %>
+
+<main class="container dashboard-page">
+  <section class="dashboard-hero">
+    <h1>Estado de entidad</h1>
+    <p>Consulta el estado actual de validacion de tu entidad.</p>
+  </section>
+
+  <section class="status-card">
+    <h2><%= entity.organizationName %></h2>
+    <p><strong>Estado:</strong> <%= entity.validationStatus %></p>
+    <p><%= statusMessage %></p>
+
+    <% if (entity.validationStatus === "VERIFICADA") { %>
+      <a class="primary-button" href="/entidad/perfil">Ir al perfil de entidad</a>
+    <% } %>
+
+    <form class="logout-form" action="/logout" method="post">
+      <button class="logout-button" type="submit">Cerrar sesion</button>
+    </form>
+  </section>
+</main>
+
+<%- include("../../partials/footer") %>

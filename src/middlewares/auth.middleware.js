@@ -61,7 +61,41 @@ function requireRole(...allowedRoles) {
   };
 }
 
+function requireVerifiedEntity(dependencies = {}) {
+  return async (req, res, next) => {
+    if (!req.currentUser) {
+      return res.redirect("/login");
+    }
+
+    if (req.currentUser.role !== "ENTIDAD") {
+      return res.redirect(getRedirectPathForRole(req.currentUser.role));
+    }
+
+    const prismaClient = dependencies.prisma || prisma;
+
+    try {
+      const entity = await prismaClient.entity.findUnique({
+        where: {
+          requestedByUserId: req.currentUser.id,
+        },
+        select: {
+          validationStatus: true,
+        },
+      });
+
+      if (!entity || entity.validationStatus !== "VERIFICADA") {
+        return res.redirect("/entidad/estado");
+      }
+
+      return next();
+    } catch (error) {
+      return next(error);
+    }
+  };
+}
+
 module.exports = {
   requireAuth,
   requireRole,
+  requireVerifiedEntity,
 };

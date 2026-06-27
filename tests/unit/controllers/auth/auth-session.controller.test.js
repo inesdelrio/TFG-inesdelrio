@@ -28,6 +28,32 @@ function testRenderLoginFormShowsRegisteredMessageAndPrefillsEmail() {
   assert.equal(renderCalls[0].model.formData.email, "ines@example.com");
 }
 
+function testRenderLoginFormShowsEntityRegistrationMessage() {
+  const renderCalls = [];
+  const req = {
+    currentUser: null,
+    query: {
+      entityRequested: "1",
+      email: "entidad@example.com",
+    },
+  };
+  const res = {
+    render: (view, model) => {
+      renderCalls.push({ view, model });
+    },
+  };
+
+  renderLoginForm(req, res);
+
+  assert.equal(renderCalls.length, 1);
+  assert.equal(
+    renderCalls[0].model.infoMessage,
+    "Solicitud de entidad enviada. Un administrador debe validar la cuenta antes de que pueda publicar eventos.",
+  );
+  assert.equal(renderCalls[0].model.formData.email, "entidad@example.com");
+}
+
 module.exports = {
+  testRenderLoginFormShowsEntityRegistrationMessage,
   testRenderLoginFormShowsRegisteredMessageAndPrefillsEmail,
 };

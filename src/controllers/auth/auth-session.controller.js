@@ -1,6 +1,9 @@
 const authenticateUser = require("../../services/auth/authenticate-user.service");
 const { destroyUserSession } = require("../../services/auth/session.service");
-const { getRedirectPathForRole } = require("../../utils/auth-redirect");
+const {
+  getEntityLoginRedirectPath,
+  getRedirectPathForRole,
+} = require("../../utils/auth-redirect");
 const { validateLoginInput } = require("../../validators/auth/login.validator");
 
 function buildLoginViewModel(overrides = {}) {
@@ -23,6 +26,8 @@ function renderLoginForm(req, res) {
   const infoMessage =
     req.query.registered === "1"
       ? "Cuenta creada correctamente. Ya puedes iniciar sesion."
+      : req.query.entityRequested === "1"
+        ? "Solicitud de entidad enviada. Un administrador debe validar la cuenta antes de que pueda publicar eventos."
       : req.query.deleted === "1"
         ? "La cuenta se ha eliminado definitivamente."
       : null;
@@ -66,12 +71,14 @@ async function loginUser(req, res, next) {
       role: user.role,
     };
 
+    const redirectPath = await getEntityLoginRedirectPath(user);
+
     return req.session.save((saveError) => {
       if (saveError) {
         return next(saveError);
       }
 
-      return res.redirect(getRedirectPathForRole(user.role));
+      return res.redirect(redirectPath);
     });
   } catch (error) {
     if (error.code === "INVALID_CREDENTIALS") {

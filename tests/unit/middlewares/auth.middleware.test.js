@@ -1,6 +1,10 @@
 const assert = require("node:assert/strict");
 
-const { requireAuth, requireRole } = require("../../../src/middlewares/auth.middleware");
+const {
+  requireAuth,
+  requireRole,
+  requireVerifiedEntity,
+} = require("../../../src/middlewares/auth.middleware");
 
 async function testRequireAuthRefreshesActiveUserFromDatabase() {
   const req = {
@@ -128,9 +132,75 @@ function testRequireRoleRedirectsNonAdminUsers() {
   assert.equal(redirectedTo, "/voluntariado/perfil");
 }
 
+async function testRequireVerifiedEntityRedirectsPendingEntityToStatus() {
+  let redirectedTo = null;
+  const middleware = requireVerifiedEntity({
+    prisma: {
+      entity: {
+        findUnique: async () => ({
+          validationStatus: "PENDIENTE",
+        }),
+      },
+    },
+  });
+
+  await middleware(
+    {
+      currentUser: {
+        id: 7,
+        role: "ENTIDAD",
+      },
+    },
+    {
+      redirect(path) {
+        redirectedTo = path;
+      },
+    },
+    () => {
+      throw new Error("Pending entities must not access operative routes.");
+    },
+  );
+
+  assert.equal(redirectedTo, "/entidad/estado");
+}
+
+async function testRequireVerifiedEntityAllowsVerifiedEntity() {
+  let nextCalled = false;
+  const middleware = requireVerifiedEntity({
+    prisma: {
+      entity: {
+        findUnique: async () => ({
+          validationStatus: "VERIFICADA",
+        }),
+      },
+    },
+  });
+
+  await middleware(
+    {
+      currentUser: {
+        id: 7,
+        role: "ENTIDAD",
+      },
+    },
+    {
+      redirect() {
+        throw new Error("Verified entities should not be redirected.");
+      },
+    },
+    () => {
+      nextCalled = true;
+    },
+  );
+
+  assert.equal(nextCalled, true);
+}
+
 module.exports = {
   testRequireRoleRedirectsNonAdminUsers,
   testRequireRoleRedirectsUnauthenticatedUsers,
   testRequireAuthRefreshesActiveUserFromDatabase,
   testRequireAuthRejectsAnonymizedUserFromStaleSession,
+  testRequireVerifiedEntityAllowsVerifiedEntity,
+  testRequireVerifiedEntityRedirectsPendingEntityToStatus,
 };

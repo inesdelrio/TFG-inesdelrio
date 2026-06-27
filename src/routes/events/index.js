@@ -5,7 +5,11 @@ const eventRegistrationController = require("../../controllers/events/event-regi
 const eventManagementController = require("../../controllers/events/event-management.controller");
 const eventPublicationController = require("../../controllers/events/event-publication.controller");
 const eventMapController = require("../../controllers/maps/event-map.controller");
-const { requireAuth, requireRole } = require("../../middlewares/auth.middleware");
+const {
+  requireAuth,
+  requireRole,
+  requireVerifiedEntity,
+} = require("../../middlewares/auth.middleware");
 
 const router = express.Router();
 
@@ -20,36 +24,42 @@ router.get(
   "/eventos/nuevo",
   requireAuth,
   requireRole("ENTIDAD"),
+  requireVerifiedEntity(),
   eventPublicationController.renderEventCreationForm,
 );
 router.post(
   "/eventos",
   requireAuth,
   requireRole("ENTIDAD"),
+  requireVerifiedEntity(),
   eventPublicationController.publishEvent,
 );
 router.get(
   "/eventos/:eventId/editar",
   requireAuth,
   requireRole("ENTIDAD"),
+  requireVerifiedEntity(),
   eventManagementController.renderEventEditForm,
 );
 router.post(
   "/eventos/:eventId",
   requireAuth,
   requireRole("ENTIDAD"),
+  requireVerifiedEntity(),
   eventManagementController.updateEvent,
 );
 router.post(
   "/eventos/:eventId/eliminar",
   requireAuth,
   requireRole("ENTIDAD"),
+  requireVerifiedEntity(),
   eventManagementController.deleteEvent,
 );
 router.get(
   "/eventos/:eventId/inscritos",
   requireAuth,
   requireRole("ENTIDAD"),
+  requireVerifiedEntity(),
   eventAttendanceController.renderEventAttendees,
 );
 router.post(

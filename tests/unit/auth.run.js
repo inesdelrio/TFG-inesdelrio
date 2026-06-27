@@ -70,6 +70,11 @@ const {
   testCreateEntityRequestCreatesPendingEntityAndPromotesUserRole,
 } = require("./services/entities/create-entity-request.service.test");
 const {
+  testCreateEntityRegistrationCreatesEntityUserAndPendingEntity,
+  testCreateEntityRegistrationRejectsDuplicateEmail,
+  testCreateEntityRegistrationRejectsDuplicateTaxId,
+} = require("./services/entities/create-entity-registration.service.test");
+const {
   testAssertEntityCanPublishEventsAllowsVerifiedEntity,
   testAssertEntityCanPublishEventsRejectsPendingEntity,
   testAssertEntityCanPublishEventsRejectsSuspendedEntity,
@@ -152,8 +157,12 @@ const {
   testDestroyUserSessionDestroysSessionWithoutError,
 } = require("./services/auth/session.service.test");
 const {
+  testRenderLoginFormShowsEntityRegistrationMessage,
   testRenderLoginFormShowsRegisteredMessageAndPrefillsEmail,
 } = require("./controllers/auth/auth-session.controller.test");
+const {
+  testRenderEntityPublicRegistrationFormRendersPublicEntityForm,
+} = require("./controllers/entities/entity-public-registration.controller.test");
 const {
   testSubscribeToEntityRedirectsToDetailWithBackToEventsFlagAfterSuccess,
   testUnsubscribeFromEntityRedirectsToDetailWithBackToEventsFlagAfterSuccess,
@@ -197,6 +206,11 @@ const {
   testValidateEntityRegistrationInputRejectsInvalidData,
 } = require("./validators/entities/entity-registration.validator.test");
 const {
+  testValidateEntityPublicRegistrationAcceptsValidMadridLocation,
+  testValidateEntityPublicRegistrationRejectsInvalidMadridLocation,
+  testValidateEntityPublicRegistrationRejectsInvalidPassword,
+} = require("./validators/entities/entity-public-registration.validator.test");
+const {
   testValidateEntityProfileInputAcceptsValidMadridLocation,
   testValidateEntityProfileInputRejectsInvalidData,
   testValidateEntityProfileInputRejectsInvalidMadridLocationWhenAddressChanges,
@@ -216,6 +230,13 @@ const {
   testValidateVolunteerRegistrationInputRejectsInvalidData,
 } = require("./validators/auth/register-volunteer.validator.test");
 const {
+  testVolunteerRegisterViewLinksToEntityRegistration,
+} = require("./views/auth-register.view.test");
+const {
+  testGetEntityLoginRedirectPathSendsPendingEntityToStatus,
+  testGetEntityLoginRedirectPathSendsRejectedEntityToStatus,
+  testGetEntityLoginRedirectPathSendsSuspendedEntityToStatus,
+  testGetEntityLoginRedirectPathSendsVerifiedEntityToProfile,
   testGetRedirectPathForRoleSendsAdminToProfile,
 } = require("./utils/auth-redirect.test");
 const {
@@ -255,6 +276,8 @@ const {
   testRequireAuthRejectsAnonymizedUserFromStaleSession,
   testRequireRoleRedirectsNonAdminUsers,
   testRequireRoleRedirectsUnauthenticatedUsers,
+  testRequireVerifiedEntityAllowsVerifiedEntity,
+  testRequireVerifiedEntityRedirectsPendingEntityToStatus,
 } = require("./middlewares/auth.middleware.test");
 const {
   testDeleteNotificationActionRedirectsAfterDeletingOwnNotification,
@@ -332,12 +355,44 @@ async function main() {
     testRenderLoginFormShowsRegisteredMessageAndPrefillsEmail,
   );
   await runTest(
+    "renderLoginForm muestra mensaje de solicitud de entidad",
+    testRenderLoginFormShowsEntityRegistrationMessage,
+  );
+  await runTest(
     "getRedirectPathForRole envia al admin a su perfil",
     testGetRedirectPathForRoleSendsAdminToProfile,
   );
   await runTest(
+    "getEntityLoginRedirectPath envia entidad pendiente a estado",
+    testGetEntityLoginRedirectPathSendsPendingEntityToStatus,
+  );
+  await runTest(
+    "getEntityLoginRedirectPath envia entidad rechazada a estado",
+    testGetEntityLoginRedirectPathSendsRejectedEntityToStatus,
+  );
+  await runTest(
+    "getEntityLoginRedirectPath envia entidad suspendida a estado",
+    testGetEntityLoginRedirectPathSendsSuspendedEntityToStatus,
+  );
+  await runTest(
+    "getEntityLoginRedirectPath envia entidad verificada a perfil",
+    testGetEntityLoginRedirectPathSendsVerifiedEntityToProfile,
+  );
+  await runTest(
     "createEntityRequest crea una entidad pendiente y promociona el rol del usuario",
     testCreateEntityRequestCreatesPendingEntityAndPromotesUserRole,
+  );
+  await runTest(
+    "createEntityRegistration crea usuario entidad y entidad pendiente",
+    testCreateEntityRegistrationCreatesEntityUserAndPendingEntity,
+  );
+  await runTest(
+    "createEntityRegistration rechaza email duplicado",
+    testCreateEntityRegistrationRejectsDuplicateEmail,
+  );
+  await runTest(
+    "createEntityRegistration rechaza CIF/NIF duplicado",
+    testCreateEntityRegistrationRejectsDuplicateTaxId,
   );
   await runTest(
     "createEntitySubscription crea una suscripcion sin duplicados",
@@ -474,6 +529,10 @@ async function main() {
   await runTest(
     "renderEntityMap renderiza la vista de mapa de entidad",
     testRenderEntityMapRendersMapView,
+  );
+  await runTest(
+    "renderEntityPublicRegistrationForm renderiza registro publico de entidad",
+    testRenderEntityPublicRegistrationFormRendersPublicEntityForm,
   );
   await runTest(
     "renderAdminMap renderiza la vista de mapa admin",
@@ -708,12 +767,28 @@ async function main() {
     testValidateVolunteerRegistrationInputRejectsInvalidData,
   );
   await runTest(
+    "vista de registro voluntario enlaza al registro de entidad",
+    testVolunteerRegisterViewLinksToEntityRegistration,
+  );
+  await runTest(
     "validateLoginInput detecta datos invalidos en el login",
     testValidateLoginInputRejectsInvalidData,
   );
   await runTest(
     "validateEntityRegistrationInput detecta datos invalidos en el alta de entidad",
     testValidateEntityRegistrationInputRejectsInvalidData,
+  );
+  await runTest(
+    "validateEntityPublicRegistration rechaza contrasena invalida",
+    testValidateEntityPublicRegistrationRejectsInvalidPassword,
+  );
+  await runTest(
+    "validateEntityPublicRegistration rechaza direccion fuera de Madrid",
+    testValidateEntityPublicRegistrationRejectsInvalidMadridLocation,
+  );
+  await runTest(
+    "validateEntityPublicRegistration acepta direccion valida de Madrid",
+    testValidateEntityPublicRegistrationAcceptsValidMadridLocation,
   );
   await runTest(
     "validateEntityProfileInput detecta datos invalidos en el perfil de entidad",
@@ -802,6 +877,14 @@ async function main() {
   await runTest(
     "requireRole redirige usuarios que no son admin",
     testRequireRoleRedirectsNonAdminUsers,
+  );
+  await runTest(
+    "requireVerifiedEntity bloquea entidades no verificadas",
+    testRequireVerifiedEntityRedirectsPendingEntityToStatus,
+  );
+  await runTest(
+    "requireVerifiedEntity permite entidades verificadas",
+    testRequireVerifiedEntityAllowsVerifiedEntity,
   );
   await runTest(
     "openNotificationEvent usa el evento guardado y abre la actividad",
