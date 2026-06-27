@@ -12,11 +12,8 @@ function buildValidInput(overrides = {}) {
     password: "password123",
     passwordConfirm: "password123",
     organizationName: "Fundacion Madrid",
-    legalName: "Fundacion Madrid Social",
     taxId: "G12345678",
     contactPhone: "612345678",
-    city: "Madrid",
-    address: "Calle Mayor 10",
     latitude: "40.416800",
     longitude: "-3.703800",
     normalizedAddress: "Calle Mayor 10, Madrid",
@@ -44,6 +41,9 @@ function testValidateEntityPublicRegistrationAcceptsValidMadridLocation() {
   assert.deepEqual(result.errors, {});
   assert.equal(result.sanitizedData.email, "laura@example.com");
   assert.equal(result.sanitizedData.contactEmail, "laura@example.com");
+  assert.equal(result.sanitizedData.legalName, "Fundacion Madrid");
+  assert.equal(result.sanitizedData.city, "Madrid");
+  assert.equal(result.sanitizedData.address, "Calle Mayor 10, Madrid");
   assert.equal(result.sanitizedData.latitude, 40.4168);
   assert.equal(result.sanitizedData.longitude, -3.7038);
 }

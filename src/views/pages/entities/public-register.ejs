@@ -20,7 +20,7 @@
       <% } %>
 
       <form class="auth-form" action="/entidades/registro" method="post" novalidate>
-        <h2>Responsable de la cuenta</h2>
+        <h2>Datos de acceso</h2>
 
         <div class="form-row">
           <label for="firstName">Nombre</label>
@@ -38,12 +38,6 @@
           <label for="email">Email</label>
           <input id="email" name="email" type="email" required value="<%= formData.email %>" />
           <% if (errors.email) { %><p class="field-error"><%= errors.email %></p><% } %>
-        </div>
-
-        <div class="form-row">
-          <label for="phone">Telefono del responsable</label>
-          <input id="phone" name="phone" type="tel" value="<%= formData.phone %>" />
-          <% if (errors.phone) { %><p class="field-error"><%= errors.phone %></p><% } %>
         </div>
 
         <div class="form-row">
@@ -67,12 +61,6 @@
         </div>
 
         <div class="form-row">
-          <label for="legalName">Razon social o nombre legal</label>
-          <input id="legalName" name="legalName" type="text" required value="<%= formData.legalName %>" />
-          <% if (errors.legalName) { %><p class="field-error"><%= errors.legalName %></p><% } %>
-        </div>
-
-        <div class="form-row">
           <label for="taxId">CIF/NIF</label>
           <input id="taxId" name="taxId" type="text" required value="<%= formData.taxId %>" />
           <% if (errors.taxId) { %><p class="field-error"><%= errors.taxId %></p><% } %>
@@ -84,18 +72,9 @@
           <% if (errors.contactPhone) { %><p class="field-error"><%= errors.contactPhone %></p><% } %>
         </div>
 
-        <div class="form-row">
-          <label for="city">Ciudad</label>
-          <input id="city" name="city" type="text" required value="<%= formData.city %>" />
-          <% if (errors.city) { %><p class="field-error"><%= errors.city %></p><% } %>
-        </div>
-
-        <div class="form-row">
-          <label for="address">Direccion</label>
-          <input id="address" name="address" type="text" required value="<%= formData.address %>" />
-          <% if (errors.address) { %><p class="field-error"><%= errors.address %></p><% } %>
-        </div>
-
+        <input id="address" name="address" type="hidden" value="<%= formData.address %>" />
+        <% if (errors.address) { %><p class="field-error"><%= errors.address %></p><% } %>
+        <h2>Dirección de la entidad en Madrid</h2>
         <%- include("../../partials/address-search", { fieldPrefix: "entityRegistration", formData, errors }) %>
 
         <div class="form-row">
@@ -105,7 +84,7 @@
         </div>
 
         <div class="form-row">
-          <label for="supportingInfo">Documento o informacion justificativa</label>
+          <label for="supportingInfo">Información adicional para la validación</label>
           <textarea id="supportingInfo" name="supportingInfo" rows="4"><%= formData.supportingInfo %></textarea>
         </div>
 

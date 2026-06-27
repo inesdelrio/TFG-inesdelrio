@@ -13,12 +13,11 @@ function validateEntityPublicRegistrationInput(input = {}) {
     email: sanitizeText(input.email).toLowerCase(),
     phone: sanitizeText(input.phone),
     organizationName: sanitizeText(input.organizationName),
-    legalName: sanitizeText(input.legalName),
     taxId: sanitizeText(input.taxId).toUpperCase(),
     contactEmail: sanitizeText(input.email).toLowerCase(),
     contactPhone: sanitizeText(input.contactPhone),
-    city: sanitizeText(input.city),
-    address: sanitizeText(input.address),
+    city: "Madrid",
+    address: sanitizeText(input.normalizedAddress || input.address),
     latitude: input.latitude,
     longitude: input.longitude,
     normalizedAddress: sanitizeText(input.normalizedAddress),
@@ -59,9 +58,7 @@ function validateEntityPublicRegistrationInput(input = {}) {
     errors.organizationName = "Introduce un nombre visible valido para la entidad.";
   }
 
-  if (sanitizedData.legalName.length < 3) {
-    errors.legalName = "Introduce la razon social o nombre legal de la entidad.";
-  }
+  sanitizedData.legalName = sanitizedData.organizationName;
 
   if (!/^[A-Z0-9-]{8,15}$/.test(sanitizedData.taxId)) {
     errors.taxId = "Introduce un CIF/NIF valido en formato basico.";
@@ -69,10 +66,6 @@ function validateEntityPublicRegistrationInput(input = {}) {
 
   if (!/^[0-9+\s()-]{9,20}$/.test(sanitizedData.contactPhone)) {
     errors.contactPhone = "Introduce un telefono de contacto valido.";
-  }
-
-  if (sanitizedData.city.length < 2) {
-    errors.city = "Introduce la ciudad principal de la entidad.";
   }
 
   if (sanitizedData.address.length < 5) {
@@ -101,6 +94,7 @@ function validateEntityPublicRegistrationInput(input = {}) {
   sanitizedData.latitude = location.sanitizedData.latitude;
   sanitizedData.longitude = location.sanitizedData.longitude;
   sanitizedData.normalizedAddress = location.sanitizedData.normalizedAddress;
+  sanitizedData.address = location.sanitizedData.normalizedAddress || sanitizedData.address;
 
   return {
     sanitizedData,

@@ -233,6 +233,9 @@ const {
   testVolunteerRegisterViewLinksToEntityRegistration,
 } = require("./views/auth-register.view.test");
 const {
+  testEntityPublicRegisterViewUsesSimplifiedFields,
+} = require("./views/entity-public-register.view.test");
+const {
   testGetEntityLoginRedirectPathSendsPendingEntityToStatus,
   testGetEntityLoginRedirectPathSendsRejectedEntityToStatus,
   testGetEntityLoginRedirectPathSendsSuspendedEntityToStatus,
@@ -769,6 +772,10 @@ async function main() {
   await runTest(
     "vista de registro voluntario enlaza al registro de entidad",
     testVolunteerRegisterViewLinksToEntityRegistration,
+  );
+  await runTest(
+    "vista de registro entidad usa campos simplificados",
+    testEntityPublicRegisterViewUsesSimplifiedFields,
   );
   await runTest(
     "validateLoginInput detecta datos invalidos en el login",
