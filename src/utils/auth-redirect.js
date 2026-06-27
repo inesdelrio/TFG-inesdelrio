@@ -1,7 +1,7 @@
 function getRedirectPathForRole(role) {
   switch (role) {
     case "ADMIN":
-      return "/admin/area";
+      return "/admin/perfil";
     case "ENTIDAD":
       return "/entidad/perfil";
     case "VOLUNTARIO":

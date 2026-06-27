@@ -1,5 +1,6 @@
 const express = require("express");
 
+const adminProfileController = require("../../controllers/admin/admin-profile.controller");
 const entityModerationController = require("../../controllers/admin/entity-moderation.controller");
 const { requireAuth, requireRole } = require("../../middlewares/auth.middleware");
 
@@ -10,6 +11,12 @@ router.get(
   requireAuth,
   requireRole("ADMIN"),
   entityModerationController.renderAdminDashboard,
+);
+router.get(
+  "/admin/perfil",
+  requireAuth,
+  requireRole("ADMIN"),
+  adminProfileController.renderAdminProfile,
 );
 router.get(
   "/admin/entidades",

@@ -163,13 +163,6 @@ code {
   line-height: 0.98;
 }
 
-.auth-brand-logo {
-  display: block;
-  height: 3.4rem;
-  width: auto;
-  margin-bottom: 1rem;
-}
-
 .home-hero-copy p {
   max-width: 65ch;
   color: var(--muted);

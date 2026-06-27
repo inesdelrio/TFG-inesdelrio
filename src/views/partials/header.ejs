@@ -8,22 +8,24 @@
       <a href="/eventos">Eventos</a>
       <% if (currentUser) { %>
         <% if (currentUser.role === "VOLUNTARIO") { %>
-          <a href="/voluntariado/perfil">Mi perfil</a>
           <a href="/voluntariado/calendario">Calendario</a>
-          <a href="/voluntariado/historial">Historial</a>
           <a href="/notificaciones">Notificaciones</a>
+          <a href="/voluntariado/historial">Historial</a>
+          <a href="/voluntariado/perfil">Perfil</a>
         <% } %>
         <% if (currentUser.role === "ENTIDAD") { %>
           <a href="/entidad/calendario">Calendario</a>
           <a href="/notificaciones">Notificaciones</a>
-          <a href="/entidad/perfil">Perfil entidad</a>
+          <a href="/entidad/historial">Historial</a>
+          <a href="/entidad/perfil">Perfil</a>
         <% } %>
         <% if (currentUser.role === "ADMIN") { %>
           <a href="/admin/area">Panel admin</a>
+          <a href="/admin/perfil">Perfil</a>
         <% } %>
       <% } else { %>
         <a href="/registro">Registro</a>
-        <a href="/login">Login</a>
+        <a href="/login">Iniciar sesion</a>
       <% } %>
     </nav>
   </div>

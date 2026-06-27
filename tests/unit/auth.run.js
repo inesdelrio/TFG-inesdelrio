@@ -140,6 +140,10 @@ const {
   testGetEntityCalendarReturnsEmptyMonthWithoutEvents,
 } = require("./services/entities/get-entity-calendar.service.test");
 const {
+  testGetEntityHistoryRejectsMissingEntity,
+  testGetEntityHistorySeparatesFutureAndPastEvents,
+} = require("./services/entities/get-entity-history.service.test");
+const {
   testGetVolunteerHistorySeparatesFutureAndPastRegistrations,
 } = require("./services/volunteers/get-volunteer-history.service.test");
 const {
@@ -164,6 +168,9 @@ const {
   testValidateVolunteerRegistrationInputRejectsInvalidData,
 } = require("./validators/auth/register-volunteer.validator.test");
 const {
+  testGetRedirectPathForRoleSendsAdminToProfile,
+} = require("./utils/auth-redirect.test");
+const {
   testResolveAdminSeedConfigRequiresAdminEmailAndPassword,
   testResolveAdminSeedConfigReturnsEnvironmentValues,
 } = require("./scripts/seed-admin-config.test");
@@ -184,6 +191,12 @@ const {
   testRenderEntityReviewDetailShows404ForMissingEntity,
   testUpdateEntityStatusRedirectsToDetailAfterChange,
 } = require("./controllers/admin/entity-moderation.controller.test");
+const {
+  testRenderAdminProfileShowsCurrentAdminUser,
+} = require("./controllers/admin/admin-profile.controller.test");
+const {
+  testRenderEntityHistoryLoadsHistoryForCurrentEntityUser,
+} = require("./controllers/entities/entity-history.controller.test");
 const {
   testDeleteVolunteerAccountActionDestroysSessionAndRedirects,
   testDeleteVolunteerAccountActionRequiresConfirmation,
@@ -257,6 +270,10 @@ async function main() {
   await runTest(
     "renderLoginForm muestra cuenta creada y prerrellena email tras registro",
     testRenderLoginFormShowsRegisteredMessageAndPrefillsEmail,
+  );
+  await runTest(
+    "getRedirectPathForRole envia al admin a su perfil",
+    testGetRedirectPathForRoleSendsAdminToProfile,
   );
   await runTest(
     "createEntityRequest crea una entidad pendiente y promociona el rol del usuario",
@@ -349,6 +366,10 @@ async function main() {
   await runTest(
     "renderAdminEntitiesList pasa el filtro de estado al servicio",
     testRenderAdminEntitiesListPassesStatusFilterToService,
+  );
+  await runTest(
+    "renderAdminProfile muestra el perfil del administrador actual",
+    testRenderAdminProfileShowsCurrentAdminUser,
   );
   await runTest(
     "renderEntityReviewDetail muestra el detalle de una entidad existente",
@@ -505,6 +526,18 @@ async function main() {
   await runTest(
     "getEntityCalendar devuelve un mes vacio sin eventos",
     testGetEntityCalendarReturnsEmptyMonthWithoutEvents,
+  );
+  await runTest(
+    "getEntityHistory separa eventos propios futuros y pasados",
+    testGetEntityHistorySeparatesFutureAndPastEvents,
+  );
+  await runTest(
+    "getEntityHistory rechaza una entidad inexistente",
+    testGetEntityHistoryRejectsMissingEntity,
+  );
+  await runTest(
+    "renderEntityHistory carga el historial del usuario entidad actual",
+    testRenderEntityHistoryLoadsHistoryForCurrentEntityUser,
   );
   await runTest(
     "getVolunteerHistory separa inscripciones futuras y pasadas",

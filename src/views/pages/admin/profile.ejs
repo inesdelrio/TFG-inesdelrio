@@ -1,0 +1,75 @@
+<%- include("../../partials/head") %>
+<%- include("../../partials/header") %>
+
+<main class="container dashboard-page">
+  <section class="dashboard-hero">
+    <h1>Perfil de administrador</h1>
+    <p>Consulta la cuenta activa de administracion y cierra sesion al terminar.</p>
+  </section>
+
+  <section class="profile-shell">
+    <div class="status-card">
+      <h2>Resumen</h2>
+      <p><strong>Rol:</strong> <%= admin.role %></p>
+      <p><strong>Email de acceso:</strong> <%= admin.email %></p>
+      <p class="field-help">
+        El email se muestra como referencia de login y no se edita desde este perfil.
+      </p>
+
+      <div class="account-options">
+        <h2>Opciones de cuenta</h2>
+        <p>Cierra la sesion de administrador cuando termines de revisar la plataforma.</p>
+
+        <form class="logout-form" action="/logout" method="post">
+          <button class="logout-button" type="submit">Cerrar sesion</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="auth-card">
+      <form class="auth-form" novalidate>
+        <div class="form-row">
+          <label for="firstName">Nombre</label>
+          <input
+            id="firstName"
+            type="text"
+            value="<%= admin.firstName %>"
+            disabled
+          />
+        </div>
+
+        <div class="form-row">
+          <label for="lastName">Apellidos</label>
+          <input
+            id="lastName"
+            type="text"
+            value="<%= admin.lastName %>"
+            disabled
+          />
+        </div>
+
+        <div class="form-row">
+          <label for="email">Email</label>
+          <input
+            id="email"
+            type="email"
+            value="<%= admin.email %>"
+            disabled
+          />
+        </div>
+
+        <div class="form-row">
+          <label for="phone">Telefono</label>
+          <input
+            id="phone"
+            type="tel"
+            value="<%= admin.phone || "" %>"
+            disabled
+          />
+        </div>
+      </form>
+    </div>
+  </section>
+</main>
+
+<%- include("../../partials/footer") %>

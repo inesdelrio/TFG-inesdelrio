@@ -1,0 +1,63 @@
+<%- include("../../partials/head") %>
+<%- include("../../partials/header") %>
+
+<main class="container dashboard-page">
+  <section class="dashboard-hero">
+    <h1>Historial de eventos</h1>
+    <p>
+      Consulta los eventos dados de alta por <%= history.entity.organizationName %>, separados entre proximos y pasados.
+    </p>
+  </section>
+
+  <section class="event-list">
+    <article class="status-card">
+      <h2>Eventos futuros</h2>
+
+      <% if (history.futureEvents.length === 0) { %>
+        <p>No hay eventos futuros registrados por la entidad.</p>
+      <% } %>
+
+      <% history.futureEvents.forEach((event) => { %>
+        <div class="history-item">
+          <h3><%= event.title %></h3>
+          <p><strong>Fecha:</strong> <%= new Date(event.startsAt).toLocaleString("es-ES", { dateStyle: "medium", timeStyle: "short" }) %></p>
+          <p><strong>Ubicacion:</strong> <%= event.city %> - <%= event.address %></p>
+          <p><strong>Estado:</strong> <%= event.publicationStatus %></p>
+          <p><strong>Inscritos:</strong> <%= event.registrationsCount %> / <%= event.totalSlots %></p>
+
+          <% if (event.canOpenDetail) { %>
+            <a class="secondary-link" href="/eventos/<%= event.eventId %>">Ver detalle</a>
+          <% } else { %>
+            <p class="history-disabled-link">Detalle publico no disponible: evento retirado.</p>
+          <% } %>
+        </div>
+      <% }) %>
+    </article>
+
+    <article class="status-card">
+      <h2>Eventos pasados</h2>
+
+      <% if (history.pastEvents.length === 0) { %>
+        <p>No hay eventos pasados registrados por la entidad.</p>
+      <% } %>
+
+      <% history.pastEvents.forEach((event) => { %>
+        <div class="history-item">
+          <h3><%= event.title %></h3>
+          <p><strong>Fecha:</strong> <%= new Date(event.startsAt).toLocaleString("es-ES", { dateStyle: "medium", timeStyle: "short" }) %></p>
+          <p><strong>Ubicacion:</strong> <%= event.city %> - <%= event.address %></p>
+          <p><strong>Estado:</strong> <%= event.publicationStatus %></p>
+          <p><strong>Inscritos:</strong> <%= event.registrationsCount %> / <%= event.totalSlots %></p>
+
+          <% if (event.canOpenDetail) { %>
+            <a class="secondary-link" href="/eventos/<%= event.eventId %>">Ver detalle</a>
+          <% } else { %>
+            <p class="history-disabled-link">Detalle publico no disponible: evento retirado.</p>
+          <% } %>
+        </div>
+      <% }) %>
+    </article>
+  </section>
+</main>
+
+<%- include("../../partials/footer") %>
