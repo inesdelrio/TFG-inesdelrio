@@ -1,0 +1,19 @@
+<%- include("../../partials/head", {
+  extraHead: '<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIINfQADfHKEFo2lM4JEZjR1Ppnm6xfsBBE=" crossorigin="" />'
+}) %>
+<%- include("../../partials/header") %>
+
+<main class="container dashboard-page">
+  <section class="dashboard-hero">
+    <h1>Mapa de eventos</h1>
+    <p>Consulta en Madrid las actividades disponibles con ubicacion registrada.</p>
+  </section>
+
+  <%- include("../../partials/map-shell", {
+    markers,
+    mapLabel: "Mapa de eventos disponibles en Madrid",
+    emptyMessage: "Todavia no hay eventos activos, futuros y verificados con coordenadas."
+  }) %>
+</main>
+
+<%- include("../../partials/footer") %>

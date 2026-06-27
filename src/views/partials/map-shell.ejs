@@ -1,0 +1,24 @@
+<section class="status-card map-shell">
+  <% if (markers.length === 0) { %>
+    <div class="feedback-banner error">
+      <strong>Sin ubicaciones disponibles.</strong>
+      <p><%= emptyMessage %></p>
+    </div>
+  <% } %>
+
+  <div
+    id="volunred-map"
+    class="map-container"
+    data-empty-message="<%= emptyMessage %>"
+    aria-label="<%= mapLabel %>"
+  ></div>
+
+  <script type="application/json" id="map-markers-json"><%- JSON.stringify(markers).replace(/</g, "\\u003c") %></script>
+</section>
+
+<script
+  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+  crossorigin=""
+></script>
+<script src="/js/map-view.js"></script>

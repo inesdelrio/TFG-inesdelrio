@@ -2,6 +2,7 @@ const express = require("express");
 
 const adminProfileController = require("../../controllers/admin/admin-profile.controller");
 const entityModerationController = require("../../controllers/admin/entity-moderation.controller");
+const adminMapController = require("../../controllers/maps/admin-map.controller");
 const { requireAuth, requireRole } = require("../../middlewares/auth.middleware");
 
 const router = express.Router();
@@ -17,6 +18,12 @@ router.get(
   requireAuth,
   requireRole("ADMIN"),
   adminProfileController.renderAdminProfile,
+);
+router.get(
+  "/admin/mapa",
+  requireAuth,
+  requireRole("ADMIN"),
+  adminMapController.renderAdminMap,
 );
 router.get(
   "/admin/entidades",

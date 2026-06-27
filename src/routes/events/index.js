@@ -4,11 +4,18 @@ const eventAttendanceController = require("../../controllers/events/event-attend
 const eventRegistrationController = require("../../controllers/events/event-registration.controller");
 const eventManagementController = require("../../controllers/events/event-management.controller");
 const eventPublicationController = require("../../controllers/events/event-publication.controller");
+const eventMapController = require("../../controllers/maps/event-map.controller");
 const { requireAuth, requireRole } = require("../../middlewares/auth.middleware");
 
 const router = express.Router();
 
 router.get("/eventos", eventPublicationController.renderPublicEventsList);
+router.get(
+  "/eventos/mapa",
+  requireAuth,
+  requireRole("VOLUNTARIO"),
+  eventMapController.renderVolunteerEventMap,
+);
 router.get(
   "/eventos/nuevo",
   requireAuth,

@@ -10,6 +10,16 @@ const {
   testSearchMadridAddressesActionReturnsMockedSuggestions,
 } = require("./controllers/maps/geocoding.controller.test");
 const {
+  testRenderAdminMapRendersMapView,
+  testRenderEntityMapRendersMapView,
+  testRenderVolunteerEventMapRendersMapView,
+} = require("./controllers/maps/map.controller.test");
+const {
+  testAdminMapRouteIsProtected,
+  testEntityMapRouteIsProtected,
+  testVolunteerMapRouteIsProtected,
+} = require("./routes/map-routes.test");
+const {
   testValidateMadridLocationAcceptsCoordinatesInsideMadrid,
   testValidateMadridLocationAcceptsRequiredAddressWhenCoordinatesAreValid,
   testValidateMadridLocationRejectsCoordinatesOutsideMadrid,
@@ -23,6 +33,17 @@ const {
   testSearchMadridAddressesMapsValidMadridResults,
   testSearchMadridAddressesReturnsEmptyForShortQuery,
 } = require("./services/maps/search-madrid-addresses.service.test");
+const {
+  testListAdminMapMarkersIncludesEventsAndEntitiesWithCoordinates,
+} = require("./services/maps/list-admin-map-markers.service.test");
+const {
+  testListEntityMapMarkersIncludesOwnOrganizationAndEvents,
+  testListEntityMapMarkersRejectsMissingEntity,
+} = require("./services/maps/list-entity-map-markers.service.test");
+const {
+  testListVolunteerEventMapMarkersExcludesEventsWithoutCoordinates,
+  testListVolunteerEventMapMarkersReturnsVisibleFutureEventsWithCoordinates,
+} = require("./services/maps/list-volunteer-event-map-markers.service.test");
 const {
   testListAdminEntitiesFiltersPendingEntities,
   testListAdminEntitiesFiltersRejectedEntities,
@@ -408,6 +429,50 @@ async function main() {
   await runTest(
     "searchMadridAddressesAction devuelve sugerencias mockeadas",
     testSearchMadridAddressesActionReturnsMockedSuggestions,
+  );
+  await runTest(
+    "listVolunteerEventMapMarkers devuelve eventos visibles con coordenadas",
+    testListVolunteerEventMapMarkersReturnsVisibleFutureEventsWithCoordinates,
+  );
+  await runTest(
+    "listVolunteerEventMapMarkers excluye eventos sin coordenadas",
+    testListVolunteerEventMapMarkersExcludesEventsWithoutCoordinates,
+  );
+  await runTest(
+    "listEntityMapMarkers incluye organizacion propia y eventos propios",
+    testListEntityMapMarkersIncludesOwnOrganizationAndEvents,
+  );
+  await runTest(
+    "listEntityMapMarkers rechaza entidad inexistente",
+    testListEntityMapMarkersRejectsMissingEntity,
+  );
+  await runTest(
+    "listAdminMapMarkers incluye eventos y entidades con coordenadas",
+    testListAdminMapMarkersIncludesEventsAndEntitiesWithCoordinates,
+  );
+  await runTest(
+    "renderVolunteerEventMap renderiza la vista de mapa de eventos",
+    testRenderVolunteerEventMapRendersMapView,
+  );
+  await runTest(
+    "renderEntityMap renderiza la vista de mapa de entidad",
+    testRenderEntityMapRendersMapView,
+  );
+  await runTest(
+    "renderAdminMap renderiza la vista de mapa admin",
+    testRenderAdminMapRendersMapView,
+  );
+  await runTest(
+    "ruta de mapa de voluntario queda protegida",
+    testVolunteerMapRouteIsProtected,
+  );
+  await runTest(
+    "ruta de mapa de entidad queda protegida",
+    testEntityMapRouteIsProtected,
+  );
+  await runTest(
+    "ruta de mapa admin queda protegida",
+    testAdminMapRouteIsProtected,
   );
   await runTest(
     "listAdminEntities devuelve todas las entidades sin filtro",

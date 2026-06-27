@@ -553,6 +553,49 @@ code {
   outline: 2px solid var(--color-primary-border);
 }
 
+.map-shell {
+  display: grid;
+  gap: 1rem;
+}
+
+.map-container {
+  width: 100%;
+  min-height: 34rem;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.map-marker-icon {
+  background: transparent;
+  border: 0;
+}
+
+.map-marker-icon span {
+  display: block;
+  width: 22px;
+  height: 22px;
+  border: 3px solid #fff;
+  border-radius: 999px;
+  box-shadow: 0 4px 10px rgba(27, 31, 35, 0.28);
+}
+
+.map-popup {
+  display: grid;
+  gap: 0.35rem;
+  min-width: 13rem;
+}
+
+.map-popup h3,
+.map-popup p {
+  margin: 0;
+}
+
+.map-popup a {
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
 .feedback-banner {
   margin-bottom: 1rem;
   padding: 1rem 1.1rem;

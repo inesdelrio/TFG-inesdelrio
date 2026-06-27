@@ -3,6 +3,7 @@ const express = require("express");
 const accountDeletionController = require("../../controllers/accounts/account-deletion.controller");
 const entityCalendarController = require("../../controllers/entities/entity-calendar.controller");
 const entityHistoryController = require("../../controllers/entities/entity-history.controller");
+const entityMapController = require("../../controllers/maps/entity-map.controller");
 const entityProfileController = require("../../controllers/entities/entity-profile.controller");
 const entitySubscriptionController = require("../../controllers/entities/entity-subscription.controller");
 const entityRegistrationController = require("../../controllers/entities/entity-registration.controller");
@@ -33,6 +34,12 @@ router.get(
   requireAuth,
   requireRole("ENTIDAD"),
   entityHistoryController.renderEntityHistory,
+);
+router.get(
+  "/entidad/mapa",
+  requireAuth,
+  requireRole("ENTIDAD"),
+  entityMapController.renderEntityMap,
 );
 router.get(
   "/entidades/solicitud",
