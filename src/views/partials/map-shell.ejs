@@ -1,17 +1,19 @@
 <section class="status-card map-shell">
   <% if (markers.length === 0) { %>
-    <div class="feedback-banner error">
+    <div class="map-empty-state">
       <strong>Sin ubicaciones disponibles.</strong>
       <p><%= emptyMessage %></p>
     </div>
   <% } %>
 
-  <div
-    id="volunred-map"
-    class="map-container"
-    data-empty-message="<%= emptyMessage %>"
-    aria-label="<%= mapLabel %>"
-  ></div>
+  <div class="map-frame">
+    <div
+      id="volunred-map"
+      class="map-container"
+      data-empty-message="<%= emptyMessage %>"
+      aria-label="<%= mapLabel %>"
+    ></div>
+  </div>
 
   <script type="application/json" id="map-markers-json"><%- JSON.stringify(markers).replace(/</g, "\\u003c") %></script>
 </section>

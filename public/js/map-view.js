@@ -1,4 +1,4 @@
-(() => {
+function initializeVolunRedMap() {
   const mapElement = document.getElementById("volunred-map");
   const markerDataElement = document.getElementById("map-markers-json");
 
@@ -8,8 +8,8 @@
 
   const MADRID_CENTER = [40.4168, -3.7038];
   const MADRID_BOUNDS = [
-    [40.312, -3.889],
-    [40.643, -3.517],
+    [40.31, -3.83],
+    [40.55, -3.52],
   ];
 
   function parseMarkers() {
@@ -76,6 +76,10 @@
     return container;
   }
 
+  function refreshMapSize() {
+    map.invalidateSize();
+  }
+
   const markers = parseMarkers();
   const map = L.map(mapElement, {
     maxBounds: MADRID_BOUNDS,
@@ -88,8 +92,12 @@
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
   }).addTo(map);
 
+  refreshMapSize();
+  setTimeout(refreshMapSize, 150);
+
   if (markers.length === 0) {
-    map.fitBounds(MADRID_BOUNDS);
+    map.setView(MADRID_CENTER, 12);
+    setTimeout(refreshMapSize, 150);
     return;
   }
 
@@ -110,8 +118,26 @@
   markerGroup.addTo(map);
 
   if (markerGroup.getLayers().length > 0) {
-    map.fitBounds(markerGroup.getBounds().pad(0.2));
+    refreshMapSize();
+    map.fitBounds(markerGroup.getBounds().pad(0.2), {
+      padding: [24, 24],
+      maxZoom: 14,
+    });
+    setTimeout(() => {
+      refreshMapSize();
+      map.fitBounds(markerGroup.getBounds().pad(0.2), {
+        padding: [24, 24],
+        maxZoom: 14,
+      });
+    }, 150);
   } else {
-    map.fitBounds(MADRID_BOUNDS);
+    map.setView(MADRID_CENTER, 12);
+    setTimeout(refreshMapSize, 150);
   }
-})();
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initializeVolunRedMap);
+} else {
+  initializeVolunRedMap();
+}
