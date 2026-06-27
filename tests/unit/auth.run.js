@@ -47,6 +47,7 @@ const {
 } = require("./services/maps/list-entity-map-markers.service.test");
 const {
   testListVolunteerEventMapMarkersExcludesEventsWithoutCoordinates,
+  testListVolunteerEventMapMarkersMarksRegisteredAndFullEvents,
   testListVolunteerEventMapMarkersReturnsVisibleFutureEventsWithCoordinates,
 } = require("./services/maps/list-volunteer-event-map-markers.service.test");
 const {
@@ -115,6 +116,10 @@ const {
   testCreateEventCreatesEventForVerifiedEntity,
   testCreateEventRejectsUnverifiedEntity,
 } = require("./services/events/create-event.service.test");
+const {
+  testGetEventColorDataHandlesMissingId,
+  testGetEventColorDataReturnsStablePastelData,
+} = require("./services/events/event-color.service.test");
 const {
   testCreateEventRegistrationCreatesRegistrationWhenSlotsAvailable,
   testCreateEventRegistrationNotifiesWhenLastSlotIsFilled,
@@ -246,6 +251,16 @@ const {
   testEventCreateViewUsesSingleAddressSearchBlock,
   testEventEditViewUsesSingleAddressSearchBlock,
 } = require("./views/event-form.view.test");
+const {
+  testHeadPartialIncludesBfcacheRefreshScript,
+} = require("./views/head.view.test");
+const {
+  testMapViewScriptBuildsExternalSelectedCard,
+  testMapViewScriptUsesMarkerPastelColor,
+} = require("./views/map-view.script.test");
+const {
+  testMapShellIncludesSelectedItemCard,
+} = require("./views/map-shell.view.test");
 const {
   testGetEntityLoginRedirectPathSendsPendingEntityToStatus,
   testGetEntityLoginRedirectPathSendsRejectedEntityToStatus,
@@ -521,6 +536,10 @@ async function main() {
     testListVolunteerEventMapMarkersReturnsVisibleFutureEventsWithCoordinates,
   );
   await runTest(
+    "listVolunteerEventMapMarkers refleja inscripcion y eventos completos",
+    testListVolunteerEventMapMarkersMarksRegisteredAndFullEvents,
+  );
+  await runTest(
     "listVolunteerEventMapMarkers excluye eventos sin coordenadas",
     testListVolunteerEventMapMarkersExcludesEventsWithoutCoordinates,
   );
@@ -647,6 +666,14 @@ async function main() {
   await runTest(
     "createEvent bloquea una entidad no verificada",
     testCreateEventRejectsUnverifiedEntity,
+  );
+  await runTest(
+    "getEventColorData devuelve color pastel estable",
+    testGetEventColorDataReturnsStablePastelData,
+  );
+  await runTest(
+    "getEventColorData gestiona eventos sin id",
+    testGetEventColorDataHandlesMissingId,
   );
   await runTest(
     "createEventRegistration crea una inscripcion con plazas disponibles",
@@ -807,6 +834,22 @@ async function main() {
   await runTest(
     "partial address-search soporta address hidden",
     testAddressSearchPartialSupportsHiddenAddressInput,
+  );
+  await runTest(
+    "partial head recarga paginas restauradas desde BFCache",
+    testHeadPartialIncludesBfcacheRefreshScript,
+  );
+  await runTest(
+    "map-view muestra tarjeta externa al seleccionar marcador",
+    testMapViewScriptBuildsExternalSelectedCard,
+  );
+  await runTest(
+    "map-view usa el color pastel del marcador",
+    testMapViewScriptUsesMarkerPastelColor,
+  );
+  await runTest(
+    "map-shell incluye tarjeta externa de elemento seleccionado",
+    testMapShellIncludesSelectedItemCard,
   );
   await runTest(
     "validateLoginInput detecta datos invalidos en el login",

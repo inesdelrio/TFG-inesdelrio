@@ -4,6 +4,7 @@ const {
   expandEventDates,
   formatLocalDate,
 } = require("../events/event-date-range.service");
+const { getEventColorData } = require("../events/event-color.service");
 
 function padMonth(value) {
   return String(value).padStart(2, "0");
@@ -51,6 +52,7 @@ function buildCalendarDays(registrations, monthStart, nextMonthStart) {
         endsAt: registration.event.endsAt,
         city: registration.event.city,
         entityName: registration.event.entity.organizationName,
+        colorClass: getEventColorData(registration.event.id).colorClass,
       });
 
       dayEvents.sort((left, right) => new Date(left.startsAt) - new Date(right.startsAt));

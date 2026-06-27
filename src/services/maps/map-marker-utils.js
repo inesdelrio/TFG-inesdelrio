@@ -1,3 +1,5 @@
+const { getEventColorData } = require("../events/event-color.service");
+
 function toNumber(value) {
   if (value === null || value === undefined) {
     return null;
@@ -38,6 +40,8 @@ function hasCoordinates(record) {
 }
 
 function mapEventToMarker(event, overrides = {}) {
+  const colorData = getEventColorData(event.id);
+
   return {
     id: event.id,
     type: "EVENT",
@@ -52,6 +56,10 @@ function mapEventToMarker(event, overrides = {}) {
     latitude: toNumber(event.latitude),
     longitude: toNumber(event.longitude),
     url: `/eventos/${event.id}`,
+    detailUrl: `/eventos/${event.id}`,
+    colorClass: colorData.colorClass,
+    markerColor: colorData.markerColor,
+    markerTextColor: colorData.markerTextColor,
     ...overrides,
   };
 }

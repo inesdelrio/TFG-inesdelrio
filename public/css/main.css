@@ -613,6 +613,13 @@ code {
   padding: 1rem;
 }
 
+.map-content-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 0.38fr);
+  gap: 1rem;
+  align-items: stretch;
+}
+
 .map-frame {
   width: 100%;
   height: clamp(380px, 58vh, 560px);
@@ -684,34 +691,56 @@ code {
   color: var(--muted);
 }
 
-.map-marker-icon {
-  background: transparent;
-  border: 0;
+.map-selected-card {
+  align-content: start;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: 0 12px 28px rgba(31, 26, 23, 0.08);
+  background: rgba(255, 253, 249, 0.96);
+  padding: 1rem;
+  min-height: 12rem;
 }
 
-.map-marker-icon span {
-  display: block;
-  width: 22px;
-  height: 22px;
-  border: 3px solid #fff;
-  border-radius: 999px;
-  box-shadow: 0 4px 10px rgba(27, 31, 35, 0.28);
+.map-selected-card[hidden] {
+  display: none;
 }
 
-.map-popup {
-  display: grid;
-  gap: 0.35rem;
-  min-width: 13rem;
-}
-
-.map-popup h3,
-.map-popup p {
+.map-selected-card h2,
+.map-selected-card p {
   margin: 0;
 }
 
-.map-popup a {
+.map-selected-content {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.map-selected-content h2 {
+  color: var(--ink);
+  font-size: 1.25rem;
+  line-height: 1.25;
+}
+
+.map-selected-content p {
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.map-selected-content p strong {
+  color: var(--ink);
+}
+
+.map-selected-eyebrow {
   color: var(--color-primary);
-  font-weight: 700;
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.map-selected-link {
+  justify-self: start;
+  margin-top: 0.35rem;
 }
 
 .feedback-banner {
@@ -1309,7 +1338,15 @@ code {
     padding: 0.75rem;
   }
 
+  .map-content-grid {
+    grid-template-columns: 1fr;
+  }
+
   .map-frame {
     height: clamp(320px, 55vh, 460px);
+  }
+
+  .map-selected-card {
+    min-height: auto;
   }
 }

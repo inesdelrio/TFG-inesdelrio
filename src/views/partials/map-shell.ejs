@@ -6,13 +6,20 @@
     </div>
   <% } %>
 
-  <div class="map-frame">
-    <div
-      id="volunred-map"
-      class="map-container"
-      data-empty-message="<%= emptyMessage %>"
-      aria-label="<%= mapLabel %>"
-    ></div>
+  <div class="map-content-grid">
+    <div class="map-frame">
+      <div
+        id="volunred-map"
+        class="map-container"
+        data-empty-message="<%= emptyMessage %>"
+        aria-label="<%= mapLabel %>"
+      ></div>
+    </div>
+
+    <aside class="map-selected-card" data-selected-map-item>
+      <h2>Evento seleccionado</h2>
+      <p>Selecciona un evento en el mapa para ver su información.</p>
+    </aside>
   </div>
 
   <script type="application/json" id="map-markers-json"><%- JSON.stringify(markers).replace(/</g, "\\u003c") %></script>

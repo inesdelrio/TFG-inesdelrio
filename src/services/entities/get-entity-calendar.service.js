@@ -7,6 +7,7 @@ const {
   expandEventDates,
   formatLocalDate,
 } = require("../events/event-date-range.service");
+const { getEventColorData } = require("../events/event-color.service");
 
 function buildEntityCalendarDays(events, monthStart, nextMonthStart) {
   const eventsByDay = new Map();
@@ -15,7 +16,10 @@ function buildEntityCalendarDays(events, monthStart, nextMonthStart) {
     expandEventDates(event, monthStart, nextMonthStart).forEach((isoDate) => {
       const dayEvents = eventsByDay.get(isoDate) || [];
 
-      dayEvents.push(event);
+      dayEvents.push({
+        ...event,
+        colorClass: getEventColorData(event.id).colorClass,
+      });
       dayEvents.sort((left, right) => new Date(left.startsAt) - new Date(right.startsAt));
       eventsByDay.set(isoDate, dayEvents);
     });

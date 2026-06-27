@@ -2,7 +2,9 @@ const listVolunteerEventMapMarkers = require("../../services/maps/list-volunteer
 
 async function renderVolunteerEventMap(req, res, next) {
   try {
-    const markers = await listVolunteerEventMapMarkers();
+    const markers = await listVolunteerEventMapMarkers({
+      volunteerUserId: req.currentUser ? req.currentUser.id : null,
+    });
 
     return res.render("pages/events/map", {
       pageTitle: "Mapa de eventos",

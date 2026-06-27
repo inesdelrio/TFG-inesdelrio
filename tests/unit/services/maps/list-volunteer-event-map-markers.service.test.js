@@ -22,6 +22,11 @@ async function testListVolunteerEventMapMarkersReturnsVisibleFutureEventsWithCoo
                 normalizedAddress: "Calle Mayor 10, Madrid",
                 latitude: "40.416800",
                 longitude: "-3.703800",
+                totalSlots: 3,
+                _count: {
+                  registrations: 1,
+                },
+                registrations: [],
                 entity: {
                   organizationName: "Fundacion Horizonte",
                 },
@@ -45,6 +50,72 @@ async function testListVolunteerEventMapMarkersReturnsVisibleFutureEventsWithCoo
   assert.equal(markers[0].entityName, "Fundacion Horizonte");
   assert.equal(markers[0].latitude, 40.4168);
   assert.equal(markers[0].url, "/eventos/7");
+  assert.equal(markers[0].detailUrl, "/eventos/7");
+  assert.equal(markers[0].availableSlots, 2);
+  assert.equal(markers[0].registrationState, "AVAILABLE");
+  assert.equal(markers[0].actionLabel, "Inscribirme");
+  assert.equal(markers[0].colorClass, "calendar-event-pastel-1");
+  assert.match(markers[0].markerColor, /^#[0-9a-f]{6}$/i);
+}
+
+async function testListVolunteerEventMapMarkersMarksRegisteredAndFullEvents() {
+  const markers = await listVolunteerEventMapMarkers(
+    {
+      volunteerUserId: 42,
+      now: new Date("2099-01-01T00:00:00.000Z"),
+    },
+    {
+      prisma: {
+        event: {
+          findMany: async (query) => {
+            assert.deepEqual(query.include.registrations.where, {
+              volunteerUserId: 42,
+            });
+
+            return [
+              {
+                id: 8,
+                title: "Evento inscrito",
+                startsAt: new Date("2099-02-01T10:00:00.000Z"),
+                address: "Calle A",
+                latitude: "40.416800",
+                longitude: "-3.703800",
+                totalSlots: 5,
+                _count: {
+                  registrations: 2,
+                },
+                registrations: [{ id: 1 }],
+                entity: {
+                  organizationName: "Entidad",
+                },
+              },
+              {
+                id: 9,
+                title: "Evento completo",
+                startsAt: new Date("2099-02-01T10:00:00.000Z"),
+                address: "Calle B",
+                latitude: "40.416800",
+                longitude: "-3.703800",
+                totalSlots: 2,
+                _count: {
+                  registrations: 2,
+                },
+                registrations: [],
+                entity: {
+                  organizationName: "Entidad",
+                },
+              },
+            ];
+          },
+        },
+      },
+    },
+  );
+
+  assert.equal(markers[0].registrationState, "REGISTERED");
+  assert.equal(markers[0].actionLabel, "Ya estas inscrito");
+  assert.equal(markers[1].registrationState, "FULL");
+  assert.equal(markers[1].actionLabel, "Evento completo");
 }
 
 async function testListVolunteerEventMapMarkersExcludesEventsWithoutCoordinates() {
@@ -70,5 +141,6 @@ async function testListVolunteerEventMapMarkersExcludesEventsWithoutCoordinates(
 
 module.exports = {
   testListVolunteerEventMapMarkersExcludesEventsWithoutCoordinates,
+  testListVolunteerEventMapMarkersMarksRegisteredAndFullEvents,
   testListVolunteerEventMapMarkersReturnsVisibleFutureEventsWithCoordinates,
 };

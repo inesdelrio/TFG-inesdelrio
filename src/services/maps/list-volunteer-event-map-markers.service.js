@@ -21,6 +21,21 @@ async function listVolunteerEventMapMarkers(input = {}, dependencies = {}) {
       },
     },
     include: {
+      _count: {
+        select: {
+          registrations: true,
+        },
+      },
+      registrations: input.volunteerUserId
+        ? {
+            where: {
+              volunteerUserId: input.volunteerUserId,
+            },
+            select: {
+              id: true,
+            },
+          }
+        : false,
       entity: {
         select: {
           organizationName: true,
@@ -32,7 +47,30 @@ async function listVolunteerEventMapMarkers(input = {}, dependencies = {}) {
     },
   });
 
-  return events.map(mapEventToMarker);
+  return events.map((event) => {
+    const registrationsCount = event._count ? event._count.registrations : 0;
+    const availableSlots = Math.max(0, event.totalSlots - registrationsCount);
+    const isRegistered = Array.isArray(event.registrations) && event.registrations.length > 0;
+    const registrationState = isRegistered
+      ? "REGISTERED"
+      : availableSlots === 0
+        ? "FULL"
+        : "AVAILABLE";
+    const actionLabel =
+      registrationState === "REGISTERED"
+        ? "Ya estas inscrito"
+        : registrationState === "FULL"
+          ? "Evento completo"
+          : "Inscribirme";
+
+    return mapEventToMarker(event, {
+      availableSlots,
+      registrationsCount,
+      registrationState,
+      actionLabel,
+      canRegister: registrationState === "AVAILABLE",
+    });
+  });
 }
 
 module.exports = listVolunteerEventMapMarkers;

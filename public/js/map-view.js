@@ -1,6 +1,7 @@
 function initializeVolunRedMap() {
   const mapElement = document.getElementById("volunred-map");
   const markerDataElement = document.getElementById("map-markers-json");
+  const selectedCard = document.querySelector("[data-selected-map-item]");
 
   if (!mapElement || !markerDataElement || typeof L === "undefined") {
     return;
@@ -21,20 +22,8 @@ function initializeVolunRedMap() {
     }
   }
 
-  function createIcon(type) {
-    const color = type === "ENTITY" ? "#2f6f8f" : "#bd3e3d";
-
-    return L.divIcon({
-      className: "map-marker-icon",
-      html: `<span style="background:${color}"></span>`,
-      iconSize: [22, 22],
-      iconAnchor: [11, 11],
-      popupAnchor: [0, -10],
-    });
-  }
-
   function appendText(parent, label, value) {
-    if (!value) {
+    if (value === null || value === undefined || value === "") {
       return;
     }
 
@@ -46,18 +35,51 @@ function initializeVolunRedMap() {
     parent.appendChild(paragraph);
   }
 
-  function buildPopup(marker) {
-    const container = document.createElement("div");
-    container.className = "map-popup";
+  function appendDetailLink(parent, marker) {
+    const href = marker.type === "EVENT" ? marker.detailUrl || marker.url : marker.url;
 
-    const title = document.createElement("h3");
+    if (!href) {
+      return;
+    }
+
+    const link = document.createElement("a");
+    link.className = "primary-button map-selected-link";
+    link.href = href;
+    link.textContent = marker.type === "EVENT" ? "Ver detalles e inscribirme" : "Ver detalle";
+    parent.appendChild(link);
+  }
+
+  function showSelectedMapItem(marker) {
+    if (!selectedCard) {
+      return;
+    }
+
+    selectedCard.hidden = false;
+    selectedCard.replaceChildren();
+
+    const container = document.createElement("div");
+    container.className = "map-selected-content";
+
+    const eyebrow = document.createElement("span");
+    eyebrow.className = "map-selected-eyebrow";
+    eyebrow.textContent = marker.type === "EVENT" ? "Evento seleccionado" : "Ubicacion seleccionada";
+    container.appendChild(eyebrow);
+
+    const title = document.createElement("h2");
     title.textContent = marker.type === "ENTITY" ? marker.name : marker.title;
     container.appendChild(title);
 
     if (marker.type === "EVENT") {
       appendText(container, "Entidad", marker.entityName);
       appendText(container, "Fecha", marker.startsAtLabel);
-      appendText(container, "Estado", marker.publicationStatus);
+      appendText(container, "Hora", marker.timeLabel);
+      appendText(container, "Plazas disponibles", marker.availableSlots);
+
+      if (marker.registrationState === "FULL") {
+        appendText(container, "Estado", "Evento completo");
+      } else if (marker.registrationState === "REGISTERED") {
+        appendText(container, "Estado", "Ya estas inscrito");
+      }
     } else {
       appendText(container, "Estado", marker.validationStatus);
       appendText(container, "Email", marker.contactEmail || marker.requesterEmail);
@@ -65,15 +87,8 @@ function initializeVolunRedMap() {
     }
 
     appendText(container, "Direccion", marker.normalizedAddress || marker.address);
-
-    if (marker.url) {
-      const link = document.createElement("a");
-      link.href = marker.url;
-      link.textContent = "Ver detalle";
-      container.appendChild(link);
-    }
-
-    return container;
+    appendDetailLink(container, marker);
+    selectedCard.appendChild(container);
   }
 
   function refreshMapSize() {
@@ -108,11 +123,33 @@ function initializeVolunRedMap() {
       return;
     }
 
-    L.marker([marker.latitude, marker.longitude], {
-      icon: createIcon(marker.type),
-    })
-      .bindPopup(buildPopup(marker))
-      .addTo(markerGroup);
+    const coordinates = [marker.latitude, marker.longitude];
+    const fillColor = marker.type === "ENTITY" ? "#2f6f8f" : marker.markerColor || "#bd3e3d";
+    const strokeColor = marker.type === "ENTITY" ? "#24556f" : marker.markerTextColor || fillColor;
+
+    L.circleMarker(coordinates, {
+      radius: 8,
+      color: strokeColor,
+      fillColor,
+      fillOpacity: 0.88,
+      weight: 2,
+      interactive: false,
+    }).addTo(markerGroup);
+
+    const clickArea = L.circleMarker(coordinates, {
+      radius: 18,
+      color: fillColor,
+      fillColor,
+      fillOpacity: 0,
+      opacity: 0,
+      weight: 0,
+      interactive: true,
+      bubblingMouseEvents: false,
+    }).addTo(markerGroup);
+
+    clickArea.on("click", () => {
+      showSelectedMapItem(marker);
+    });
   });
 
   markerGroup.addTo(map);
