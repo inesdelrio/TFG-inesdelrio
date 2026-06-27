@@ -6,6 +6,15 @@ const {
   testGetAdminDashboardSummaryReturnsBasicCounters,
 } = require("./services/admin/get-admin-dashboard-summary.service.test");
 const {
+  testValidateMadridLocationAcceptsCoordinatesInsideMadrid,
+  testValidateMadridLocationAcceptsRequiredAddressWhenCoordinatesAreValid,
+  testValidateMadridLocationRejectsCoordinatesOutsideMadrid,
+  testValidateMadridLocationRejectsMissingAddressWhenRequired,
+  testValidateMadridLocationRejectsMissingLatitude,
+  testValidateMadridLocationRejectsMissingLongitude,
+  testValidateMadridLocationRejectsNonNumericValues,
+} = require("./services/maps/validate-madrid-location.service.test");
+const {
   testListAdminEntitiesFiltersPendingEntities,
   testListAdminEntitiesFiltersRejectedEntities,
   testListAdminEntitiesFiltersSuspendedEntities,
@@ -338,6 +347,34 @@ async function main() {
   await runTest(
     "getAdminDashboardSummary devuelve metricas basicas del panel admin",
     testGetAdminDashboardSummaryReturnsBasicCounters,
+  );
+  await runTest(
+    "validateMadridLocation acepta coordenadas dentro de Madrid",
+    testValidateMadridLocationAcceptsCoordinatesInsideMadrid,
+  );
+  await runTest(
+    "validateMadridLocation rechaza latitud vacia",
+    testValidateMadridLocationRejectsMissingLatitude,
+  );
+  await runTest(
+    "validateMadridLocation rechaza longitud vacia",
+    testValidateMadridLocationRejectsMissingLongitude,
+  );
+  await runTest(
+    "validateMadridLocation rechaza valores no numericos",
+    testValidateMadridLocationRejectsNonNumericValues,
+  );
+  await runTest(
+    "validateMadridLocation rechaza coordenadas fuera de Madrid",
+    testValidateMadridLocationRejectsCoordinatesOutsideMadrid,
+  );
+  await runTest(
+    "validateMadridLocation rechaza direccion vacia cuando se exige",
+    testValidateMadridLocationRejectsMissingAddressWhenRequired,
+  );
+  await runTest(
+    "validateMadridLocation acepta direccion exigida con coordenadas validas",
+    testValidateMadridLocationAcceptsRequiredAddressWhenCoordinatesAreValid,
   );
   await runTest(
     "listAdminEntities devuelve todas las entidades sin filtro",

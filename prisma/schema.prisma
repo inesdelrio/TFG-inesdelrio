@@ -60,6 +60,9 @@ model Entity {
   contactPhone        String
   city                String
   address             String
+  latitude            Decimal?               @db.Decimal(9, 6)
+  longitude           Decimal?               @db.Decimal(9, 6)
+  normalizedAddress   String?
   description         String
   supportingInfo      String?
   validationStatus    EntityValidationStatus @default(PENDIENTE)
@@ -79,6 +82,9 @@ model Event {
   description       String
   city              String
   address           String
+  latitude          Decimal?               @db.Decimal(9, 6)
+  longitude         Decimal?               @db.Decimal(9, 6)
+  normalizedAddress String?
   startsAt          DateTime
   totalSlots        Int
   publicationStatus EventPublicationStatus @default(ACTIVO)
