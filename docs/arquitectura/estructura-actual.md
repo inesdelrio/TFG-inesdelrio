@@ -81,6 +81,13 @@ Centraliza configuración reutilizable, como el cliente Prisma.
 
 Contiene CSS, imágenes y JavaScript servido como recurso estático.
 
+Los recursos de identidad visual se ubican en `public/img/brand/`:
+
+- `volunred-logo-horizontal.png`: logo horizontal usado en la cabecera.
+- `volunred-logo.png`: isotipo usado como favicon.
+
+El color principal `#bd3e3d` y la tipografia `Quicksand` se aplican desde `public/css/main.css`, con la carga de fuente y favicon centralizada en `src/views/partials/head.ejs`.
+
 ### `prisma/`
 
 Contiene el esquema de datos y el histórico de migraciones.
@@ -96,6 +103,15 @@ Contiene pruebas unitarias y estructura preparada para pruebas de integración.
 - Servicios reutilizables para lógica de negocio.
 - Validaciones en servidor para proteger operaciones principales.
 - Uso de roles para controlar el acceso.
+- Navegacion comun por rol desde `src/views/partials/header.ejs`.
 - Uso de migraciones para versionar cambios de base de datos.
 - Documentación individual de requisitos.
 - Pruebas unitarias para servicios y controladores principales.
+
+## Navegacion y areas principales
+
+- Voluntario: `Inicio`, `Eventos`, `Calendario`, `Notificaciones`, `Historial`, `Perfil`.
+- Entidad: `Inicio`, `Eventos`, `Calendario`, `Notificaciones`, `Historial`, `Perfil`.
+- Administrador: perfil en `/admin/perfil` y panel operativo en `/admin/area`.
+
+El login de administrador redirige a `/admin/perfil`. Desde esa pantalla se muestran datos basicos de la cuenta y se permite cerrar sesion; el panel administrativo sigue accesible desde el menu.

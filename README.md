@@ -14,6 +14,7 @@ La aplicación incluye actualmente:
 - Consulta, validación y cambio de estado de entidades por parte de administración.
 - Perfil editable de voluntario.
 - Perfil editable de entidad.
+- Perfil de administrador con datos basicos y cierre de sesion.
 - Publicación, edición y retirada de eventos por entidades verificadas.
 - Listado, detalle y filtros de eventos.
 - Inscripción y cancelación de inscripción en eventos.
@@ -24,6 +25,7 @@ La aplicación incluye actualmente:
 - Calendario personal del voluntario.
 - Calendario de entidad.
 - Historial de participación.
+- Historial de eventos de entidad.
 - Consulta de inscritos dentro del detalle del evento para entidades propietarias.
 - Panel de administración con listado de entidades, filtros por estado y detalle gestionable.
 - Moderación de publicaciones.
@@ -34,8 +36,25 @@ La aplicación incluye actualmente:
 La aplicación contempla tres roles:
 
 - `VOLUNTARIO`: usuario que consulta eventos, sigue entidades, se inscribe en actividades y consulta su calendario e historial.
-- `ENTIDAD`: organización validada que puede publicar eventos, consultar inscritos y gestionar su información.
-- `ADMIN`: usuario administrador encargado de consultar y gestionar entidades, cambiar su estado y moderar contenido.
+- `ENTIDAD`: organización validada que puede publicar eventos, consultar inscritos, revisar calendario e historial y gestionar su información.
+- `ADMIN`: usuario administrador encargado de consultar y gestionar entidades, cambiar su estado, moderar contenido y acceder a su perfil administrativo.
+
+## Identidad visual
+
+La interfaz usa la identidad visual de VolunRed de forma centralizada:
+
+- Logo horizontal en la cabecera: `public/img/brand/volunred-logo-horizontal.png`.
+- Isotipo como favicon: `public/img/brand/volunred-logo.png`.
+- Color principal: `#bd3e3d`, definido en `public/css/main.css`.
+- Tipografia principal: `Quicksand`, cargada en `src/views/partials/head.ejs`.
+- La cabecera comun se renderiza desde `src/views/partials/header.ejs`.
+
+## Navegacion principal
+
+- Sin sesion: `Inicio`, `Eventos`, `Registro`, `Iniciar sesion`.
+- Voluntario: `Inicio`, `Eventos`, `Calendario`, `Notificaciones`, `Historial`, `Perfil`.
+- Entidad: `Inicio`, `Eventos`, `Calendario`, `Notificaciones`, `Historial`, `Perfil`.
+- Administrador: acceso a `Perfil` en `/admin/perfil` y `Panel admin` en `/admin/area`.
 
 ## Stack técnico
 

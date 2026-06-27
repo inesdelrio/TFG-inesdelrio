@@ -19,8 +19,8 @@ El sistema se plantea como una plataforma centralizada donde las entidades puede
 ## 3. Roles
 
 - `VOLUNTARIO`: consulta eventos, sigue entidades, se inscribe, consulta notificaciones, calendario e historial.
-- `ENTIDAD`: publica eventos, gestiona su perfil, consulta inscritos y revisa su calendario.
-- `ADMIN`: consulta y gestiona entidades, revisa métricas básicas y modera publicaciones.
+- `ENTIDAD`: publica eventos, gestiona su perfil, consulta inscritos y revisa su calendario e historial.
+- `ADMIN`: consulta y gestiona entidades, revisa métricas básicas, modera publicaciones y dispone de perfil propio.
 
 ## 4. Estado general
 
@@ -37,10 +37,12 @@ El proyecto cuenta con los flujos principales implementados:
 - notificaciones internas;
 - calendario de voluntario;
 - calendario de entidad;
-- historial;
+- historial de participacion del voluntario;
+- historial de eventos de entidad;
 - consulta de inscritos;
 - moderación administrativa;
-- baja definitiva de cuenta.
+- baja definitiva de cuenta;
+- identidad visual integrada con logo, favicon, color principal y tipografia propia.
 
 ## 5. Requisitos cerrados
 
@@ -78,6 +80,7 @@ El proyecto cuenta con los flujos principales implementados:
 - RF23 — Mejora de estado y navegación en inscripciones
 - RF24 — Cancelación de seguimiento de entidades
 - RF25 — Mejora de notificaciones internas
+- RF33 — Historial de eventos de entidad
 
 ### Requisitos no funcionales
 
@@ -117,6 +120,20 @@ El proyecto utiliza PostgreSQL como base de datos relacional y Prisma como ORM. 
 
 La autenticación se realiza con `express-session`. Las contraseñas se almacenan usando `bcrypt`, evitando guardar contraseñas en texto plano.
 
+El inicio de sesion redirige al area principal correspondiente al rol. En el caso de `ADMIN`, la redireccion actual apunta a `/admin/perfil`, desde donde se muestran los datos basicos del administrador y se permite cerrar sesion. El panel operativo de administracion sigue disponible desde `/admin/area`.
+
+### Identidad visual
+
+La interfaz usa el logo horizontal de VolunRed en la cabecera y el isotipo como favicon. Los recursos principales estan en `public/img/brand/volunred-logo-horizontal.png` y `public/img/brand/volunred-logo.png`.
+
+La paleta centraliza el color principal `#bd3e3d` en `public/css/main.css`. La fuente principal es `Quicksand`, cargada en `src/views/partials/head.ejs`, y la navegacion comun se mantiene en `src/views/partials/header.ejs`.
+
+### Navegacion por rol
+
+- Voluntario: `Inicio`, `Eventos`, `Calendario`, `Notificaciones`, `Historial`, `Perfil`.
+- Entidad: `Inicio`, `Eventos`, `Calendario`, `Notificaciones`, `Historial`, `Perfil`.
+- Administrador: `Perfil` y `Panel admin`.
+
 ### Separación por capas
 
 El proyecto separa rutas, controladores, servicios, validadores y vistas. La lógica de negocio debe mantenerse preferentemente en servicios para facilitar pruebas y mantenimiento.
@@ -134,6 +151,10 @@ La administración puede retirar publicaciones y suspender entidades. Una entida
 ### Baja definitiva de cuenta
 
 La eliminación de cuenta se implementa como baja definitiva con anonimización y bloqueo de acceso, no como borrado físico directo del usuario. Esta decisión evita romper relaciones con eventos, inscripciones, notificaciones y logs administrativos.
+
+### Historial de eventos de entidad
+
+Las entidades disponen de `/entidad/historial` para consultar los eventos que han dado de alta. La vista separa eventos futuros y pasados, y muestra estado, fecha, ubicacion e inscritos.
 
 ## 8. Reglas de implementación y mantenimiento
 
