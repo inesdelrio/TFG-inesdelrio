@@ -3,6 +3,11 @@ const getOwnedEventById = require("../../services/events/get-owned-event-by-id.s
 const updateOwnedEvent = require("../../services/events/update-owned-event.service");
 const deleteOwnedEvent = require("../../services/events/delete-owned-event.service");
 const { validateEventInput } = require("../../validators/events/event.validator");
+const { formatLocalDate } = require("../../services/events/event-date-range.service");
+
+function formatLocalTime(date) {
+  return `${String(date.getHours()).padStart(2, "0")}:${String(date.getMinutes()).padStart(2, "0")}`;
+}
 
 function buildEditViewModel(overrides = {}) {
   return {
@@ -16,8 +21,10 @@ function buildEditViewModel(overrides = {}) {
       latitude: "",
       longitude: "",
       normalizedAddress: "",
-      eventDate: "",
-      eventTime: "",
+      startDate: "",
+      endDate: "",
+      startTime: "",
+      endTime: "",
       totalSlots: "",
     },
     errors: {},
@@ -28,6 +35,7 @@ function buildEditViewModel(overrides = {}) {
 
 function mapEventToFormData(event) {
   const startsAt = new Date(event.startsAt);
+  const endsAt = event.endsAt ? new Date(event.endsAt) : startsAt;
 
   return {
     id: event.id,
@@ -38,8 +46,10 @@ function mapEventToFormData(event) {
     latitude: event.latitude ? String(event.latitude) : "",
     longitude: event.longitude ? String(event.longitude) : "",
     normalizedAddress: event.normalizedAddress || "",
-    eventDate: startsAt.toISOString().slice(0, 10),
-    eventTime: startsAt.toISOString().slice(11, 16),
+    startDate: formatLocalDate(startsAt),
+    endDate: formatLocalDate(endsAt),
+    startTime: formatLocalTime(startsAt),
+    endTime: formatLocalTime(endsAt),
     totalSlots: String(event.totalSlots),
   };
 }
@@ -114,8 +124,12 @@ async function updateEvent(req, res, next) {
       latitude: sanitizedData.latitude,
       longitude: sanitizedData.longitude,
       normalizedAddress: sanitizedData.normalizedAddress,
-      eventDate: sanitizedData.eventDate,
-      eventTime: sanitizedData.eventTime,
+      startDate: sanitizedData.startDate,
+      endDate: sanitizedData.endDate,
+      startTime: sanitizedData.startTime,
+      endTime: sanitizedData.endTime,
+      startsAt: sanitizedData.startsAt,
+      endsAt: sanitizedData.endsAt,
       totalSlots: sanitizedData.totalSlots,
     });
 

@@ -1,4 +1,5 @@
 const prisma = require("../../config/prisma");
+const { getEffectiveEndsAt } = require("../events/event-date-range.service");
 
 function mapRegistrationToActivity(registration) {
   const event = registration.event;
@@ -9,6 +10,7 @@ function mapRegistrationToActivity(registration) {
     title: event.title,
     entityName: event.entity.organizationName,
     startsAt: event.startsAt,
+    endsAt: event.endsAt,
     city: event.city,
     address: event.address,
     publicationStatus: event.publicationStatus,
@@ -49,8 +51,8 @@ async function getVolunteerHistory(input, dependencies = {}) {
   const activities = registrations.map(mapRegistrationToActivity);
 
   return {
-    futureActivities: activities.filter((activity) => activity.startsAt >= now),
-    pastActivities: activities.filter((activity) => activity.startsAt < now),
+    futureActivities: activities.filter((activity) => getEffectiveEndsAt(activity) >= now),
+    pastActivities: activities.filter((activity) => getEffectiveEndsAt(activity) < now),
   };
 }
 

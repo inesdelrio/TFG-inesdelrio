@@ -24,12 +24,23 @@
     <% } %>
 
     <% publications.forEach((publication) => { %>
+      <%
+        const publicationStart = new Date(publication.startsAt);
+        const publicationEnd = new Date(publication.endsAt || publication.startsAt);
+        const publicationStartDate = publicationStart.toLocaleDateString("es-ES");
+        const publicationEndDate = publicationEnd.toLocaleDateString("es-ES");
+        const publicationStartTime = publicationStart.toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" });
+        const publicationEndTime = publicationEnd.toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" });
+        const publicationDateLabel = publicationStartDate === publicationEndDate
+          ? `${publicationStartDate}, de ${publicationStartTime} a ${publicationEndTime}`
+          : `Del ${publicationStartDate} al ${publicationEndDate}, de ${publicationStartTime} a ${publicationEndTime}`;
+      %>
       <article class="status-card">
         <h2><%= publication.title %></h2>
         <p><strong>Entidad:</strong> <%= publication.entity.organizationName %></p>
         <p><strong>Estado entidad:</strong> <%= publication.entity.validationStatus %></p>
         <p><strong>Estado publicacion:</strong> <%= publication.publicationStatus %></p>
-        <p><strong>Fecha:</strong> <%= new Date(publication.startsAt).toLocaleString("es-ES") %></p>
+        <p><strong>Fecha:</strong> <%= publicationDateLabel %></p>
         <p><strong>Inscritos:</strong> <%= publication._count.registrations %></p>
         <% if (publication.publicationStatus === "ACTIVO" && publication.entity.validationStatus === "VERIFICADA") { %>
           <a class="secondary-link" href="/eventos/<%= publication.id %>">Ver detalle publico</a>

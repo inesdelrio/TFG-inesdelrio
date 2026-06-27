@@ -44,6 +44,8 @@ async function testListPublishedEventsReturnsOrderedPaginatedActiveEvents() {
   assert.equal(result.pagination.totalPages, 3);
   assert.equal(calls[1].query.skip, 3);
   assert.equal(calls[1].query.take, 3);
+  assert.equal(calls[0].where.OR[0].endsAt.gte.getTime(), new Date("2099-01-01T00:00:00Z").getTime());
+  assert.equal(calls[0].where.OR[1].endsAt, null);
   assert.deepEqual(calls[1].query.include._count, {
     select: {
       registrations: true,
@@ -84,8 +86,9 @@ async function testListPublishedEventsAppliesCombinedFilters() {
 
   assert.equal(calls[0].where.city.contains, "Madrid");
   assert.equal(calls[0].where.entity.organizationName.contains, "Horizonte");
-  assert.ok(calls[0].where.startsAt.gte);
-  assert.ok(calls[0].where.startsAt.lte);
+  assert.ok(calls[0].where.AND[0].startsAt.lt);
+  assert.ok(calls[0].where.AND[0].OR[0].endsAt.gte);
+  assert.equal(calls[0].where.AND[0].OR[1].endsAt, null);
 }
 
 async function testListPublishedEventsExcludesWithdrawnEventsAndSuspendedEntities() {

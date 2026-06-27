@@ -2,25 +2,23 @@ const prisma = require("../../config/prisma");
 const {
   getMonthMeta,
 } = require("../volunteers/get-volunteer-calendar.service");
-
-function padMonth(value) {
-  return String(value).padStart(2, "0");
-}
-
-function formatLocalDate(date) {
-  return `${date.getFullYear()}-${padMonth(date.getMonth() + 1)}-${padMonth(date.getDate())}`;
-}
+const {
+  buildEventRangeWhere,
+  expandEventDates,
+  formatLocalDate,
+} = require("../events/event-date-range.service");
 
 function buildEntityCalendarDays(events, monthStart, nextMonthStart) {
   const eventsByDay = new Map();
 
   events.forEach((event) => {
-    const isoDate = formatLocalDate(new Date(event.startsAt));
-    const dayEvents = eventsByDay.get(isoDate) || [];
+    expandEventDates(event, monthStart, nextMonthStart).forEach((isoDate) => {
+      const dayEvents = eventsByDay.get(isoDate) || [];
 
-    dayEvents.push(event);
-    dayEvents.sort((left, right) => new Date(left.startsAt) - new Date(right.startsAt));
-    eventsByDay.set(isoDate, dayEvents);
+      dayEvents.push(event);
+      dayEvents.sort((left, right) => new Date(left.startsAt) - new Date(right.startsAt));
+      eventsByDay.set(isoDate, dayEvents);
+    });
   });
 
   const totalDays = new Date(
@@ -94,15 +92,13 @@ async function getEntityCalendar(input, dependencies = {}) {
   const events = await prismaClient.event.findMany({
     where: {
       entityId: entity.id,
-      startsAt: {
-        gte: monthMeta.monthStart,
-        lt: monthMeta.nextMonthStart,
-      },
+      ...buildEventRangeWhere(monthMeta.monthStart, monthMeta.nextMonthStart),
     },
     select: {
       id: true,
       title: true,
       startsAt: true,
+      endsAt: true,
       city: true,
       address: true,
     },

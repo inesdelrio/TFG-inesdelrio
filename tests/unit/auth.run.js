@@ -183,11 +183,13 @@ const {
   testUpdateVolunteerProfileUpdatesAllowedFields,
 } = require("./services/volunteers/update-volunteer-profile.service.test");
 const {
+  testBuildCalendarDaysExpandsMultiDayEvents,
   testBuildCalendarDaysPlacesEventsOnTheirDate,
   testGetMonthMetaNormalizesInvalidMonthInput,
   testGetVolunteerCalendarLoadsRegisteredEventsForSelectedMonth,
 } = require("./services/volunteers/get-volunteer-calendar.service.test");
 const {
+  testBuildEntityCalendarDaysExpandsMultiDayEvents,
   testBuildEntityCalendarDaysPlacesEventsOnTheirDate,
   testGetEntityCalendarLoadsOnlyOwnedEventsForSelectedMonth,
   testGetEntityCalendarReturnsEmptyMonthWithoutEvents,
@@ -219,8 +221,12 @@ const {
   testValidateEventFiltersSanitizesInvalidDateAndText,
 } = require("./validators/events/event-filters.validator.test");
 const {
+  testValidateEventInputAcceptsMultiDayEvent,
   testValidateEventInputAcceptsValidMadridLocation,
+  testValidateEventInputRejectsEndTimeBeforeStartTimeOnSameDay,
   testValidateEventInputRejectsInvalidData,
+  testValidateEventInputRejectsInvalidDateRange,
+  testValidateEventInputRejectsLongerThanThirtyDays,
   testValidateEventInputRejectsMissingMadridLocation,
 } = require("./validators/events/event.validator.test");
 const {
@@ -743,6 +749,10 @@ async function main() {
     testBuildEntityCalendarDaysPlacesEventsOnTheirDate,
   );
   await runTest(
+    "buildEntityCalendarDays expande eventos de varios dias",
+    testBuildEntityCalendarDaysExpandsMultiDayEvents,
+  );
+  await runTest(
     "getEntityCalendar devuelve un mes vacio sin eventos",
     testGetEntityCalendarReturnsEmptyMonthWithoutEvents,
   );
@@ -765,6 +775,10 @@ async function main() {
   await runTest(
     "buildCalendarDays coloca los eventos en su fecha correspondiente",
     testBuildCalendarDaysPlacesEventsOnTheirDate,
+  );
+  await runTest(
+    "buildCalendarDays expande eventos de varios dias",
+    testBuildCalendarDaysExpandsMultiDayEvents,
   );
   await runTest(
     "getMonthMeta normaliza meses invalidos",
@@ -837,6 +851,22 @@ async function main() {
   await runTest(
     "validateEventInput acepta ubicacion valida de Madrid",
     testValidateEventInputAcceptsValidMadridLocation,
+  );
+  await runTest(
+    "validateEventInput acepta eventos de varios dias",
+    testValidateEventInputAcceptsMultiDayEvent,
+  );
+  await runTest(
+    "validateEventInput rechaza fecha fin anterior",
+    testValidateEventInputRejectsInvalidDateRange,
+  );
+  await runTest(
+    "validateEventInput rechaza hora fin no posterior en el mismo dia",
+    testValidateEventInputRejectsEndTimeBeforeStartTimeOnSameDay,
+  );
+  await runTest(
+    "validateEventInput rechaza duraciones superiores a 30 dias",
+    testValidateEventInputRejectsLongerThanThirtyDays,
   );
   await runTest(
     "validateEventFilters normaliza filtros de busqueda invalidos",

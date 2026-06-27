@@ -9,6 +9,12 @@
   --color-primary-dark: #983130;
   --color-primary-light: rgba(189, 62, 61, 0.12);
   --color-primary-border: rgba(189, 62, 61, 0.35);
+  --color-success: #2f7d4f;
+  --color-success-light: rgba(47, 125, 79, 0.12);
+  --color-success-border: rgba(47, 125, 79, 0.28);
+  --color-info: #2f6f9f;
+  --color-info-light: rgba(47, 111, 159, 0.12);
+  --color-info-border: rgba(47, 111, 159, 0.28);
   --font-main: "Quicksand", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
@@ -369,6 +375,16 @@ code {
   gap: 1rem;
 }
 
+.event-datetime-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: rgba(255, 253, 249, 0.72);
+}
+
 .filter-shell {
   margin-bottom: 1.5rem;
 }
@@ -532,7 +548,26 @@ code {
 }
 
 .address-search-button {
+  appearance: none;
+  border: 0;
+  border-radius: 999px;
+  padding: 0.85rem 1.15rem;
+  background: var(--color-primary);
+  color: #fff;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
   white-space: nowrap;
+}
+
+.address-search-button:hover,
+.address-search-button:focus-visible {
+  background: var(--color-primary-dark);
+}
+
+.address-search-button:focus-visible {
+  outline: 2px solid var(--color-primary-border);
+  outline-offset: 2px;
 }
 
 .address-search-status {
@@ -565,10 +600,10 @@ code {
 }
 
 .address-search [data-address-selected]:not(:empty) {
-  border: 1px solid var(--color-primary-border);
+  border: 1px solid var(--color-info-border);
   border-radius: 12px;
-  background: var(--color-primary-light);
-  color: var(--color-primary-dark);
+  background: var(--color-info-light);
+  color: #24557a;
   padding: 0.7rem 0.8rem;
 }
 
@@ -695,8 +730,9 @@ code {
 }
 
 .feedback-banner.success {
-  background: var(--color-primary-light);
-  border: 1px solid rgba(189, 62, 61, 0.2);
+  background: var(--color-success-light);
+  border: 1px solid var(--color-success-border);
+  color: #1f4f34;
 }
 
 .feedback-banner.error {
@@ -904,13 +940,43 @@ code {
   text-decoration: none;
   padding: 0.2rem 0.45rem;
   border-radius: 6px;
-  background: var(--color-primary-light);
-  color: var(--color-primary);
+  background: #f8dfcf;
+  color: #8a4630;
   font-size: 0.78rem;
   line-height: 1.15;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.calendar-event-pastel-0 {
+  background: #f8dfcf;
+  color: #8a4630;
+}
+
+.calendar-event-pastel-1 {
+  background: #f7d6d6;
+  color: #8a3636;
+}
+
+.calendar-event-pastel-2 {
+  background: #dcefdc;
+  color: #356f43;
+}
+
+.calendar-event-pastel-3 {
+  background: #dcebf8;
+  color: #315f86;
+}
+
+.calendar-event-pastel-4 {
+  background: #f8edc6;
+  color: #7a6422;
+}
+
+.calendar-event-pastel-5 {
+  background: #eadcf8;
+  color: #65427d;
 }
 
 .calendar-event strong {
@@ -1224,6 +1290,11 @@ code {
 
   .form-row-group {
     grid-template-columns: 1fr;
+  }
+
+  .event-datetime-grid {
+    grid-template-columns: 1fr;
+    padding: 0.85rem;
   }
 
   .event-detail-grid {

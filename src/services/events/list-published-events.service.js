@@ -1,4 +1,8 @@
 const prisma = require("../../config/prisma");
+const {
+  buildCurrentOrFutureWhere,
+  buildEventRangeWhere,
+} = require("./event-date-range.service");
 
 async function listPublishedEvents(options = {}, dependencies = {}) {
   const prismaClient = dependencies.prisma || prisma;
@@ -8,9 +12,7 @@ async function listPublishedEvents(options = {}, dependencies = {}) {
   const filters = options.filters || {};
 
   const where = {
-    startsAt: {
-      gte: now,
-    },
+    ...buildCurrentOrFutureWhere(now),
     publicationStatus: "ACTIVO",
     entity: {
       validationStatus: "VERIFICADA",
@@ -21,10 +23,7 @@ async function listPublishedEvents(options = {}, dependencies = {}) {
     const dateStart = new Date(`${filters.eventDate}T00:00:00`);
     const dateEnd = new Date(`${filters.eventDate}T23:59:59.999`);
 
-    where.startsAt = {
-      gte: dateStart > now ? dateStart : now,
-      lte: dateEnd,
-    };
+    where.AND = [buildEventRangeWhere(dateStart, dateEnd)];
   }
 
   if (filters.city) {

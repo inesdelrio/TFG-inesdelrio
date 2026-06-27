@@ -3,10 +3,7 @@ const {
   assertEntityCanPublishEvents,
 } = require("../entities/entity-publication-access.service");
 const createEventNotifications = require("../notifications/create-event-notifications.service");
-
-function buildStartsAt(eventDate, eventTime) {
-  return new Date(`${eventDate}T${eventTime}:00`);
-}
+const { parseLocalDateTime } = require("./event-date-range.service");
 
 async function createEvent(input, dependencies = {}) {
   const prismaClient = dependencies.prisma || prisma;
@@ -37,7 +34,13 @@ async function createEvent(input, dependencies = {}) {
       latitude: input.latitude,
       longitude: input.longitude,
       normalizedAddress: input.normalizedAddress,
-      startsAt: buildStartsAt(input.eventDate, input.eventTime),
+      startsAt: input.startsAt || parseLocalDateTime(input.startDate || input.eventDate, input.startTime || input.eventTime),
+      endsAt:
+        input.endsAt ||
+        parseLocalDateTime(
+          input.endDate || input.startDate || input.eventDate,
+          input.endTime || input.startTime || input.eventTime,
+        ),
       totalSlots: Number(input.totalSlots),
       entityId: entity.id,
     },

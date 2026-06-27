@@ -1,10 +1,7 @@
 const prisma = require("../../config/prisma");
 const getOwnedEventById = require("./get-owned-event-by-id.service");
 const createEventNotifications = require("../notifications/create-event-notifications.service");
-
-function buildStartsAt(eventDate, eventTime) {
-  return new Date(`${eventDate}T${eventTime}:00`);
-}
+const { parseLocalDateTime } = require("./event-date-range.service");
 
 async function updateOwnedEvent(input, dependencies = {}) {
   const prismaClient = dependencies.prisma || prisma;
@@ -32,7 +29,13 @@ async function updateOwnedEvent(input, dependencies = {}) {
       latitude: input.latitude,
       longitude: input.longitude,
       normalizedAddress: input.normalizedAddress,
-      startsAt: buildStartsAt(input.eventDate, input.eventTime),
+      startsAt: input.startsAt || parseLocalDateTime(input.startDate || input.eventDate, input.startTime || input.eventTime),
+      endsAt:
+        input.endsAt ||
+        parseLocalDateTime(
+          input.endDate || input.startDate || input.eventDate,
+          input.endTime || input.startTime || input.eventTime,
+        ),
       totalSlots: Number(input.totalSlots),
     },
   });

@@ -28,8 +28,10 @@ async function testCreateEventCreatesEventForVerifiedEntity() {
       description: "Jornada de apoyo logistico para recogida y clasificacion de alimentos.",
       city: "Madrid",
       address: "Calle Luna 8",
-      eventDate: "2099-05-20",
-      eventTime: "10:30",
+      startDate: "2099-05-20",
+      endDate: "2099-05-22",
+      startTime: "10:30",
+      endTime: "12:00",
       totalSlots: "25",
       latitude: 40.4168,
       longitude: -3.7038,
@@ -49,6 +51,8 @@ async function testCreateEventCreatesEventForVerifiedEntity() {
   assert.equal(createdPayload.latitude, 40.4168);
   assert.equal(createdPayload.longitude, -3.7038);
   assert.equal(createdPayload.normalizedAddress, "Calle Luna 8, Madrid");
+  assert.equal(createdPayload.startsAt.getTime(), new Date("2099-05-20T10:30:00").getTime());
+  assert.equal(createdPayload.endsAt.getTime(), new Date("2099-05-22T12:00:00").getTime());
   assert.equal(event.title, "Recogida solidaria");
   assert.deepEqual(notificationsPayload, {
     entityId: 3,

@@ -1,10 +1,12 @@
 const prisma = require("../../config/prisma");
+const { getEffectiveEndsAt } = require("../events/event-date-range.service");
 
 function mapEventToHistoryItem(event) {
   return {
     eventId: event.id,
     title: event.title,
     startsAt: event.startsAt,
+    endsAt: event.endsAt,
     city: event.city,
     address: event.address,
     publicationStatus: event.publicationStatus,
@@ -42,6 +44,7 @@ async function getEntityHistory(input, dependencies = {}) {
       id: true,
       title: true,
       startsAt: true,
+      endsAt: true,
       city: true,
       address: true,
       publicationStatus: true,
@@ -61,8 +64,8 @@ async function getEntityHistory(input, dependencies = {}) {
 
   return {
     entity,
-    futureEvents: historyEvents.filter((event) => event.startsAt >= now),
-    pastEvents: historyEvents.filter((event) => event.startsAt < now),
+    futureEvents: historyEvents.filter((event) => getEffectiveEndsAt(event) >= now),
+    pastEvents: historyEvents.filter((event) => getEffectiveEndsAt(event) < now),
   };
 }
 

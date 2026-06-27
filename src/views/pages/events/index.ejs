@@ -65,6 +65,15 @@
           const registrationsCount = event._count?.registrations ?? 0;
           const availableSlots = Math.max(0, event.totalSlots - registrationsCount);
           const isFull = availableSlots === 0;
+          const eventStart = new Date(event.startsAt);
+          const eventEnd = new Date(event.endsAt || event.startsAt);
+          const eventStartDate = eventStart.toLocaleDateString("es-ES");
+          const eventEndDate = eventEnd.toLocaleDateString("es-ES");
+          const eventStartTime = eventStart.toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" });
+          const eventEndTime = eventEnd.toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" });
+          const eventDateLabel = eventStartDate === eventEndDate
+            ? `${eventStartDate}, de ${eventStartTime} a ${eventEndTime}`
+            : `Del ${eventStartDate} al ${eventEndDate}, de ${eventStartTime} a ${eventEndTime}`;
         %>
         <article class="status-card event-card <%= isFull ? "event-card-full" : "" %>">
           <% if (isFull) { %>
@@ -72,7 +81,7 @@
           <% } %>
           <h2><%= event.title %></h2>
           <p><strong>Entidad:</strong> <%= event.entity.organizationName %></p>
-          <p><strong>Fecha:</strong> <%= new Date(event.startsAt).toLocaleString("es-ES") %></p>
+          <p><strong>Fecha:</strong> <%= eventDateLabel %></p>
           <p><strong>Ciudad:</strong> <%= event.city %></p>
           <p><strong>Direccion:</strong> <%= event.address %></p>
           <p><strong>Plazas:</strong> <%= availableSlots %> disponibles de <%= event.totalSlots %></p>

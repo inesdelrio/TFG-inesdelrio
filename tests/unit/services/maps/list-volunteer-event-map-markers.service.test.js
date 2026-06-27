@@ -17,6 +17,7 @@ async function testListVolunteerEventMapMarkersReturnsVisibleFutureEventsWithCoo
                 id: 7,
                 title: "Recogida solidaria",
                 startsAt: new Date("2099-02-01T10:00:00.000Z"),
+                endsAt: new Date("2099-02-02T12:00:00.000Z"),
                 address: "Calle Mayor 10",
                 normalizedAddress: "Calle Mayor 10, Madrid",
                 latitude: "40.416800",
@@ -33,7 +34,9 @@ async function testListVolunteerEventMapMarkersReturnsVisibleFutureEventsWithCoo
   );
 
   assert.equal(receivedQuery.where.publicationStatus, "ACTIVO");
-  assert.deepEqual(receivedQuery.where.startsAt, { gte: now });
+  assert.equal(receivedQuery.where.OR[0].endsAt.gte, now);
+  assert.equal(receivedQuery.where.OR[1].endsAt, null);
+  assert.deepEqual(receivedQuery.where.OR[1].startsAt, { gte: now });
   assert.deepEqual(receivedQuery.where.entity, { validationStatus: "VERIFICADA" });
   assert.deepEqual(receivedQuery.where.latitude, { not: null });
   assert.equal(markers.length, 1);

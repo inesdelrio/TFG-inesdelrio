@@ -1,11 +1,12 @@
 const prisma = require("../../config/prisma");
+const {
+  buildEventRangeWhere,
+  expandEventDates,
+  formatLocalDate,
+} = require("../events/event-date-range.service");
 
 function padMonth(value) {
   return String(value).padStart(2, "0");
-}
-
-function formatLocalDate(date) {
-  return `${date.getFullYear()}-${padMonth(date.getMonth() + 1)}-${padMonth(date.getDate())}`;
 }
 
 function getMonthMeta(rawMonth, baseDate = new Date()) {
@@ -40,20 +41,21 @@ function buildCalendarDays(registrations, monthStart, nextMonthStart) {
   const eventsByDay = new Map();
 
   registrations.forEach((registration) => {
-    const eventDate = new Date(registration.event.startsAt);
-    const isoDate = formatLocalDate(eventDate);
-    const dayEvents = eventsByDay.get(isoDate) || [];
+    expandEventDates(registration.event, monthStart, nextMonthStart).forEach((isoDate) => {
+      const dayEvents = eventsByDay.get(isoDate) || [];
 
-    dayEvents.push({
-      id: registration.event.id,
-      title: registration.event.title,
-      startsAt: registration.event.startsAt,
-      city: registration.event.city,
-      entityName: registration.event.entity.organizationName,
+      dayEvents.push({
+        id: registration.event.id,
+        title: registration.event.title,
+        startsAt: registration.event.startsAt,
+        endsAt: registration.event.endsAt,
+        city: registration.event.city,
+        entityName: registration.event.entity.organizationName,
+      });
+
+      dayEvents.sort((left, right) => new Date(left.startsAt) - new Date(right.startsAt));
+      eventsByDay.set(isoDate, dayEvents);
     });
-
-    dayEvents.sort((left, right) => new Date(left.startsAt) - new Date(right.startsAt));
-    eventsByDay.set(isoDate, dayEvents);
   });
 
   const totalDays = new Date(
@@ -113,10 +115,7 @@ async function getVolunteerCalendar(input, dependencies = {}) {
     where: {
       volunteerUserId: input.volunteerUserId,
       event: {
-        startsAt: {
-          gte: monthMeta.monthStart,
-          lt: monthMeta.nextMonthStart,
-        },
+        ...buildEventRangeWhere(monthMeta.monthStart, monthMeta.nextMonthStart),
       },
     },
     include: {
@@ -150,6 +149,7 @@ async function getVolunteerCalendar(input, dependencies = {}) {
 
 module.exports = {
   buildCalendarDays,
+  formatLocalDate,
   getMonthMeta,
   getVolunteerCalendar,
 };

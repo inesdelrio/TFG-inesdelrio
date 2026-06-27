@@ -48,11 +48,11 @@
               <% } %>
 
               <% day.events.forEach((event) => { %>
-                <a class="calendar-event" href="/eventos/<%= event.id %>">
+                <% const pastelClass = `calendar-event-pastel-${Math.abs(Number(event.id) || 0) % 6}`; %>
+                <a class="calendar-event <%= pastelClass %>" href="/eventos/<%= event.id %>">
                   <strong><%= event.title %></strong>
                   <span>
                     <%= new Date(event.startsAt).toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" }) %>
-                    · <%= event.city %>
                   </span>
                 </a>
               <% }) %>

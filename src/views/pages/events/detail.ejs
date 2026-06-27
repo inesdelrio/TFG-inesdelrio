@@ -1,5 +1,16 @@
 <%- include("../../partials/head") %>
 <%- include("../../partials/header") %>
+<%
+  const eventStart = new Date(event.startsAt);
+  const eventEnd = new Date(event.endsAt || event.startsAt);
+  const eventStartDate = eventStart.toLocaleDateString("es-ES");
+  const eventEndDate = eventEnd.toLocaleDateString("es-ES");
+  const eventStartTime = eventStart.toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" });
+  const eventEndTime = eventEnd.toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" });
+  const eventDateLabel = eventStartDate === eventEndDate
+    ? `${eventStartDate}, de ${eventStartTime} a ${eventEndTime}`
+    : `Del ${eventStartDate} al ${eventEndDate}, de ${eventStartTime} a ${eventEndTime}`;
+%>
 
 <main class="container dashboard-page">
   <section class="dashboard-hero">
@@ -20,7 +31,7 @@
 
   <% if (Array.isArray(registrations)) { %>
     <section>
-      <p><strong>Fecha y hora:</strong> <%= new Date(event.startsAt).toLocaleString("es-ES") %></p>
+      <p><strong>Fecha y hora:</strong> <%= eventDateLabel %></p>
       <p><strong>Ubicacion:</strong> <%= event.city %>, <%= event.address %></p>
       <p><strong>Plazas:</strong> <%= availableSlots %> disponibles de <%= event.totalSlots %></p>
 
@@ -36,7 +47,7 @@
   <section class="event-detail-grid">
     <article class="status-card">
       <h2>Datos del evento</h2>
-      <p><strong>Fecha y hora:</strong> <%= new Date(event.startsAt).toLocaleString("es-ES") %></p>
+      <p><strong>Fecha y hora:</strong> <%= eventDateLabel %></p>
       <p><strong>Ciudad:</strong> <%= event.city %></p>
       <p><strong>Direccion:</strong> <%= event.address %></p>
       <p><strong>Plazas totales:</strong> <%= event.totalSlots %></p>

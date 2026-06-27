@@ -27,6 +27,7 @@ async function testGetEntityCalendarLoadsOnlyOwnedEventsForSelectedMonth() {
             title: "Banco de alimentos",
             city: "Madrid",
             startsAt: new Date(2099, 4, 10, 9, 0, 0),
+            endsAt: new Date(2099, 4, 10, 11, 0, 0),
           },
         ];
       },
@@ -46,13 +47,11 @@ async function testGetEntityCalendarLoadsOnlyOwnedEventsForSelectedMonth() {
   assert.equal(receivedEntityQuery.where.requestedByUserId, 8);
   assert.equal(receivedEventsQuery.where.entityId, 4);
   assert.equal(
-    receivedEventsQuery.where.startsAt.gte.getTime(),
-    new Date(2099, 4, 1).getTime(),
-  );
-  assert.equal(
     receivedEventsQuery.where.startsAt.lt.getTime(),
     new Date(2099, 5, 1).getTime(),
   );
+  assert.equal(receivedEventsQuery.where.OR[0].endsAt.gte.getTime(), new Date(2099, 4, 1).getTime());
+  assert.equal(receivedEventsQuery.where.OR[1].endsAt, null);
   assert.equal(result.monthKey, "2099-05");
   assert.equal(result.events.length, 1);
 }
@@ -68,6 +67,7 @@ function testBuildEntityCalendarDaysPlacesEventsOnTheirDate() {
         title: "Banco de alimentos",
         city: "Madrid",
         startsAt,
+        endsAt: new Date(2099, 4, 10, 11, 0, 0),
       },
     ],
     monthStart,
@@ -82,6 +82,32 @@ function testBuildEntityCalendarDaysPlacesEventsOnTheirDate() {
   assert.ok(matchingDay);
   assert.equal(matchingDay.events[0].title, "Banco de alimentos");
   assert.equal(matchingDay.events[0].city, "Madrid");
+}
+
+function testBuildEntityCalendarDaysExpandsMultiDayEvents() {
+  const monthStart = new Date(2099, 4, 1);
+  const nextMonthStart = new Date(2099, 5, 1);
+  const weeks = buildEntityCalendarDays(
+    [
+      {
+        id: 17,
+        title: "Banco de alimentos",
+        city: "Madrid",
+        startsAt: new Date(2099, 4, 10, 9, 0, 0),
+        endsAt: new Date(2099, 4, 12, 11, 0, 0),
+      },
+    ],
+    monthStart,
+    nextMonthStart,
+  );
+
+  const daysWithEvent = weeks
+    .flat()
+    .filter(Boolean)
+    .filter((day) => day.events.some((event) => event.id === 17))
+    .map((day) => day.dayNumber);
+
+  assert.deepEqual(daysWithEvent, [10, 11, 12]);
 }
 
 async function testGetEntityCalendarReturnsEmptyMonthWithoutEvents() {
@@ -113,6 +139,7 @@ async function testGetEntityCalendarReturnsEmptyMonthWithoutEvents() {
 }
 
 module.exports = {
+  testBuildEntityCalendarDaysExpandsMultiDayEvents,
   testBuildEntityCalendarDaysPlacesEventsOnTheirDate,
   testGetEntityCalendarLoadsOnlyOwnedEventsForSelectedMonth,
   testGetEntityCalendarReturnsEmptyMonthWithoutEvents,

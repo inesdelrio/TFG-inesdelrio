@@ -22,8 +22,10 @@ async function testUpdateOwnedEventUpdatesEventForOwnerEntity() {
       description: "Descripcion actualizada para el evento de prueba con suficiente longitud.",
       city: "Leganes",
       address: "Calle Sur 99",
-      eventDate: "2099-08-10",
-      eventTime: "18:00",
+      startDate: "2099-08-10",
+      endDate: "2099-08-11",
+      startTime: "18:00",
+      endTime: "20:00",
       totalSlots: "40",
       latitude: 40.4168,
       longitude: -3.7038,
@@ -52,6 +54,8 @@ async function testUpdateOwnedEventUpdatesEventForOwnerEntity() {
   assert.equal(updatedPayload.latitude, 40.4168);
   assert.equal(updatedPayload.longitude, -3.7038);
   assert.equal(updatedPayload.normalizedAddress, "Calle Sur 99, Madrid");
+  assert.equal(updatedPayload.startsAt.getTime(), new Date("2099-08-10T18:00:00").getTime());
+  assert.equal(updatedPayload.endsAt.getTime(), new Date("2099-08-11T20:00:00").getTime());
   assert.equal(event.city, "Leganes");
   assert.deepEqual(notificationsPayload, {
     entityId: 5,

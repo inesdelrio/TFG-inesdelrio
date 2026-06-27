@@ -86,6 +86,7 @@ model Event {
   longitude         Decimal?               @db.Decimal(9, 6)
   normalizedAddress String?
   startsAt          DateTime
+  endsAt            DateTime?
   totalSlots        Int
   publicationStatus EventPublicationStatus @default(ACTIVO)
   entity            Entity                 @relation(fields: [entityId], references: [id])

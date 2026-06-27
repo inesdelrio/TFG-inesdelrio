@@ -18,10 +18,21 @@
       <% } %>
 
       <% history.futureActivities.forEach((activity) => { %>
+        <%
+          const activityStart = new Date(activity.startsAt);
+          const activityEnd = new Date(activity.endsAt || activity.startsAt);
+          const activityStartDate = activityStart.toLocaleDateString("es-ES");
+          const activityEndDate = activityEnd.toLocaleDateString("es-ES");
+          const activityStartTime = activityStart.toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" });
+          const activityEndTime = activityEnd.toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" });
+          const activityDateLabel = activityStartDate === activityEndDate
+            ? `${activityStartDate}, de ${activityStartTime} a ${activityEndTime}`
+            : `Del ${activityStartDate} al ${activityEndDate}, de ${activityStartTime} a ${activityEndTime}`;
+        %>
         <div class="history-item">
           <h3><%= activity.title %></h3>
           <p><strong>Entidad:</strong> <%= activity.entityName %></p>
-          <p><strong>Fecha:</strong> <%= new Date(activity.startsAt).toLocaleString("es-ES", { dateStyle: "medium", timeStyle: "short" }) %></p>
+          <p><strong>Fecha:</strong> <%= activityDateLabel %></p>
           <p><strong>Ubicacion:</strong> <%= activity.city %> - <%= activity.address %></p>
           <p><strong>Estado:</strong> <%= activity.publicationStatus %></p>
 
@@ -42,10 +53,21 @@
       <% } %>
 
       <% history.pastActivities.forEach((activity) => { %>
+        <%
+          const activityStart = new Date(activity.startsAt);
+          const activityEnd = new Date(activity.endsAt || activity.startsAt);
+          const activityStartDate = activityStart.toLocaleDateString("es-ES");
+          const activityEndDate = activityEnd.toLocaleDateString("es-ES");
+          const activityStartTime = activityStart.toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" });
+          const activityEndTime = activityEnd.toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" });
+          const activityDateLabel = activityStartDate === activityEndDate
+            ? `${activityStartDate}, de ${activityStartTime} a ${activityEndTime}`
+            : `Del ${activityStartDate} al ${activityEndDate}, de ${activityStartTime} a ${activityEndTime}`;
+        %>
         <div class="history-item">
           <h3><%= activity.title %></h3>
           <p><strong>Entidad:</strong> <%= activity.entityName %></p>
-          <p><strong>Fecha:</strong> <%= new Date(activity.startsAt).toLocaleString("es-ES", { dateStyle: "medium", timeStyle: "short" }) %></p>
+          <p><strong>Fecha:</strong> <%= activityDateLabel %></p>
           <p><strong>Ubicacion:</strong> <%= activity.city %> - <%= activity.address %></p>
           <p><strong>Estado:</strong> <%= activity.publicationStatus %></p>
 

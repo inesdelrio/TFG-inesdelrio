@@ -20,6 +20,7 @@ async function testGetVolunteerCalendarLoadsRegisteredEventsForSelectedMonth() {
               title: "Banco de alimentos",
               city: "Madrid",
               startsAt: new Date("2099-05-10T09:00:00Z"),
+              endsAt: new Date("2099-05-10T11:00:00Z"),
               entity: {
                 organizationName: "Fundacion Horizonte",
               },
@@ -41,6 +42,9 @@ async function testGetVolunteerCalendarLoadsRegisteredEventsForSelectedMonth() {
   );
 
   assert.equal(receivedQuery.where.volunteerUserId, 8);
+  assert.equal(receivedQuery.where.event.startsAt.lt.getTime(), new Date(2099, 5, 1).getTime());
+  assert.equal(receivedQuery.where.event.OR[0].endsAt.gte.getTime(), new Date(2099, 4, 1).getTime());
+  assert.equal(receivedQuery.where.event.OR[1].endsAt, null);
   assert.equal(result.monthKey, "2099-05");
   assert.equal(result.registrations.length, 1);
   assert.equal(result.weeks.flat().filter(Boolean).some((day) => day.events.length === 1), true);
@@ -58,6 +62,7 @@ function testBuildCalendarDaysPlacesEventsOnTheirDate() {
           title: "Banco de alimentos",
           city: "Madrid",
           startsAt,
+          endsAt: new Date(2099, 4, 10, 11, 0, 0),
           entity: {
             organizationName: "Fundacion Horizonte",
           },
@@ -78,6 +83,37 @@ function testBuildCalendarDaysPlacesEventsOnTheirDate() {
   assert.equal(matchingDay.events[0].title, "Banco de alimentos");
 }
 
+function testBuildCalendarDaysExpandsMultiDayEvents() {
+  const monthStart = new Date(2099, 4, 1);
+  const nextMonthStart = new Date(2099, 5, 1);
+  const weeks = buildCalendarDays(
+    [
+      {
+        event: {
+          id: 17,
+          title: "Banco de alimentos",
+          city: "Madrid",
+          startsAt: new Date(2099, 4, 10, 9, 0, 0),
+          endsAt: new Date(2099, 4, 12, 11, 0, 0),
+          entity: {
+            organizationName: "Fundacion Horizonte",
+          },
+        },
+      },
+    ],
+    monthStart,
+    nextMonthStart,
+  );
+
+  const daysWithEvent = weeks
+    .flat()
+    .filter(Boolean)
+    .filter((day) => day.events.some((event) => event.id === 17))
+    .map((day) => day.dayNumber);
+
+  assert.deepEqual(daysWithEvent, [10, 11, 12]);
+}
+
 function testGetMonthMetaNormalizesInvalidMonthInput() {
   const result = getMonthMeta("dato-invalido", new Date(2099, 6, 4));
 
@@ -87,6 +123,7 @@ function testGetMonthMetaNormalizesInvalidMonthInput() {
 }
 
 module.exports = {
+  testBuildCalendarDaysExpandsMultiDayEvents,
   testBuildCalendarDaysPlacesEventsOnTheirDate,
   testGetMonthMetaNormalizesInvalidMonthInput,
   testGetVolunteerCalendarLoadsRegisteredEventsForSelectedMonth,

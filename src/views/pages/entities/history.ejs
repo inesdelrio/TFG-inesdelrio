@@ -18,9 +18,20 @@
       <% } %>
 
       <% history.futureEvents.forEach((event) => { %>
+        <%
+          const eventStart = new Date(event.startsAt);
+          const eventEnd = new Date(event.endsAt || event.startsAt);
+          const eventStartDate = eventStart.toLocaleDateString("es-ES");
+          const eventEndDate = eventEnd.toLocaleDateString("es-ES");
+          const eventStartTime = eventStart.toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" });
+          const eventEndTime = eventEnd.toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" });
+          const eventDateLabel = eventStartDate === eventEndDate
+            ? `${eventStartDate}, de ${eventStartTime} a ${eventEndTime}`
+            : `Del ${eventStartDate} al ${eventEndDate}, de ${eventStartTime} a ${eventEndTime}`;
+        %>
         <div class="history-item">
           <h3><%= event.title %></h3>
-          <p><strong>Fecha:</strong> <%= new Date(event.startsAt).toLocaleString("es-ES", { dateStyle: "medium", timeStyle: "short" }) %></p>
+          <p><strong>Fecha:</strong> <%= eventDateLabel %></p>
           <p><strong>Ubicacion:</strong> <%= event.city %> - <%= event.address %></p>
           <p><strong>Estado:</strong> <%= event.publicationStatus %></p>
           <p><strong>Inscritos:</strong> <%= event.registrationsCount %> / <%= event.totalSlots %></p>
@@ -42,9 +53,20 @@
       <% } %>
 
       <% history.pastEvents.forEach((event) => { %>
+        <%
+          const eventStart = new Date(event.startsAt);
+          const eventEnd = new Date(event.endsAt || event.startsAt);
+          const eventStartDate = eventStart.toLocaleDateString("es-ES");
+          const eventEndDate = eventEnd.toLocaleDateString("es-ES");
+          const eventStartTime = eventStart.toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" });
+          const eventEndTime = eventEnd.toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" });
+          const eventDateLabel = eventStartDate === eventEndDate
+            ? `${eventStartDate}, de ${eventStartTime} a ${eventEndTime}`
+            : `Del ${eventStartDate} al ${eventEndDate}, de ${eventStartTime} a ${eventEndTime}`;
+        %>
         <div class="history-item">
           <h3><%= event.title %></h3>
-          <p><strong>Fecha:</strong> <%= new Date(event.startsAt).toLocaleString("es-ES", { dateStyle: "medium", timeStyle: "short" }) %></p>
+          <p><strong>Fecha:</strong> <%= eventDateLabel %></p>
           <p><strong>Ubicacion:</strong> <%= event.city %> - <%= event.address %></p>
           <p><strong>Estado:</strong> <%= event.publicationStatus %></p>
           <p><strong>Inscritos:</strong> <%= event.registrationsCount %> / <%= event.totalSlots %></p>

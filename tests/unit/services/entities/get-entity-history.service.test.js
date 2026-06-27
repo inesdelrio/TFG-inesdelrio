@@ -26,6 +26,7 @@ async function testGetEntityHistorySeparatesFutureAndPastEvents() {
             city: "Madrid",
             address: "Calle A",
             startsAt: new Date("2099-05-01T09:00:00.000Z"),
+            endsAt: new Date("2099-05-01T11:00:00.000Z"),
             publicationStatus: "ACTIVO",
             totalSlots: 20,
             _count: {
@@ -37,7 +38,8 @@ async function testGetEntityHistorySeparatesFutureAndPastEvents() {
             title: "Evento futuro",
             city: "Madrid",
             address: "Calle B",
-            startsAt: new Date("2099-06-01T09:00:00.000Z"),
+            startsAt: new Date("2099-05-14T09:00:00.000Z"),
+            endsAt: new Date("2099-05-16T11:00:00.000Z"),
             publicationStatus: "RETIRADO",
             totalSlots: 10,
             _count: {

@@ -1,5 +1,6 @@
 const prisma = require("../../config/prisma");
 const { mapEventToMarker } = require("./map-marker-utils");
+const { buildCurrentOrFutureWhere } = require("../events/event-date-range.service");
 
 async function listVolunteerEventMapMarkers(input = {}, dependencies = {}) {
   const prismaClient = dependencies.prisma || prisma;
@@ -8,9 +9,7 @@ async function listVolunteerEventMapMarkers(input = {}, dependencies = {}) {
   const events = await prismaClient.event.findMany({
     where: {
       publicationStatus: "ACTIVO",
-      startsAt: {
-        gte: now,
-      },
+      ...buildCurrentOrFutureWhere(now),
       latitude: {
         not: null,
       },

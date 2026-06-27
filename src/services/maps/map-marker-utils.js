@@ -14,6 +14,25 @@ function formatDateTime(value) {
   });
 }
 
+function formatEventDateRange(event) {
+  const startsAt = new Date(event.startsAt);
+  const endsAt = event.endsAt ? new Date(event.endsAt) : startsAt;
+  const startDate = startsAt.toLocaleDateString("es-ES");
+  const endDate = endsAt.toLocaleDateString("es-ES");
+  const startTime = startsAt.toLocaleTimeString("es-ES", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+  const endTime = endsAt.toLocaleTimeString("es-ES", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
+  return startDate === endDate
+    ? `${startDate}, de ${startTime} a ${endTime}`
+    : `Del ${startDate} al ${endDate}, de ${startTime} a ${endTime}`;
+}
+
 function hasCoordinates(record) {
   return toNumber(record.latitude) !== null && toNumber(record.longitude) !== null;
 }
@@ -25,7 +44,8 @@ function mapEventToMarker(event, overrides = {}) {
     title: event.title,
     entityName: event.entity ? event.entity.organizationName : overrides.entityName,
     startsAt: event.startsAt,
-    startsAtLabel: formatDateTime(event.startsAt),
+    endsAt: event.endsAt,
+    startsAtLabel: formatEventDateRange(event),
     publicationStatus: event.publicationStatus,
     address: event.address,
     normalizedAddress: event.normalizedAddress || event.address,

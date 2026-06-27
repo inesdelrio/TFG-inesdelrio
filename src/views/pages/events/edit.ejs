@@ -52,24 +52,37 @@
         }) %>
         <% if (errors.address) { %><p class="field-error"><%= errors.address %></p><% } %>
 
-        <div class="form-row-group">
+        <div class="event-datetime-grid">
           <div class="form-row">
-            <label for="eventDate">Fecha</label>
-            <input id="eventDate" name="eventDate" type="date" required value="<%= formData.eventDate %>" />
-            <% if (errors.eventDate) { %><p class="field-error"><%= errors.eventDate %></p><% } %>
+            <label for="startDate">Día que empieza</label>
+            <input id="startDate" name="startDate" type="date" required value="<%= formData.startDate %>" />
+            <% if (errors.startDate) { %><p class="field-error"><%= errors.startDate %></p><% } %>
           </div>
 
           <div class="form-row">
-            <label for="eventTime">Hora</label>
-            <input id="eventTime" name="eventTime" type="time" required value="<%= formData.eventTime %>" />
-            <% if (errors.eventTime) { %><p class="field-error"><%= errors.eventTime %></p><% } %>
+            <label for="startTime">Hora de inicio</label>
+            <input id="startTime" name="startTime" type="time" required value="<%= formData.startTime %>" />
+            <% if (errors.startTime) { %><p class="field-error"><%= errors.startTime %></p><% } %>
           </div>
 
           <div class="form-row">
-            <label for="totalSlots">Plazas</label>
-            <input id="totalSlots" name="totalSlots" type="number" min="1" required value="<%= formData.totalSlots %>" />
-            <% if (errors.totalSlots) { %><p class="field-error"><%= errors.totalSlots %></p><% } %>
+            <label for="endDate">Día que termina</label>
+            <input id="endDate" name="endDate" type="date" value="<%= formData.endDate %>" />
+            <p class="field-help">Si lo dejas vacío, se usará el mismo día de inicio.</p>
+            <% if (errors.endDate) { %><p class="field-error"><%= errors.endDate %></p><% } %>
           </div>
+
+          <div class="form-row">
+            <label for="endTime">Hora de fin</label>
+            <input id="endTime" name="endTime" type="time" required value="<%= formData.endTime %>" />
+            <% if (errors.endTime) { %><p class="field-error"><%= errors.endTime %></p><% } %>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <label for="totalSlots">Plazas</label>
+          <input id="totalSlots" name="totalSlots" type="number" min="1" required value="<%= formData.totalSlots %>" />
+          <% if (errors.totalSlots) { %><p class="field-error"><%= errors.totalSlots %></p><% } %>
         </div>
 
         <div class="profile-actions">
