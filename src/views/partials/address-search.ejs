@@ -1,5 +1,6 @@
 <div class="address-search" data-address-search data-address-target="#address">
-  <label for="<%= fieldPrefix %>AddressSearch">Buscar direccion de Madrid</label>
+  <h2><%= typeof title !== "undefined" ? title : "Buscar direccion de Madrid" %></h2>
+  <label for="<%= fieldPrefix %>AddressSearch">Buscar direccion</label>
   <div class="address-search-controls">
     <input
       id="<%= fieldPrefix %>AddressSearch"
@@ -20,6 +21,9 @@
   <input type="hidden" name="latitude" data-address-latitude value="<%= formData.latitude || "" %>" />
   <input type="hidden" name="longitude" data-address-longitude value="<%= formData.longitude || "" %>" />
   <input type="hidden" name="normalizedAddress" data-address-normalized value="<%= formData.normalizedAddress || "" %>" />
+  <% if (typeof includeAddressHidden !== "undefined" && includeAddressHidden) { %>
+    <input id="address" name="address" type="hidden" value="<%= formData.address || "" %>" />
+  <% } %>
 
   <% if (formData.normalizedAddress) { %>
     <p class="field-help" data-address-selected>

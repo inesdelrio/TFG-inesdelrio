@@ -40,19 +40,17 @@
           <% if (errors.description) { %><p class="field-error"><%= errors.description %></p><% } %>
         </div>
 
-        <div class="form-row">
-          <label for="city">Ciudad</label>
-          <input id="city" name="city" type="text" required value="<%= formData.city %>" />
-          <% if (errors.city) { %><p class="field-error"><%= errors.city %></p><% } %>
-        </div>
+        <input name="city" type="hidden" value="Madrid" />
+        <% if (errors.city) { %><p class="field-error"><%= errors.city %></p><% } %>
 
-        <div class="form-row">
-          <label for="address">Direccion</label>
-          <input id="address" name="address" type="text" required value="<%= formData.address %>" />
-          <% if (errors.address) { %><p class="field-error"><%= errors.address %></p><% } %>
-        </div>
-
-        <%- include("../../partials/address-search", { fieldPrefix: "eventEdit", formData, errors }) %>
+        <%- include("../../partials/address-search", {
+          fieldPrefix: "eventEdit",
+          title: "Dirección del evento en Madrid",
+          includeAddressHidden: true,
+          formData,
+          errors
+        }) %>
+        <% if (errors.address) { %><p class="field-error"><%= errors.address %></p><% } %>
 
         <div class="form-row-group">
           <div class="form-row">

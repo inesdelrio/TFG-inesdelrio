@@ -6,7 +6,6 @@ function testValidateEventInputRejectsInvalidData() {
   const result = validateEventInput({
     title: "Abc",
     description: "Corta",
-    city: "M",
     address: "1234",
     eventDate: "2020-01-01",
     eventTime: "10:00",
@@ -15,7 +14,6 @@ function testValidateEventInputRejectsInvalidData() {
 
   assert.ok(result.errors.title);
   assert.ok(result.errors.description);
-  assert.ok(result.errors.city);
   assert.ok(result.errors.address);
   assert.ok(result.errors.eventDate);
   assert.ok(result.errors.totalSlots);
@@ -52,6 +50,8 @@ function testValidateEventInputAcceptsValidMadridLocation() {
   });
 
   assert.deepEqual(result.errors, {});
+  assert.equal(result.sanitizedData.city, "Madrid");
+  assert.equal(result.sanitizedData.address, "Calle Mayor 10, Madrid");
   assert.equal(result.sanitizedData.latitude, 40.4168);
   assert.equal(result.sanitizedData.longitude, -3.7038);
   assert.equal(result.sanitizedData.normalizedAddress, "Calle Mayor 10, Madrid");

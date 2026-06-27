@@ -10,8 +10,8 @@ function validateEventInput(input = {}) {
   const sanitizedData = {
     title: sanitizeText(input.title),
     description: sanitizeText(input.description),
-    city: sanitizeText(input.city),
-    address: sanitizeText(input.address),
+    city: "Madrid",
+    address: sanitizeText(input.normalizedAddress || input.address),
     eventDate: sanitizeText(input.eventDate),
     eventTime: sanitizeText(input.eventTime),
     totalSlots: sanitizeText(input.totalSlots),
@@ -76,6 +76,7 @@ function validateEventInput(input = {}) {
   sanitizedData.latitude = location.sanitizedData.latitude;
   sanitizedData.longitude = location.sanitizedData.longitude;
   sanitizedData.normalizedAddress = location.sanitizedData.normalizedAddress;
+  sanitizedData.address = location.sanitizedData.normalizedAddress || sanitizedData.address;
 
   return {
     sanitizedData,

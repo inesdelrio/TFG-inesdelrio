@@ -236,6 +236,11 @@ const {
   testEntityPublicRegisterViewUsesSimplifiedFields,
 } = require("./views/entity-public-register.view.test");
 const {
+  testAddressSearchPartialSupportsHiddenAddressInput,
+  testEventCreateViewUsesSingleAddressSearchBlock,
+  testEventEditViewUsesSingleAddressSearchBlock,
+} = require("./views/event-form.view.test");
+const {
   testGetEntityLoginRedirectPathSendsPendingEntityToStatus,
   testGetEntityLoginRedirectPathSendsRejectedEntityToStatus,
   testGetEntityLoginRedirectPathSendsSuspendedEntityToStatus,
@@ -776,6 +781,18 @@ async function main() {
   await runTest(
     "vista de registro entidad usa campos simplificados",
     testEntityPublicRegisterViewUsesSimplifiedFields,
+  );
+  await runTest(
+    "vista crear evento usa un unico bloque de direccion",
+    testEventCreateViewUsesSingleAddressSearchBlock,
+  );
+  await runTest(
+    "vista editar evento usa un unico bloque de direccion",
+    testEventEditViewUsesSingleAddressSearchBlock,
+  );
+  await runTest(
+    "partial address-search soporta address hidden",
+    testAddressSearchPartialSupportsHiddenAddressInput,
   );
   await runTest(
     "validateLoginInput detecta datos invalidos en el login",
