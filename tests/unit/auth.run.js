@@ -6,6 +6,10 @@ const {
   testGetAdminDashboardSummaryReturnsBasicCounters,
 } = require("./services/admin/get-admin-dashboard-summary.service.test");
 const {
+  testSearchMadridAddressesActionReturnsEmptyForMissingQuery,
+  testSearchMadridAddressesActionReturnsMockedSuggestions,
+} = require("./controllers/maps/geocoding.controller.test");
+const {
   testValidateMadridLocationAcceptsCoordinatesInsideMadrid,
   testValidateMadridLocationAcceptsRequiredAddressWhenCoordinatesAreValid,
   testValidateMadridLocationRejectsCoordinatesOutsideMadrid,
@@ -14,6 +18,11 @@ const {
   testValidateMadridLocationRejectsMissingLongitude,
   testValidateMadridLocationRejectsNonNumericValues,
 } = require("./services/maps/validate-madrid-location.service.test");
+const {
+  testSearchMadridAddressesFiltersResultsOutsideMadrid,
+  testSearchMadridAddressesMapsValidMadridResults,
+  testSearchMadridAddressesReturnsEmptyForShortQuery,
+} = require("./services/maps/search-madrid-addresses.service.test");
 const {
   testListAdminEntitiesFiltersPendingEntities,
   testListAdminEntitiesFiltersRejectedEntities,
@@ -162,13 +171,17 @@ const {
   testValidateEntityRegistrationInputRejectsInvalidData,
 } = require("./validators/entities/entity-registration.validator.test");
 const {
+  testValidateEntityProfileInputAcceptsValidMadridLocation,
   testValidateEntityProfileInputRejectsInvalidData,
+  testValidateEntityProfileInputRejectsInvalidMadridLocationWhenAddressChanges,
 } = require("./validators/entities/entity-profile.validator.test");
 const {
   testValidateEventFiltersSanitizesInvalidDateAndText,
 } = require("./validators/events/event-filters.validator.test");
 const {
+  testValidateEventInputAcceptsValidMadridLocation,
   testValidateEventInputRejectsInvalidData,
+  testValidateEventInputRejectsMissingMadridLocation,
 } = require("./validators/events/event.validator.test");
 const {
   testValidateVolunteerProfileInputRejectsInvalidData,
@@ -375,6 +388,26 @@ async function main() {
   await runTest(
     "validateMadridLocation acepta direccion exigida con coordenadas validas",
     testValidateMadridLocationAcceptsRequiredAddressWhenCoordinatesAreValid,
+  );
+  await runTest(
+    "searchMadridAddresses devuelve vacio para query corta",
+    testSearchMadridAddressesReturnsEmptyForShortQuery,
+  );
+  await runTest(
+    "searchMadridAddresses mapea resultados validos de Madrid",
+    testSearchMadridAddressesMapsValidMadridResults,
+  );
+  await runTest(
+    "searchMadridAddresses filtra resultados fuera de Madrid",
+    testSearchMadridAddressesFiltersResultsOutsideMadrid,
+  );
+  await runTest(
+    "searchMadridAddressesAction devuelve vacio sin query",
+    testSearchMadridAddressesActionReturnsEmptyForMissingQuery,
+  );
+  await runTest(
+    "searchMadridAddressesAction devuelve sugerencias mockeadas",
+    testSearchMadridAddressesActionReturnsMockedSuggestions,
   );
   await runTest(
     "listAdminEntities devuelve todas las entidades sin filtro",
@@ -605,8 +638,24 @@ async function main() {
     testValidateEntityProfileInputRejectsInvalidData,
   );
   await runTest(
+    "validateEntityProfileInput exige ubicacion valida al guardar entidad",
+    testValidateEntityProfileInputRejectsInvalidMadridLocationWhenAddressChanges,
+  );
+  await runTest(
+    "validateEntityProfileInput acepta ubicacion valida de Madrid",
+    testValidateEntityProfileInputAcceptsValidMadridLocation,
+  );
+  await runTest(
     "validateEventInput detecta datos invalidos en la publicacion de eventos",
     testValidateEventInputRejectsInvalidData,
+  );
+  await runTest(
+    "validateEventInput exige ubicacion valida de Madrid",
+    testValidateEventInputRejectsMissingMadridLocation,
+  );
+  await runTest(
+    "validateEventInput acepta ubicacion valida de Madrid",
+    testValidateEventInputAcceptsValidMadridLocation,
   );
   await runTest(
     "validateEventFilters normaliza filtros de busqueda invalidos",

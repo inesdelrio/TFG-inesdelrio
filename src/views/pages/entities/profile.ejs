@@ -146,6 +146,8 @@
           <% } %>
         </div>
 
+        <%- include("../../partials/address-search", { fieldPrefix: "entityProfile", formData, errors }) %>
+
         <div class="form-row">
           <label for="description">Descripcion</label>
           <textarea

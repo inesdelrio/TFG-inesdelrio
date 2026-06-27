@@ -52,6 +52,8 @@
           <% if (errors.address) { %><p class="field-error"><%= errors.address %></p><% } %>
         </div>
 
+        <%- include("../../partials/address-search", { fieldPrefix: "eventEdit", formData, errors }) %>
+
         <div class="form-row-group">
           <div class="form-row">
             <label for="eventDate">Fecha</label>

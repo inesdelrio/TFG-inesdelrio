@@ -25,6 +25,9 @@ async function testUpdateOwnedEventUpdatesEventForOwnerEntity() {
       eventDate: "2099-08-10",
       eventTime: "18:00",
       totalSlots: "40",
+      latitude: 40.4168,
+      longitude: -3.7038,
+      normalizedAddress: "Calle Sur 99, Madrid",
     },
     {
       prisma: prismaMock,
@@ -46,6 +49,9 @@ async function testUpdateOwnedEventUpdatesEventForOwnerEntity() {
 
   assert.equal(updatedPayload.title, "Evento editado");
   assert.equal(updatedPayload.totalSlots, 40);
+  assert.equal(updatedPayload.latitude, 40.4168);
+  assert.equal(updatedPayload.longitude, -3.7038);
+  assert.equal(updatedPayload.normalizedAddress, "Calle Sur 99, Madrid");
   assert.equal(event.city, "Leganes");
   assert.deepEqual(notificationsPayload, {
     entityId: 5,

@@ -31,6 +31,9 @@ async function testCreateEventCreatesEventForVerifiedEntity() {
       eventDate: "2099-05-20",
       eventTime: "10:30",
       totalSlots: "25",
+      latitude: 40.4168,
+      longitude: -3.7038,
+      normalizedAddress: "Calle Luna 8, Madrid",
     },
     {
       prisma: prismaMock,
@@ -43,6 +46,9 @@ async function testCreateEventCreatesEventForVerifiedEntity() {
 
   assert.equal(createdPayload.entityId, 3);
   assert.equal(createdPayload.totalSlots, 25);
+  assert.equal(createdPayload.latitude, 40.4168);
+  assert.equal(createdPayload.longitude, -3.7038);
+  assert.equal(createdPayload.normalizedAddress, "Calle Luna 8, Madrid");
   assert.equal(event.title, "Recogida solidaria");
   assert.deepEqual(notificationsPayload, {
     entityId: 3,

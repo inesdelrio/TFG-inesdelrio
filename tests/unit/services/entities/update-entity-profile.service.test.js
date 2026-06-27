@@ -27,6 +27,9 @@ async function testUpdateEntityProfileUpdatesAllowedFields() {
       address: "Calle Mayor 10",
       description: "Entidad centrada en programas de acompanamiento y accion social.",
       supportingInfo: "Actualizacion del dosier institucional",
+      latitude: 40.4168,
+      longitude: -3.7038,
+      normalizedAddress: "Calle Mayor 10, Madrid",
     },
     {
       prisma: prismaMock,
@@ -35,6 +38,9 @@ async function testUpdateEntityProfileUpdatesAllowedFields() {
 
   assert.equal(updatedPayload.organizationName, "Fundacion Horizonte Vivo");
   assert.equal(updatedPayload.contactEmail, "contacto@horizonte.org");
+  assert.equal(updatedPayload.latitude, 40.4168);
+  assert.equal(updatedPayload.longitude, -3.7038);
+  assert.equal(updatedPayload.normalizedAddress, "Calle Mayor 10, Madrid");
   assert.equal(updatedEntity.city, "Madrid");
 }
 

@@ -1,0 +1,36 @@
+<div class="address-search" data-address-search data-address-target="#address">
+  <label for="<%= fieldPrefix %>AddressSearch">Buscar direccion de Madrid</label>
+  <div class="address-search-controls">
+    <input
+      id="<%= fieldPrefix %>AddressSearch"
+      type="text"
+      data-address-search-input
+      placeholder="Ej. Calle Mayor 10, Madrid"
+    />
+    <button class="secondary-link address-search-button" type="button" data-address-search-button>
+      Buscar direccion
+    </button>
+  </div>
+  <p class="field-help">
+    Selecciona una sugerencia para guardar la direccion y sus coordenadas.
+  </p>
+  <div class="address-search-status" data-address-search-status aria-live="polite"></div>
+  <div class="address-search-results" data-address-search-results></div>
+
+  <input type="hidden" name="latitude" data-address-latitude value="<%= formData.latitude || "" %>" />
+  <input type="hidden" name="longitude" data-address-longitude value="<%= formData.longitude || "" %>" />
+  <input type="hidden" name="normalizedAddress" data-address-normalized value="<%= formData.normalizedAddress || "" %>" />
+
+  <% if (formData.normalizedAddress) { %>
+    <p class="field-help" data-address-selected>
+      Direccion seleccionada: <%= formData.normalizedAddress %>
+    </p>
+  <% } else { %>
+    <p class="field-help" data-address-selected></p>
+  <% } %>
+
+  <% if (errors.latitude) { %><p class="field-error"><%= errors.latitude %></p><% } %>
+  <% if (errors.longitude) { %><p class="field-error"><%= errors.longitude %></p><% } %>
+  <% if (errors.normalizedAddress) { %><p class="field-error"><%= errors.normalizedAddress %></p><% } %>
+  <% if (errors.coordinates) { %><p class="field-error"><%= errors.coordinates %></p><% } %>
+</div>

@@ -1,6 +1,7 @@
 const express = require("express");
 
 const adminRouter = require("./admin");
+const apiRouter = require("./api");
 const authRouter = require("./auth");
 const entityRouter = require("./entities");
 const eventRouter = require("./events");
@@ -19,5 +20,6 @@ router.use("/", eventRouter);
 router.use("/", notificationRouter);
 router.use("/", volunteerRouter);
 router.use("/", adminRouter);
+router.use("/", apiRouter);
 
 module.exports = router;

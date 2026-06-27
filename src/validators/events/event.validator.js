@@ -1,3 +1,7 @@
+const {
+  validateMadridLocation,
+} = require("../../services/maps/validate-madrid-location.service");
+
 function sanitizeText(value) {
   return typeof value === "string" ? value.trim() : "";
 }
@@ -11,6 +15,9 @@ function validateEventInput(input = {}) {
     eventDate: sanitizeText(input.eventDate),
     eventTime: sanitizeText(input.eventTime),
     totalSlots: sanitizeText(input.totalSlots),
+    latitude: input.latitude,
+    longitude: input.longitude,
+    normalizedAddress: sanitizeText(input.normalizedAddress),
   };
 
   const errors = {};
@@ -50,6 +57,25 @@ function validateEventInput(input = {}) {
       errors.eventDate = "La fecha y hora del evento deben estar en el futuro.";
     }
   }
+
+  const location = validateMadridLocation(
+    {
+      latitude: sanitizedData.latitude,
+      longitude: sanitizedData.longitude,
+      normalizedAddress: sanitizedData.normalizedAddress,
+    },
+    {
+      requireAddress: true,
+    },
+  );
+
+  if (!location.isValid) {
+    Object.assign(errors, location.errors);
+  }
+
+  sanitizedData.latitude = location.sanitizedData.latitude;
+  sanitizedData.longitude = location.sanitizedData.longitude;
+  sanitizedData.normalizedAddress = location.sanitizedData.normalizedAddress;
 
   return {
     sanitizedData,

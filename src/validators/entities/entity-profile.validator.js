@@ -1,3 +1,7 @@
+const {
+  validateMadridLocation,
+} = require("../../services/maps/validate-madrid-location.service");
+
 function sanitizeText(value) {
   return typeof value === "string" ? value.trim() : "";
 }
@@ -11,6 +15,9 @@ function validateEntityProfileInput(input = {}) {
     address: sanitizeText(input.address),
     description: sanitizeText(input.description),
     supportingInfo: sanitizeText(input.supportingInfo),
+    latitude: input.latitude,
+    longitude: input.longitude,
+    normalizedAddress: sanitizeText(input.normalizedAddress),
   };
 
   const errors = {};
@@ -38,6 +45,25 @@ function validateEntityProfileInput(input = {}) {
   if (sanitizedData.description.length < 20) {
     errors.description = "La descripcion debe tener al menos 20 caracteres.";
   }
+
+  const location = validateMadridLocation(
+    {
+      latitude: sanitizedData.latitude,
+      longitude: sanitizedData.longitude,
+      normalizedAddress: sanitizedData.normalizedAddress,
+    },
+    {
+      requireAddress: true,
+    },
+  );
+
+  if (!location.isValid) {
+    Object.assign(errors, location.errors);
+  }
+
+  sanitizedData.latitude = location.sanitizedData.latitude;
+  sanitizedData.longitude = location.sanitizedData.longitude;
+  sanitizedData.normalizedAddress = location.sanitizedData.normalizedAddress;
 
   return {
     sanitizedData,
