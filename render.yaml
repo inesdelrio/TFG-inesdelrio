@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: volunred
+    runtime: node
+    plan: free
+    buildCommand: npm ci && npx prisma generate
+    startCommand: npm run prisma:deploy && npm start
+    autoDeployTrigger: commit
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: volunred-db
+          property: connectionString
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+
+databases:
+  - name: volunred-db
+    plan: free
+    databaseName: volunred
+    user: volunred

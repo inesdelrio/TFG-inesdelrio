@@ -225,7 +225,23 @@ npx prisma studio
 
 La plataforma recomendada para desplegar VolunRed es Render, usando un Web Service de Node.js y una base de datos PostgreSQL gestionada por Render.
 
-Pasos recomendados:
+El repositorio incluye `render.yaml`, por lo que se puede desplegar como Render Blueprint. Ese archivo define:
+
+- Web Service Node.js `volunred`.
+- Base PostgreSQL `volunred-db`.
+- `DATABASE_URL` enlazada a la base mediante la conexión interna de Render.
+- `SESSION_SECRET` generado automáticamente por Render.
+- `ADMIN_EMAIL` y `ADMIN_PASSWORD` como variables no sincronizadas para introducirlas en Render sin guardarlas en Git.
+
+Pasos recomendados con Blueprint:
+
+1. Crear un nuevo Blueprint en Render desde el repositorio de GitHub.
+2. Revisar que Render cree el Web Service y la base PostgreSQL.
+3. Introducir `ADMIN_EMAIL` y `ADMIN_PASSWORD` cuando Render lo solicite.
+4. Confirmar el despliegue.
+5. Crear el usuario administrador después del primer despliegue.
+
+Pasos equivalentes sin Blueprint:
 
 1. Crear una base de datos PostgreSQL en Render.
 2. Crear un Web Service conectado al repositorio de GitHub.
@@ -261,6 +277,11 @@ npm run seed:admin
 El comando `npm run prisma:deploy` ejecuta `prisma migrate deploy`, que es el flujo adecuado para aplicar migraciones ya creadas en entornos de producción.
 
 Actualmente las sesiones usan el store por defecto de `express-session` (`MemoryStore`). Para una demo o defensa de TFG con una sola instancia puede ser suficiente, asumiendo que las sesiones se pierden al reiniciar o redesplegar. Para producción real se recomienda sustituirlo por un almacén persistente, por ejemplo PostgreSQL con `connect-pg-simple` o Redis.
+
+Limitaciones del plan gratuito de Render a tener en cuenta:
+
+- Las bases PostgreSQL gratuitas expiran a los 30 dias desde su creacion; para conservar datos de forma estable conviene pasar a un plan de pago antes de la expiracion.
+- Los servicios web gratuitos pueden quedarse dormidos tras un periodo sin trafico y tardar alrededor de un minuto en responder al primer acceso posterior.
 
 ## Pruebas
 
