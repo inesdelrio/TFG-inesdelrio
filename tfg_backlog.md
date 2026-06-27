@@ -39,6 +39,8 @@ El proyecto cuenta con los flujos principales implementados:
 - calendario de entidad;
 - historial de participacion del voluntario;
 - historial de eventos de entidad;
+- mapa de eventos y entidades limitado a Madrid;
+- busqueda explicita de direcciones de Madrid con coordenadas;
 - consulta de inscritos;
 - moderación administrativa;
 - baja definitiva de cuenta;
@@ -81,6 +83,7 @@ El proyecto cuenta con los flujos principales implementados:
 - RF24 — Cancelación de seguimiento de entidades
 - RF25 — Mejora de notificaciones internas
 - RF33 — Historial de eventos de entidad
+- RF34 — Mapa de eventos y entidades
 
 ### Requisitos no funcionales
 
@@ -102,7 +105,6 @@ Estos requisitos quedan planteados como evolución natural del sistema:
 
 - RF26 — Entidades seguidas por el voluntario
 - RF27 — URLs amigables para eventos
-- RF28 — Mapa de eventos y entidades
 - RF29 — Zona social y seguimiento de voluntarios
 - RF30 — Lista de espera en eventos completos
 - RF31 — Notificaciones externas por correo
@@ -130,9 +132,9 @@ La paleta centraliza el color principal `#bd3e3d` en `public/css/main.css`. La f
 
 ### Navegacion por rol
 
-- Voluntario: `Inicio`, `Eventos`, `Calendario`, `Notificaciones`, `Historial`, `Perfil`.
-- Entidad: `Inicio`, `Eventos`, `Calendario`, `Notificaciones`, `Historial`, `Perfil`.
-- Administrador: `Perfil` y `Panel admin`.
+- Voluntario: `Inicio`, `Eventos`, `Mapa`, `Calendario`, `Notificaciones`, `Historial`, `Perfil`.
+- Entidad: `Inicio`, `Eventos`, `Mapa`, `Calendario`, `Notificaciones`, `Historial`, `Perfil`.
+- Administrador: `Perfil`, `Mapa` y `Panel admin`.
 
 ### Separación por capas
 
@@ -155,6 +157,18 @@ La eliminación de cuenta se implementa como baja definitiva con anonimización 
 ### Historial de eventos de entidad
 
 Las entidades disponen de `/entidad/historial` para consultar los eventos que han dado de alta. La vista separa eventos futuros y pasados, y muestra estado, fecha, ubicacion e inscritos.
+
+### Mapas y geolocalizacion
+
+Los eventos y entidades pueden almacenar `latitude`, `longitude` y `normalizedAddress`. La ubicacion se limita a Madrid mediante validacion de coordenadas.
+
+La busqueda de direcciones se hace de forma explicita con Nominatim/OpenStreetMap desde `/api/geocoding/madrid`, evitando autocomplete continuo.
+
+La visualizacion de mapas usa Leaflet y OpenStreetMap:
+
+- `/eventos/mapa`: eventos visibles para voluntarios.
+- `/entidad/mapa`: eventos propios y organizacion de la entidad.
+- `/admin/mapa`: eventos y entidades con coordenadas.
 
 ## 8. Reglas de implementación y mantenimiento
 

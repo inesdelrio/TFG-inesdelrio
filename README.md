@@ -26,6 +26,10 @@ La aplicación incluye actualmente:
 - Calendario de entidad.
 - Historial de participación.
 - Historial de eventos de entidad.
+- Busqueda de direcciones de Madrid y guardado de coordenadas.
+- Mapa de eventos disponibles para voluntarios.
+- Mapa de eventos propios y organizacion para entidades.
+- Mapa global de eventos y entidades para administracion.
 - Consulta de inscritos dentro del detalle del evento para entidades propietarias.
 - Panel de administración con listado de entidades, filtros por estado y detalle gestionable.
 - Moderación de publicaciones.
@@ -52,9 +56,19 @@ La interfaz usa la identidad visual de VolunRed de forma centralizada:
 ## Navegacion principal
 
 - Sin sesion: `Inicio`, `Eventos`, `Registro`, `Iniciar sesion`.
-- Voluntario: `Inicio`, `Eventos`, `Calendario`, `Notificaciones`, `Historial`, `Perfil`.
-- Entidad: `Inicio`, `Eventos`, `Calendario`, `Notificaciones`, `Historial`, `Perfil`.
-- Administrador: acceso a `Perfil` en `/admin/perfil` y `Panel admin` en `/admin/area`.
+- Voluntario: `Inicio`, `Eventos`, `Mapa`, `Calendario`, `Notificaciones`, `Historial`, `Perfil`.
+- Entidad: `Inicio`, `Eventos`, `Mapa`, `Calendario`, `Notificaciones`, `Historial`, `Perfil`.
+- Administrador: acceso a `Perfil` en `/admin/perfil`, `Mapa` en `/admin/mapa` y `Panel admin` en `/admin/area`.
+
+## Mapas y geolocalizacion
+
+VolunRed incluye mapas limitados a Madrid:
+
+- `/eventos/mapa`: eventos activos, futuros, verificados y con coordenadas para voluntarios.
+- `/entidad/mapa`: eventos propios y ubicacion de la organizacion para entidades.
+- `/admin/mapa`: mapa global de eventos y entidades con coordenadas para administracion.
+
+La busqueda de direcciones se realiza con una busqueda explicita mediante Nominatim/OpenStreetMap. No se usa autocomplete continuo por cada tecla. Los mapas se renderizan con Leaflet y OpenStreetMap.
 
 ## Stack técnico
 
