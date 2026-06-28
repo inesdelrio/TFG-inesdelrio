@@ -10,18 +10,20 @@ La aplicación incluye actualmente:
 
 - Registro de voluntarios.
 - Inicio y cierre de sesión.
-- Solicitud de alta de entidades.
+- Registro directo de entidades desde `/entidades/registro`, con estado inicial `PENDIENTE`.
+- Enlace al registro de entidad desde el registro normal de voluntario.
 - Consulta, validación y cambio de estado de entidades por parte de administración.
 - Perfil editable de voluntario.
 - Perfil editable de entidad.
 - Perfil de administrador con datos basicos y cierre de sesion.
 - Publicación, edición y retirada de eventos por entidades verificadas.
+- Eventos de un dia o de varios dias mediante `startsAt` y `endsAt`.
 - Listado, detalle y filtros de eventos.
 - Inscripción y cancelación de inscripción en eventos.
 - Visualización de eventos completos.
 - Redirección actualizada tras inscripción y cancelación.
 - Seguimiento y cancelación de seguimiento de entidades.
-- Notificaciones internas para voluntarios.
+- Notificaciones internas para voluntarios y entidades, con detalle propio, marcado como leida/no leida y borrado.
 - Calendario personal del voluntario.
 - Calendario de entidad.
 - Historial de participación.
@@ -30,6 +32,7 @@ La aplicación incluye actualmente:
 - Mapa de eventos disponibles para voluntarios.
 - Mapa de eventos propios y organizacion para entidades.
 - Mapa global de eventos y entidades para administracion.
+- Panel lateral de eventos en mapas, con puntos visibles, seleccion de evento y acceso al detalle.
 - Consulta de inscritos dentro del detalle del evento para entidades propietarias.
 - Panel de administración con listado de entidades, filtros por estado y detalle gestionable.
 - Moderación de publicaciones.
@@ -42,6 +45,8 @@ La aplicación contempla tres roles:
 - `VOLUNTARIO`: usuario que consulta eventos, sigue entidades, se inscribe en actividades y consulta su calendario e historial.
 - `ENTIDAD`: organización validada que puede publicar eventos, consultar inscritos, revisar calendario e historial y gestionar su información.
 - `ADMIN`: usuario administrador encargado de consultar y gestionar entidades, cambiar su estado, moderar contenido y acceder a su perfil administrativo.
+
+Las entidades registradas quedan inicialmente en estado `PENDIENTE`. Hasta que administracion las marque como `VERIFICADA`, se muestran en `/entidad/estado` y no pueden acceder a la operativa de publicacion o gestion de eventos. Los estados posibles son `PENDIENTE`, `VERIFICADA`, `RECHAZADA` y `SUSPENDIDA`.
 
 ## Identidad visual
 
@@ -56,7 +61,7 @@ La interfaz usa la identidad visual de VolunRed de forma centralizada:
 ## Navegacion principal
 
 - Sin sesion: `Inicio`, `Eventos`, `Registro`, `Iniciar sesion`.
-- Voluntario: `Inicio`, `Eventos`, `Mapa`, `Calendario`, `Notificaciones`, `Historial`, `Perfil`.
+- Voluntario: `Inicio`, desplegable `Eventos` con `Ver eventos`, `Mapa` y `Calendario`, `Notificaciones`, `Historial`, `Perfil`.
 - Entidad: `Inicio`, `Eventos`, `Mapa`, `Calendario`, `Notificaciones`, `Historial`, `Perfil`.
 - Administrador: acceso a `Perfil` en `/admin/perfil`, `Mapa` en `/admin/mapa` y `Panel admin` en `/admin/area`.
 
@@ -69,6 +74,8 @@ VolunRed incluye mapas limitados a Madrid:
 - `/admin/mapa`: mapa global de eventos y entidades con coordenadas para administracion.
 
 La busqueda de direcciones se realiza con una busqueda explicita mediante Nominatim/OpenStreetMap. No se usa autocomplete continuo por cada tecla. Los mapas se renderizan con Leaflet y OpenStreetMap.
+
+En las vistas de mapa, los eventos aparecen como puntos de color pastel. El panel lateral lista los eventos disponibles; al seleccionar uno, el mapa se centra en su ubicacion, resalta el punto y muestra un boton hacia el detalle. En el mapa publico el boton permite continuar al detalle para inscribirse.
 
 ## Stack técnico
 
@@ -170,10 +177,14 @@ Si el entorno tiene `make` instalado:
 make install
 make db
 make seed
+make seed-admin
 make dev
 make start
 make test
 make check
+make prisma-validate
+make migrate-status
+make migrate-dev
 make run
 ```
 
@@ -182,10 +193,14 @@ Descripción:
 - `make install`: instala dependencias.
 - `make db`: valida Prisma, genera el cliente y aplica migraciones pendientes.
 - `make seed`: crea o actualiza el administrador configurado en `.env`.
+- `make seed-admin`: alias explicito para crear o actualizar el administrador configurado en `.env`.
 - `make dev`: arranca la aplicación en desarrollo.
 - `make start`: arranca la aplicación en modo normal.
 - `make test`: ejecuta los tests unitarios.
 - `make check`: ejecuta tests y validación de Prisma.
+- `make prisma-validate`: valida el esquema Prisma.
+- `make migrate-status`: comprueba el estado de migraciones.
+- `make migrate-dev`: aplica migraciones de desarrollo con el script existente.
 - `make run`: instala dependencias, prepara la base de datos y arranca en desarrollo.
 
 En Windows puede ser necesario instalar `make` o ejecutar estos comandos desde Git Bash.
@@ -197,6 +212,7 @@ npm run dev
 npm start
 npm run prisma:generate
 npm run prisma:migrate
+npm run prisma:deploy
 npm run prisma:reset
 npm run prisma:validate
 npm run seed:admin
@@ -220,6 +236,18 @@ Para abrir Prisma Studio:
 ```bash
 npx prisma studio
 ```
+
+## Seguridad y sesiones
+
+- Las contraseñas se almacenan con `bcrypt`.
+- La autenticacion se basa en `express-session`.
+- En produccion, `SESSION_SECRET` es obligatorio y no debe guardarse en Git.
+- Las cookies de sesion usan `httpOnly`; en produccion se marcan como seguras cuando `NODE_ENV=production`.
+- La configuracion usa `sameSite: "lax"`.
+- Las rutas sensibles se protegen mediante sesion activa y control de roles.
+- Las entidades no verificadas quedan bloqueadas para operaciones como publicar o gestionar eventos.
+- Las paginas HTML dinamicas evitan mostrar estados antiguos al volver atras mediante cabeceras no-cache y recarga controlada al restaurar desde BFCache.
+- CSRF queda como mejora futura; no se documenta como funcionalidad implementada.
 
 ## Despliegue en Render
 

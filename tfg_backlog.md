@@ -30,8 +30,9 @@ El proyecto cuenta con los flujos principales implementados:
 - conexión con PostgreSQL y Prisma;
 - autenticación por sesión;
 - registro de voluntarios;
-- solicitud, validación y gestión de estado de entidades;
+- registro directo, validación y gestión de estado de entidades;
 - publicación y gestión de eventos;
+- eventos de un dia y de varios dias;
 - inscripción y cancelación;
 - seguimiento de entidades;
 - notificaciones internas;
@@ -84,6 +85,7 @@ El proyecto cuenta con los flujos principales implementados:
 - RF25 — Mejora de notificaciones internas
 - RF33 — Historial de eventos de entidad
 - RF34 — Mapa de eventos y entidades
+- RF35 — Eventos de varios dias
 
 ### Requisitos no funcionales
 
@@ -124,6 +126,8 @@ La autenticación se realiza con `express-session`. Las contraseñas se almacena
 
 El inicio de sesion redirige al area principal correspondiente al rol. En el caso de `ADMIN`, la redireccion actual apunta a `/admin/perfil`, desde donde se muestran los datos basicos del administrador y se permite cerrar sesion. El panel operativo de administracion sigue disponible desde `/admin/area`.
 
+En produccion, `SESSION_SECRET` es obligatorio. Las cookies de sesion se configuran con `httpOnly`, `sameSite: "lax"` y `secure` cuando `NODE_ENV=production`. Las paginas HTML dinamicas usan cabeceras no-cache y recarga controlada al volver desde BFCache para evitar que el navegador muestre estados antiguos tras acciones como inscripciones, seguimientos o cambios de notificaciones.
+
 ### Identidad visual
 
 La interfaz usa el logo horizontal de VolunRed en la cabecera y el isotipo como favicon. Los recursos principales estan en `public/img/brand/volunred-logo-horizontal.png` y `public/img/brand/volunred-logo.png`.
@@ -132,7 +136,7 @@ La paleta centraliza el color principal `#bd3e3d` en `public/css/main.css`. La f
 
 ### Navegacion por rol
 
-- Voluntario: `Inicio`, `Eventos`, `Mapa`, `Calendario`, `Notificaciones`, `Historial`, `Perfil`.
+- Voluntario: `Inicio`, desplegable `Eventos` con `Ver eventos`, `Mapa` y `Calendario`, `Notificaciones`, `Historial`, `Perfil`.
 - Entidad: `Inicio`, `Eventos`, `Mapa`, `Calendario`, `Notificaciones`, `Historial`, `Perfil`.
 - Administrador: `Perfil`, `Mapa` y `Panel admin`.
 
@@ -143,6 +147,8 @@ El proyecto separa rutas, controladores, servicios, validadores y vistas. La ló
 ### Entidades verificadas
 
 Las entidades no pueden publicar eventos hasta ser validadas por administración. El estado de entidad permite distinguir entre entidades pendientes, verificadas, rechazadas y suspendidas.
+
+El camino principal de alta de entidad es el registro directo desde `/entidades/registro`, enlazado desde `/registro`. El formulario crea un usuario con rol `ENTIDAD` y una entidad en estado `PENDIENTE`. Mientras no este `VERIFICADA`, la cuenta se dirige a `/entidad/estado` y no puede operar.
 
 El panel de administración permite consultar todas las entidades desde `/admin/entidades`, filtrar por `TODAS`, `PENDIENTE`, `VERIFICADA`, `RECHAZADA` y `SUSPENDIDA`, y cambiar el estado desde el detalle de cada entidad. Cada cambio queda registrado en `AdminActionLog`.
 
@@ -158,6 +164,12 @@ La eliminación de cuenta se implementa como baja definitiva con anonimización 
 
 Las entidades disponen de `/entidad/historial` para consultar los eventos que han dado de alta. La vista separa eventos futuros y pasados, y muestra estado, fecha, ubicacion e inscritos.
 
+### Eventos de varios dias
+
+El modelo `Event` usa `startsAt` y `endsAt` para representar eventos de un dia o de varios dias. Los formularios de evento piden dia/hora de inicio y dia/hora de fin. Si la fecha de fin se deja vacia, se interpreta como el mismo dia de inicio.
+
+Los calendarios de voluntario y entidad expanden el evento visualmente por cada dia incluido en el rango, pero el evento sigue siendo un unico registro y una sola inscripcion. Los listados y mapas no duplican eventos de varios dias. El historial usa `endsAt || startsAt` para decidir si un evento ya ha finalizado.
+
 ### Mapas y geolocalizacion
 
 Los eventos y entidades pueden almacenar `latitude`, `longitude` y `normalizedAddress`. La ubicacion se limita a Madrid mediante validacion de coordenadas.
@@ -169,6 +181,8 @@ La visualizacion de mapas usa Leaflet y OpenStreetMap:
 - `/eventos/mapa`: eventos visibles para voluntarios.
 - `/entidad/mapa`: eventos propios y organizacion de la entidad.
 - `/admin/mapa`: eventos y entidades con coordenadas.
+
+Las paginas de mapa muestran puntos visibles con colores pastel estables por evento y un panel lateral de eventos. Al seleccionar un evento en el panel, el mapa se centra en su ubicacion, resalta el punto y muestra un enlace al detalle. No se usa Google Maps ni API key de mapas, y Nominatim no se usa como autocomplete continuo.
 
 ## 8. Reglas de implementación y mantenimiento
 
@@ -209,6 +223,8 @@ git diff --stat
 - No modificar `schema.prisma` sin revisar migraciones.
 - No usar `prisma reset` salvo decisión explícita, porque puede borrar datos locales.
 - No mezclar cambios funcionales distintos en el mismo commit si se puede evitar.
+- No documentar CSRF ni correo electronico como implementados; quedan como mejoras futuras.
+- No subir secretos reales. `DATABASE_URL`, `SESSION_SECRET` y `ADMIN_PASSWORD` deben configurarse fuera de Git.
 
 ## 10. Definition of Done
 

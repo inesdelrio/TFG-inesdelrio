@@ -82,7 +82,7 @@ Las vistas de mapas principales son:
 
 ### `src/middlewares/`
 
-Incluye middlewares de autenticación, autorización por rol y preparación de datos comunes para vistas.
+Incluye middlewares de autenticacion, autorizacion por rol, preparacion de datos comunes para vistas y cabeceras no-cache para paginas HTML dinamicas.
 
 ### `src/config/`
 
@@ -95,7 +95,7 @@ Contiene CSS, imágenes y JavaScript servido como recurso estático.
 Los scripts específicos de geolocalizacion son:
 
 - `public/js/address-search.js`: busqueda explicita de direcciones de Madrid;
-- `public/js/map-view.js`: inicializacion de mapas Leaflet y marcadores.
+- `public/js/map-view.js`: inicializacion de mapas Leaflet, puntos visibles, panel lateral de eventos y seleccion de ubicaciones.
 
 Los recursos de identidad visual se ubican en `public/img/brand/`:
 
@@ -126,11 +126,13 @@ Contiene pruebas unitarias y estructura preparada para pruebas de integración.
 
 ## Navegacion y areas principales
 
-- Voluntario: `Inicio`, `Eventos`, `Mapa`, `Calendario`, `Notificaciones`, `Historial`, `Perfil`.
+- Voluntario: `Inicio`, desplegable `Eventos` con `Ver eventos`, `Mapa` y `Calendario`, `Notificaciones`, `Historial`, `Perfil`.
 - Entidad: `Inicio`, `Eventos`, `Mapa`, `Calendario`, `Notificaciones`, `Historial`, `Perfil`.
 - Administrador: perfil en `/admin/perfil`, mapa en `/admin/mapa` y panel operativo en `/admin/area`.
 
 El login de administrador redirige a `/admin/perfil`. Desde esa pantalla se muestran datos basicos de la cuenta y se permite cerrar sesion; el panel administrativo sigue accesible desde el menu.
+
+Las entidades pueden registrarse directamente desde `/entidades/registro`, enlazado desde `/registro`. El alta crea un usuario con rol `ENTIDAD` y una entidad en estado `PENDIENTE`; hasta que el administrador la marque como `VERIFICADA`, la cuenta queda dirigida a `/entidad/estado` y no puede acceder a la operativa principal.
 
 ## Mapas y geolocalizacion
 
@@ -145,3 +147,24 @@ Las rutas principales de visualizacion son:
 - `/admin/mapa`: eventos y entidades con coordenadas.
 
 La renderizacion se hace con Leaflet y OpenStreetMap. Los registros antiguos sin coordenadas siguen siendo compatibles y simplemente no aparecen como marcadores.
+
+La interaccion principal del mapa se realiza desde un panel lateral. El panel lista los eventos disponibles; al seleccionar uno, el mapa se centra en su ubicacion, el punto se resalta y se muestra un enlace al detalle. Los eventos de varios dias no se duplican en el mapa.
+
+## Eventos de varios dias
+
+El modelo `Event` mantiene `startsAt` como fecha/hora de inicio y anade `endsAt` como fecha/hora de fin opcional para compatibilidad con eventos antiguos.
+
+La logica comun de fechas se agrupa en `src/services/events/event-date-range.service.js`. Este servicio permite:
+
+- parsear fecha y hora de inicio/fin desde formularios;
+- obtener la fecha efectiva de fin con `endsAt || startsAt`;
+- expandir visualmente un evento en calendarios sin duplicarlo en base de datos;
+- construir filtros de solapamiento para consultar eventos que cruzan un mes o una fecha concreta.
+
+Los calendarios de voluntario y entidad muestran un evento de varios dias en cada dia del rango. Listados y mapas mantienen un unico registro.
+
+## Seguridad de paginas dinamicas
+
+Las respuestas HTML dinamicas usan cabeceras `Cache-Control`, `Pragma` y `Expires` para evitar que el navegador muestre estados antiguos al volver atras. El partial comun de cabecera incluye ademas un listener de `pageshow` que recarga la pagina si se restaura desde BFCache.
+
+Esta medida no se aplica a recursos estaticos como CSS, JavaScript, imagenes, favicon o assets externos de Leaflet.
