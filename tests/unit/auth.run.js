@@ -258,6 +258,9 @@ const {
   testHeaderVolunteerUsesEventsDropdown,
 } = require("./views/header.view.test");
 const {
+  testHomeKeepsNeutralEventsLinkOnly,
+} = require("./views/home.view.test");
+const {
   testMapViewScriptBuildsEventListPanel,
   testMapViewScriptUsesMarkerPastelColor,
 } = require("./views/map-view.script.test");
@@ -311,6 +314,10 @@ const {
   testRequireVerifiedEntityAllowsVerifiedEntity,
   testRequireVerifiedEntityRedirectsPendingEntityToStatus,
 } = require("./middlewares/auth.middleware.test");
+const {
+  testNoCacheMiddlewareAddsHeadersToHtmlRequests,
+  testNoCacheMiddlewareSkipsStaticAssets,
+} = require("./middlewares/no-cache.middleware.test");
 const {
   testDeleteNotificationActionRedirectsAfterDeletingOwnNotification,
   testOpenNotificationEventUsesStoredEventAndRedirects,
@@ -847,6 +854,10 @@ async function main() {
     testHeaderVolunteerUsesEventsDropdown,
   );
   await runTest(
+    "home mantiene solo llamada neutra a eventos",
+    testHomeKeepsNeutralEventsLinkOnly,
+  );
+  await runTest(
     "map-view construye lista lateral de eventos seleccionables",
     testMapViewScriptBuildsEventListPanel,
   );
@@ -989,6 +1000,14 @@ async function main() {
   await runTest(
     "requireVerifiedEntity permite entidades verificadas",
     testRequireVerifiedEntityAllowsVerifiedEntity,
+  );
+  await runTest(
+    "noCacheHtmlMiddleware anade cabeceras no-cache a paginas HTML",
+    testNoCacheMiddlewareAddsHeadersToHtmlRequests,
+  );
+  await runTest(
+    "noCacheHtmlMiddleware no afecta a assets estaticos",
+    testNoCacheMiddlewareSkipsStaticAssets,
   );
   await runTest(
     "openNotificationEvent usa el evento guardado y abre la actividad",

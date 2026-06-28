@@ -5,6 +5,7 @@ const path = require("path");
 const indexRouter = require("./routes");
 const { resolveSessionSecret } = require("./config/session");
 const { notFoundHandler, errorHandler } = require("./middlewares/error.middleware");
+const noCacheHtmlMiddleware = require("./middlewares/no-cache.middleware");
 
 const app = express();
 
@@ -32,6 +33,7 @@ app.use(
   }),
 );
 app.use(express.static(path.join(__dirname, "..", "public")));
+app.use(noCacheHtmlMiddleware);
 
 app.use((req, res, next) => {
   req.currentUser = req.session.user || null;

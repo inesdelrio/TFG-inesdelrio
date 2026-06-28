@@ -4,11 +4,6 @@
 <main class="container dashboard-page">
   <section class="dashboard-hero">
     <h1>Notificaciones</h1>
-    <p>
-      <%= currentUser.role === "ENTIDAD"
-        ? "Aqui puedes revisar la actividad relacionada con tus eventos."
-        : "Aqui puedes revisar los avisos generados por las entidades a las que sigues." %>
-    </p>
   </section>
 
   <% if (infoMessage) { %>

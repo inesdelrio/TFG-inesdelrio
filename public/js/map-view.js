@@ -124,12 +124,7 @@ function initializeVolunRedMap() {
 
     const container = document.createElement("div");
     container.className = "map-selected-content";
-
-    const eyebrow = document.createElement("span");
-    eyebrow.className = "map-selected-eyebrow";
-    eyebrow.textContent = "Evento seleccionado";
-    container.appendChild(eyebrow);
-
+    
     const title = document.createElement("h3");
     title.textContent = item.title;
     container.appendChild(title);
