@@ -16,9 +16,21 @@
       ></div>
     </div>
 
-    <aside class="map-selected-card" data-selected-map-item>
-      <h2>Evento seleccionado</h2>
-      <p>Selecciona un evento en el mapa para ver su información.</p>
+    <aside class="map-side-panel" data-map-side-panel>
+      <section class="map-events-list-section">
+        <div class="map-side-panel-header">
+          <h2>Eventos en el mapa</h2>
+          <p>Selecciona un evento para localizarlo en el mapa.</p>
+        </div>
+        <div class="map-event-list" data-map-events-list data-map-event-list></div>
+      </section>
+
+      <section class="map-selected-section" data-selected-map-item>
+        <h3>Evento seleccionado</h3>
+        <div class="map-selected-detail" data-map-selected-detail>
+          <p>Selecciona un evento para ver su información.</p>
+        </div>
+      </section>
     </aside>
   </div>
 

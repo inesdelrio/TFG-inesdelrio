@@ -35,6 +35,21 @@ function formatEventDateRange(event) {
     : `Del ${startDate} al ${endDate}, de ${startTime} a ${endTime}`;
 }
 
+function formatEventTimeRange(event) {
+  const startsAt = new Date(event.startsAt);
+  const endsAt = event.endsAt ? new Date(event.endsAt) : startsAt;
+  const startTime = startsAt.toLocaleTimeString("es-ES", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+  const endTime = endsAt.toLocaleTimeString("es-ES", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
+  return `${startTime} - ${endTime}`;
+}
+
 function hasCoordinates(record) {
   return toNumber(record.latitude) !== null && toNumber(record.longitude) !== null;
 }
@@ -50,6 +65,7 @@ function mapEventToMarker(event, overrides = {}) {
     startsAt: event.startsAt,
     endsAt: event.endsAt,
     startsAtLabel: formatEventDateRange(event),
+    timeLabel: formatEventTimeRange(event),
     publicationStatus: event.publicationStatus,
     address: event.address,
     normalizedAddress: event.normalizedAddress || event.address,

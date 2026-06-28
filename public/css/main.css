@@ -615,14 +615,14 @@ code {
 
 .map-content-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(260px, 0.38fr);
+  grid-template-columns: minmax(0, 2.8fr) minmax(340px, 1fr);
   gap: 1rem;
   align-items: stretch;
 }
 
 .map-frame {
   width: 100%;
-  height: clamp(380px, 58vh, 560px);
+  height: clamp(600px, 76vh, 780px);
   border: 1px solid var(--border);
   border-radius: 16px;
   box-shadow: 0 12px 28px rgba(31, 26, 23, 0.1);
@@ -691,23 +691,136 @@ code {
   color: var(--muted);
 }
 
-.map-selected-card {
-  align-content: start;
+.map-side-panel {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) minmax(0, 0.9fr);
+  gap: 0.9rem;
   border: 1px solid var(--border);
   border-radius: 16px;
   box-shadow: 0 12px 28px rgba(31, 26, 23, 0.08);
   background: rgba(255, 253, 249, 0.96);
   padding: 1rem;
-  min-height: 12rem;
+  min-height: 0;
+  height: clamp(600px, 76vh, 780px);
+  max-height: clamp(600px, 76vh, 780px);
 }
 
-.map-selected-card[hidden] {
-  display: none;
+.map-events-list-section,
+.map-selected-section {
+  display: grid;
+  gap: 0.75rem;
+  min-height: 0;
 }
 
-.map-selected-card h2,
-.map-selected-card p {
+.map-events-list-section {
+  grid-template-rows: auto minmax(0, 1fr);
+}
+
+.map-selected-section {
+  border-top: 1px solid var(--border);
+  padding-top: 0.9rem;
+  overflow-y: auto;
+}
+
+.map-side-panel-header {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.map-side-panel-header h2,
+.map-side-panel-header p,
+.map-selected-section h3,
+.map-selected-content h3,
+.map-selected-content p,
+.map-panel-empty {
   margin: 0;
+}
+
+.map-side-panel-header h2 {
+  color: var(--ink);
+  font-size: 1.2rem;
+  line-height: 1.25;
+}
+
+.map-selected-section h3 {
+  color: var(--ink);
+  font-size: 1.05rem;
+  line-height: 1.25;
+}
+
+.map-side-panel-header p,
+.map-panel-empty {
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.map-event-list {
+  display: grid;
+  gap: 0.65rem;
+  align-content: start;
+  min-height: 0;
+  overflow-y: auto;
+  padding-right: 0.15rem;
+}
+
+.map-event-list-item {
+  appearance: none;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.65rem;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: #fff;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  padding: 0.75rem;
+  text-align: left;
+  transition: border-color 0.16s ease, box-shadow 0.16s ease, transform 0.16s ease;
+}
+
+.map-event-list-item:hover,
+.map-event-list-item:focus-visible,
+.map-event-list-item.is-selected {
+  border-color: var(--color-primary-border);
+  box-shadow: 0 10px 24px rgba(31, 26, 23, 0.1);
+  outline: 0;
+}
+
+.map-event-list-item.is-selected {
+  background: var(--color-primary-light);
+  transform: translateY(-1px);
+}
+
+.map-event-list-color {
+  width: 0.9rem;
+  height: 0.9rem;
+  border: 2px solid #fff;
+  border-radius: 999px;
+  box-shadow: 0 0 0 1px rgba(31, 26, 23, 0.12);
+  margin-top: 0.2rem;
+}
+
+.map-event-list-content {
+  display: grid;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.map-event-list-content strong {
+  color: var(--ink);
+  line-height: 1.25;
+}
+
+.map-event-list-content p,
+.map-selected-content p {
+  color: var(--muted);
+  line-height: 1.35;
+}
+
+.map-event-list-content p strong,
+.map-selected-content p strong {
+  color: var(--ink);
 }
 
 .map-selected-content {
@@ -715,24 +828,15 @@ code {
   gap: 0.55rem;
 }
 
-.map-selected-content h2 {
+.map-selected-content h3 {
   color: var(--ink);
-  font-size: 1.25rem;
+  font-size: 1.15rem;
   line-height: 1.25;
-}
-
-.map-selected-content p {
-  color: var(--muted);
-  line-height: 1.4;
-}
-
-.map-selected-content p strong {
-  color: var(--ink);
 }
 
 .map-selected-eyebrow {
   color: var(--color-primary);
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   font-weight: 800;
   letter-spacing: 0.03em;
   text-transform: uppercase;
@@ -741,6 +845,29 @@ code {
 .map-selected-link {
   justify-self: start;
   margin-top: 0.35rem;
+}
+
+.map-event-marker-icon {
+  background: transparent;
+  border: 0;
+  overflow: visible;
+}
+
+.map-event-marker-icon span {
+  display: block;
+  width: 24px;
+  height: 24px;
+  border: 3px solid #fff;
+  border-radius: 999px;
+  background: var(--marker-color, #bd3e3d);
+  box-shadow: 0 5px 14px rgba(31, 26, 23, 0.32);
+}
+
+.map-event-marker-icon.is-selected span {
+  width: 30px;
+  height: 30px;
+  border-color: #2f2f2f;
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.85), 0 8px 20px rgba(31, 26, 23, 0.38);
 }
 
 .feedback-banner {
@@ -1343,10 +1470,16 @@ code {
   }
 
   .map-frame {
-    height: clamp(320px, 55vh, 460px);
+    height: clamp(360px, 55vh, 500px);
   }
 
-  .map-selected-card {
-    min-height: auto;
+  .map-side-panel {
+    height: auto;
+    max-height: none;
+  }
+
+  .map-event-list {
+    max-height: none;
+    overflow: visible;
   }
 }

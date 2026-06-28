@@ -255,11 +255,11 @@ const {
   testHeadPartialIncludesBfcacheRefreshScript,
 } = require("./views/head.view.test");
 const {
-  testMapViewScriptBuildsExternalSelectedCard,
+  testMapViewScriptBuildsEventListPanel,
   testMapViewScriptUsesMarkerPastelColor,
 } = require("./views/map-view.script.test");
 const {
-  testMapShellIncludesSelectedItemCard,
+  testMapShellIncludesEventListPanel,
 } = require("./views/map-shell.view.test");
 const {
   testGetEntityLoginRedirectPathSendsPendingEntityToStatus,
@@ -840,16 +840,16 @@ async function main() {
     testHeadPartialIncludesBfcacheRefreshScript,
   );
   await runTest(
-    "map-view muestra tarjeta externa al seleccionar marcador",
-    testMapViewScriptBuildsExternalSelectedCard,
+    "map-view construye lista lateral de eventos seleccionables",
+    testMapViewScriptBuildsEventListPanel,
   );
   await runTest(
     "map-view usa el color pastel del marcador",
     testMapViewScriptUsesMarkerPastelColor,
   );
   await runTest(
-    "map-shell incluye tarjeta externa de elemento seleccionado",
-    testMapShellIncludesSelectedItemCard,
+    "map-shell incluye panel lateral de eventos",
+    testMapShellIncludesEventListPanel,
   );
   await runTest(
     "validateLoginInput detecta datos invalidos en el login",

@@ -1,7 +1,8 @@
 function initializeVolunRedMap() {
   const mapElement = document.getElementById("volunred-map");
   const markerDataElement = document.getElementById("map-markers-json");
-  const selectedCard = document.querySelector("[data-selected-map-item]");
+  const eventListElement = document.querySelector("[data-map-event-list]");
+  const selectedDetailElement = document.querySelector("[data-map-selected-detail]");
 
   if (!mapElement || !markerDataElement || typeof L === "undefined") {
     return;
@@ -12,6 +13,11 @@ function initializeVolunRedMap() {
     [40.31, -3.83],
     [40.55, -3.52],
   ];
+  const eventMarkersById = {};
+  const eventsById = {};
+  const eventButtonsById = {};
+  let selectedMarker = null;
+  let selectedItem = null;
 
   function parseMarkers() {
     try {
@@ -20,6 +26,63 @@ function initializeVolunRedMap() {
     } catch (error) {
       return [];
     }
+  }
+
+  function hasCoordinates(item) {
+    return typeof item.latitude === "number" && typeof item.longitude === "number";
+  }
+
+  function getMarkerColors(item) {
+    if (item.type === "ENTITY") {
+      return {
+        fillColor: "#2f6f8f",
+        strokeColor: "#24556f",
+      };
+    }
+
+    return {
+      fillColor: item.markerColor || "#bd3e3d",
+      strokeColor: item.markerTextColor || item.markerColor || "#8a3636",
+    };
+  }
+
+  function getDefaultMarkerStyle(item) {
+    const colors = getMarkerColors(item);
+
+    return {
+      radius: 9,
+      color: colors.strokeColor,
+      fillColor: colors.fillColor,
+      fillOpacity: 0.85,
+      opacity: 1,
+      weight: 2,
+    };
+  }
+
+  function getSelectedMarkerStyle(item) {
+    const colors = getMarkerColors(item);
+
+    return {
+      radius: 13,
+      color: "#2f2f2f",
+      fillColor: colors.fillColor,
+      fillOpacity: 0.95,
+      opacity: 1,
+      weight: 3,
+    };
+  }
+
+  function createHtmlMarkerIcon(item, selected = false) {
+    const colors = getMarkerColors(item);
+    const size = selected ? 30 : 24;
+    const anchor = size / 2;
+
+    return L.divIcon({
+      className: `map-event-marker-icon${selected ? " is-selected" : ""}`,
+      html: `<span style="--marker-color:${colors.fillColor};--marker-stroke:${colors.strokeColor}"></span>`,
+      iconSize: [size, size],
+      iconAnchor: [anchor, anchor],
+    });
   }
 
   function appendText(parent, label, value) {
@@ -35,60 +98,161 @@ function initializeVolunRedMap() {
     parent.appendChild(paragraph);
   }
 
-  function appendDetailLink(parent, marker) {
-    const href = marker.type === "EVENT" ? marker.detailUrl || marker.url : marker.url;
+  function getBriefAddress(item) {
+    const address = item.normalizedAddress || item.address;
 
-    if (!href) {
-      return;
+    if (!address) {
+      return "";
     }
 
-    const link = document.createElement("a");
-    link.className = "primary-button map-selected-link";
-    link.href = href;
-    link.textContent = marker.type === "EVENT" ? "Ver detalles e inscribirme" : "Ver detalle";
-    parent.appendChild(link);
+    const briefAddress = String(address).replace(/,\s*Madrid\b.*$/i, "").trim();
+    return briefAddress || address;
   }
 
-  function showSelectedMapItem(marker) {
-    if (!selectedCard) {
+  function getDetailLabel(item) {
+    return item.type === "EVENT" && window.location.pathname === "/eventos/mapa"
+      ? "Ver detalles e inscribirme"
+      : "Ver detalles";
+  }
+
+  function renderSelectedEvent(item) {
+    if (!selectedDetailElement) {
       return;
     }
 
-    selectedCard.hidden = false;
-    selectedCard.replaceChildren();
+    selectedDetailElement.replaceChildren();
 
     const container = document.createElement("div");
     container.className = "map-selected-content";
 
     const eyebrow = document.createElement("span");
     eyebrow.className = "map-selected-eyebrow";
-    eyebrow.textContent = marker.type === "EVENT" ? "Evento seleccionado" : "Ubicacion seleccionada";
+    eyebrow.textContent = "Evento seleccionado";
     container.appendChild(eyebrow);
 
-    const title = document.createElement("h2");
-    title.textContent = marker.type === "ENTITY" ? marker.name : marker.title;
+    const title = document.createElement("h3");
+    title.textContent = item.title;
     container.appendChild(title);
 
-    if (marker.type === "EVENT") {
-      appendText(container, "Entidad", marker.entityName);
-      appendText(container, "Fecha", marker.startsAtLabel);
-      appendText(container, "Hora", marker.timeLabel);
-      appendText(container, "Plazas disponibles", marker.availableSlots);
+    appendText(container, "Entidad", item.entityName);
+    appendText(container, "Fecha", item.startsAtLabel);
+    appendText(container, "Hora", item.timeLabel);
+    appendText(container, "Direccion", getBriefAddress(item));
+    appendText(container, "Plazas disponibles", item.availableSlots);
 
-      if (marker.registrationState === "FULL") {
-        appendText(container, "Estado", "Evento completo");
-      } else if (marker.registrationState === "REGISTERED") {
-        appendText(container, "Estado", "Ya estas inscrito");
-      }
-    } else {
-      appendText(container, "Estado", marker.validationStatus);
-      appendText(container, "Email", marker.contactEmail || marker.requesterEmail);
-      appendText(container, "Solicitante", marker.requesterName);
+    if (item.registrationState === "FULL") {
+      appendText(container, "Estado", "Evento completo");
+    } else if (item.registrationState === "REGISTERED") {
+      appendText(container, "Estado", "Ya estas inscrito");
     }
 
-    appendText(container, "Direccion", marker.normalizedAddress || marker.address);
-    appendDetailLink(container, marker);
-    selectedCard.appendChild(container);
+    const link = document.createElement("a");
+    link.className = "primary-button map-selected-link";
+    link.href = item.detailUrl || item.url;
+    link.textContent = getDetailLabel(item);
+    container.appendChild(link);
+
+    selectedDetailElement.appendChild(container);
+  }
+
+  function updateSelectedButton(item) {
+    Object.values(eventButtonsById).forEach((button) => {
+      button.classList.remove("is-selected");
+      button.setAttribute("aria-pressed", "false");
+    });
+
+    const selectedButton = eventButtonsById[item.id];
+    if (selectedButton) {
+      selectedButton.classList.add("is-selected");
+      selectedButton.setAttribute("aria-pressed", "true");
+    }
+  }
+
+  function selectMapEvent(eventId) {
+    const item = eventsById[eventId];
+    const marker = eventMarkersById[eventId];
+
+    if (!item || !marker) {
+      return;
+    }
+
+    if (selectedMarker && selectedItem) {
+      selectedMarker.circleMarker.setStyle(getDefaultMarkerStyle(selectedItem));
+      selectedMarker.circleMarker.setRadius(9);
+      selectedMarker.htmlMarker.setIcon(createHtmlMarkerIcon(selectedItem, false));
+    }
+
+    marker.circleMarker.setStyle(getSelectedMarkerStyle(item));
+    marker.circleMarker.setRadius(13);
+    marker.htmlMarker.setIcon(createHtmlMarkerIcon(item, true));
+    selectedMarker = marker;
+    selectedItem = item;
+
+    map.setView([item.latitude, item.longitude], 16);
+    updateSelectedButton(item);
+    renderSelectedEvent(item);
+  }
+
+  function renderEmptyEventList() {
+    if (!eventListElement) {
+      return;
+    }
+
+    eventListElement.replaceChildren();
+    const emptyMessage = document.createElement("p");
+    emptyMessage.className = "map-panel-empty";
+    emptyMessage.textContent = "No hay eventos con ubicacion para mostrar.";
+    eventListElement.appendChild(emptyMessage);
+  }
+
+  function createEventListButton(item) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "map-event-list-item";
+    button.setAttribute("aria-pressed", "false");
+
+    const colorSwatch = document.createElement("span");
+    colorSwatch.className = "map-event-list-color";
+    colorSwatch.style.backgroundColor = item.markerColor || "#bd3e3d";
+    colorSwatch.setAttribute("aria-hidden", "true");
+    button.appendChild(colorSwatch);
+
+    const content = document.createElement("div");
+    content.className = "map-event-list-content";
+
+    const title = document.createElement("strong");
+    title.textContent = item.title;
+    content.appendChild(title);
+
+    appendText(content, "Fecha", item.startsAtLabel);
+    appendText(content, "Hora", item.timeLabel);
+    appendText(content, "Direccion", getBriefAddress(item));
+    appendText(content, "Entidad", item.entityName);
+    appendText(content, "Plazas disponibles", item.availableSlots);
+
+    button.appendChild(content);
+    button.addEventListener("click", () => selectMapEvent(item.id));
+
+    return button;
+  }
+
+  function renderMapEventList(events) {
+    if (!eventListElement) {
+      return;
+    }
+
+    eventListElement.replaceChildren();
+
+    if (events.length === 0) {
+      renderEmptyEventList();
+      return;
+    }
+
+    events.forEach((item) => {
+      const button = createEventListButton(item);
+      eventButtonsById[item.id] = button;
+      eventListElement.appendChild(button);
+    });
   }
 
   function refreshMapSize() {
@@ -96,6 +260,7 @@ function initializeVolunRedMap() {
   }
 
   const markers = parseMarkers();
+  const events = markers.filter((marker) => marker.type === "EVENT" && hasCoordinates(marker));
   const map = L.map(mapElement, {
     maxBounds: MADRID_BOUNDS,
     maxBoundsViscosity: 0.9,
@@ -109,6 +274,7 @@ function initializeVolunRedMap() {
 
   refreshMapSize();
   setTimeout(refreshMapSize, 150);
+  renderMapEventList(events);
 
   if (markers.length === 0) {
     map.setView(MADRID_CENTER, 12);
@@ -119,37 +285,39 @@ function initializeVolunRedMap() {
   const markerGroup = L.featureGroup();
 
   markers.forEach((marker) => {
-    if (typeof marker.latitude !== "number" || typeof marker.longitude !== "number") {
+    if (!hasCoordinates(marker)) {
       return;
     }
 
     const coordinates = [marker.latitude, marker.longitude];
-    const fillColor = marker.type === "ENTITY" ? "#2f6f8f" : marker.markerColor || "#bd3e3d";
-    const strokeColor = marker.type === "ENTITY" ? "#24556f" : marker.markerTextColor || fillColor;
-
-    L.circleMarker(coordinates, {
-      radius: 8,
-      color: strokeColor,
-      fillColor,
-      fillOpacity: 0.88,
-      weight: 2,
-      interactive: false,
-    }).addTo(markerGroup);
-
-    const clickArea = L.circleMarker(coordinates, {
-      radius: 18,
-      color: fillColor,
-      fillColor,
-      fillOpacity: 0,
-      opacity: 0,
-      weight: 0,
-      interactive: true,
+    const circleMarker = L.circleMarker(coordinates, {
+      ...getDefaultMarkerStyle(marker),
+      interactive: marker.type === "EVENT",
       bubblingMouseEvents: false,
-    }).addTo(markerGroup);
+    }).addTo(map);
 
-    clickArea.on("click", () => {
-      showSelectedMapItem(marker);
-    });
+    markerGroup.addLayer(circleMarker);
+
+    if (marker.type === "EVENT") {
+      const htmlMarker = L.marker(coordinates, {
+        icon: createHtmlMarkerIcon(marker, false),
+        interactive: true,
+        keyboard: false,
+        zIndexOffset: 500,
+      }).addTo(map);
+
+      eventsById[marker.id] = marker;
+      eventMarkersById[marker.id] = {
+        circleMarker,
+        htmlMarker,
+      };
+      circleMarker.on("click", () => {
+        selectMapEvent(marker.id);
+      });
+      htmlMarker.on("click", () => {
+        selectMapEvent(marker.id);
+      });
+    }
   });
 
   markerGroup.addTo(map);

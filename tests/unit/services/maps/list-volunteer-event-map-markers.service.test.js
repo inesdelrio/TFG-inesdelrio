@@ -51,6 +51,7 @@ async function testListVolunteerEventMapMarkersReturnsVisibleFutureEventsWithCoo
   assert.equal(markers[0].latitude, 40.4168);
   assert.equal(markers[0].url, "/eventos/7");
   assert.equal(markers[0].detailUrl, "/eventos/7");
+  assert.equal(markers[0].timeLabel, "11:00 - 13:00");
   assert.equal(markers[0].availableSlots, 2);
   assert.equal(markers[0].registrationState, "AVAILABLE");
   assert.equal(markers[0].actionLabel, "Inscribirme");
