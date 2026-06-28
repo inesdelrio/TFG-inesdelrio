@@ -126,6 +126,71 @@ code {
   color: var(--muted);
 }
 
+.nav-dropdown {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.nav-dropdown-toggle {
+  appearance: none;
+  border: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font: inherit;
+  font-weight: 600;
+  padding: 0;
+}
+
+.nav-dropdown-toggle span {
+  font-size: 0.72em;
+  line-height: 1;
+}
+
+.nav-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 0.65rem);
+  left: 0;
+  z-index: 30;
+  display: grid;
+  gap: 0.25rem;
+  min-width: 13rem;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  opacity: 0;
+  padding: 0.45rem;
+  pointer-events: none;
+  transform: translateY(-0.25rem);
+  transition: opacity 0.16s ease, transform 0.16s ease;
+}
+
+.nav-dropdown:hover .nav-dropdown-menu,
+.nav-dropdown:focus-within .nav-dropdown-menu {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.site-nav .nav-dropdown-menu a {
+  border-radius: 10px;
+  color: var(--muted);
+  padding: 0.65rem 0.75rem;
+  white-space: nowrap;
+}
+
+.site-nav .nav-dropdown-menu a:hover,
+.site-nav .nav-dropdown-menu a:focus-visible {
+  background: var(--color-primary-light);
+  color: var(--color-primary-dark);
+  outline: 0;
+}
+
 .inline-form {
   margin: 0;
 }
@@ -141,6 +206,8 @@ code {
 }
 
 .nav-button:hover,
+.nav-dropdown-toggle:hover,
+.nav-dropdown:focus-within .nav-dropdown-toggle,
 .site-nav a:hover {
   color: var(--ink);
 }
@@ -1395,6 +1462,23 @@ code {
   .site-nav {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .nav-dropdown {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .nav-dropdown-menu {
+    position: static;
+    min-width: min(18rem, calc(100vw - 2rem));
+    margin-top: 0.45rem;
+    transform: none;
+  }
+
+  .nav-dropdown:hover .nav-dropdown-menu,
+  .nav-dropdown:focus-within .nav-dropdown-menu {
+    transform: none;
   }
 
   .hero {

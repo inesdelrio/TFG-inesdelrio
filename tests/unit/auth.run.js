@@ -255,6 +255,9 @@ const {
   testHeadPartialIncludesBfcacheRefreshScript,
 } = require("./views/head.view.test");
 const {
+  testHeaderVolunteerUsesEventsDropdown,
+} = require("./views/header.view.test");
+const {
   testMapViewScriptBuildsEventListPanel,
   testMapViewScriptUsesMarkerPastelColor,
 } = require("./views/map-view.script.test");
@@ -838,6 +841,10 @@ async function main() {
   await runTest(
     "partial head recarga paginas restauradas desde BFCache",
     testHeadPartialIncludesBfcacheRefreshScript,
+  );
+  await runTest(
+    "header agrupa eventos mapa y calendario en menu de voluntario",
+    testHeaderVolunteerUsesEventsDropdown,
   );
   await runTest(
     "map-view construye lista lateral de eventos seleccionables",
