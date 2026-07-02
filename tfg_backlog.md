@@ -83,9 +83,9 @@ El proyecto cuenta con los flujos principales implementados:
 - RF23 — Mejora de estado y navegación en inscripciones
 - RF24 — Cancelación de seguimiento de entidades
 - RF25 — Mejora de notificaciones internas
-- RF33 — Historial de eventos de entidad
-- RF34 — Mapa de eventos y entidades
-- RF35 — Eventos de varios dias
+- RF26 — Historial de eventos de entidad
+- RF27 — Mapa de eventos y entidades
+- RF28 — Eventos de varios dias
 
 ### Requisitos no funcionales
 

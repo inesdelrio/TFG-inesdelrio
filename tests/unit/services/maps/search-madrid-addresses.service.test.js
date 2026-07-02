@@ -73,8 +73,30 @@ async function testSearchMadridAddressesFiltersResultsOutsideMadrid() {
   assert.deepEqual(results, []);
 }
 
+async function testSearchMadridAddressesPreservesProviderStatusOnFailure() {
+  await assert.rejects(
+    searchMadridAddresses(
+      {
+        q: "Puerta del Sol",
+      },
+      {
+        fetch: async () => ({
+          ok: false,
+          status: 429,
+        }),
+      },
+    ),
+    (error) => {
+      assert.equal(error.code, "GEOCODING_PROVIDER_ERROR");
+      assert.equal(error.statusCode, 429);
+      return true;
+    },
+  );
+}
+
 module.exports = {
   testSearchMadridAddressesFiltersResultsOutsideMadrid,
   testSearchMadridAddressesMapsValidMadridResults,
+  testSearchMadridAddressesPreservesProviderStatusOnFailure,
   testSearchMadridAddressesReturnsEmptyForShortQuery,
 };

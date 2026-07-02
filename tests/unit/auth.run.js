@@ -36,6 +36,7 @@ const {
 const {
   testSearchMadridAddressesFiltersResultsOutsideMadrid,
   testSearchMadridAddressesMapsValidMadridResults,
+  testSearchMadridAddressesPreservesProviderStatusOnFailure,
   testSearchMadridAddressesReturnsEmptyForShortQuery,
 } = require("./services/maps/search-madrid-addresses.service.test");
 const {
@@ -532,6 +533,10 @@ async function main() {
   await runTest(
     "searchMadridAddresses filtra resultados fuera de Madrid",
     testSearchMadridAddressesFiltersResultsOutsideMadrid,
+  );
+  await runTest(
+    "searchMadridAddresses conserva el estado de error del proveedor",
+    testSearchMadridAddressesPreservesProviderStatusOnFailure,
   );
   await runTest(
     "searchMadridAddressesAction devuelve vacio sin query",

@@ -11,6 +11,12 @@ async function searchMadridAddressesAction(req, res, next) {
       error.code === "GEOCODING_PROVIDER_ERROR" ||
       error.code === "GEOCODING_FETCH_UNAVAILABLE"
     ) {
+      console.warn("Geocoding provider unavailable", {
+        code: error.code,
+        statusCode: error.statusCode,
+        statusText: error.statusText,
+      });
+
       return res.status(502).json({
         suggestions: [],
         error: "No se ha podido buscar la direccion en este momento.",

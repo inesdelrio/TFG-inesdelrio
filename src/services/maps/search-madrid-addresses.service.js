@@ -73,6 +73,8 @@ async function searchMadridAddresses(input = {}, dependencies = {}) {
   if (!response.ok) {
     const error = new Error("Nominatim request failed.");
     error.code = "GEOCODING_PROVIDER_ERROR";
+    error.statusCode = response.status;
+    error.statusText = response.statusText || "";
     throw error;
   }
 
